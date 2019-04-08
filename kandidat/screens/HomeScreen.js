@@ -23,14 +23,14 @@ export default class HomeScreen extends React.Component {
       <View style={styles.container}>
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
           <View style={styles.welcomeContainer}>
-            <Image
-              source={
-                __DEV__
-                  ? require('../assets/images/robot-dev.png')
-                  : require('../assets/images/robot-prod.png')
-              }
-              style={styles.welcomeImage}
-            />
+          <Image
+          source={
+            __DEV__
+            ? require('../assets/images/100whitte.png')
+            : require('../assets/images/100whitte.png')
+          }
+          style={styles.logoImage}
+          />
           </View>
 
 
@@ -114,7 +114,7 @@ export default class HomeScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F0FFFF',
+    backgroundColor: '#0000FF',
   },
   developmentModeText: {
     marginBottom: 20,
@@ -124,19 +124,19 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   contentContainer: {
-    paddingTop: 30,
+    paddingTop: 0,
   },
   welcomeContainer: {
     alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 20,
+    marginTop: 0,
+    marginBottom: 0,
   },
-  welcomeImage: {
-    width: 100,
+  logoImage: {
+    width: 300,
     height: 80,
     resizeMode: 'contain',
-    marginTop: 3,
-    marginLeft: -10,
+    marginTop: 20,
+    marginLeft: 0,
   },
   getStartedContainer: {
     alignItems: 'center',
@@ -199,6 +199,8 @@ const styles = StyleSheet.create({
     color: '#2e78b7',
   },
   createVote:{
+  width: 350,
+  height: 200,
   marginRight:10,
   marginLeft:10,
   marginTop:10,
@@ -213,12 +215,14 @@ const styles = StyleSheet.create({
 },
 loginText:{
     color:'#fff',
-    fontSize: 50,
+    fontSize: 70,
     textAlign:'center',
     paddingLeft : 1,
     paddingRight : 1
 },
 ongoingVote:{
+width: 350,
+height: 200,
 marginRight:10,
 marginLeft:10,
 marginTop:10,
@@ -230,5 +234,14 @@ backgroundColor:'#1E6738',
 borderRadius:50,
 borderWidth: 1,
 borderColor: '#fff'
+},
+logo: {
+  color: '#FF7F50',
+  fontSize: 50,
+  fontFamily: 'Cochin',
+},
+logoPic: {
+  width: 10,
+  height: 10,
 },
 });
