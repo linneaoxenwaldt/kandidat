@@ -1,11 +1,35 @@
 import React from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
+import { ScrollView,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Platform
+} from 'react-native';
+import { DrawerActions } from 'react-navigation';
+import Icon from "react-native-vector-icons/Ionicons";
 import { ExpoLinksView } from '@expo/samples';
 
 export default class LogOutScreen extends React.Component {
-  static navigationOptions = {
-    title: 'Links',
-  };
+  static navigationOptions = ({ navigation }) => {
+      return {
+        headerTitle: (
+      <Image source={require('../assets/images/100whitte.png')}/>),
+      headerStyle: {
+        backgroundColor: 'red',
+        height: 70,
+        marginLeft: 10,
+        },
+        headerLeft: (
+          <TouchableOpacity
+  onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
+>
+<Icon
+  name={Platform.OS === "ios" ? "ios-menu" : "md-menu"}
+  size={40}/>
+</TouchableOpacity>
+        ),
+      };
+    };
 
   render() {
     return (

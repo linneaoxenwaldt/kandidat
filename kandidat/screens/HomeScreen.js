@@ -15,6 +15,7 @@ import { WebBrowser } from 'expo';
 import { DrawerNavigator, NavigationActions, DrawerActions } from 'react-navigation';
 import { MonoText } from '../components/StyledText';
 import LinksScreen from '../screens/LinksScreen';
+import NewVoteScreen from '../screens/NewVoteScreen';
 import Icon from "react-native-vector-icons/Ionicons";
 
 
@@ -48,13 +49,13 @@ export default class HomeScreen extends React.Component {
           <View style={styles.getStartedContainer}>
             <TouchableOpacity
                       style={styles.createVote}
-                      onPress={() => this.props.navigation.navigate('HomeScreen')}
+                      onPress={() => this.props.navigation.navigate('NewVote')}
                       underlayColor='#fff'>
                       <Text style={styles.loginText}>Create new vote</Text>
              </TouchableOpacity>
              <TouchableOpacity
                        style={styles.ongoingVote}
-                       onPress={() => this.props.navigation.navigate('SettingsScreen')}
+                       onPress={() => this.props.navigation.navigate('OngoingVote')}
                        underlayColor='#fff'>
                        <Text style={styles.loginText}>On going votes</Text>
               </TouchableOpacity>
