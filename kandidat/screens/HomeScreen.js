@@ -9,41 +9,43 @@ import {
   TouchableHighlight,
   View,
   Button,
+  Header,
 } from 'react-native';
 import { WebBrowser } from 'expo';
-import { DrawerNavigator } from 'react-navigation';
+import { DrawerNavigator, NavigationActions, DrawerActions } from 'react-navigation';
 import { MonoText } from '../components/StyledText';
 import LinksScreen from '../screens/LinksScreen';
+import Icon from "react-native-vector-icons/Ionicons";
 
 
 export default class HomeScreen extends React.Component {
-  static navigationOptions = {
-    header: null,
-  };
+  static navigationOptions = ({ navigation }) => {
+      return {
+        headerTitle: (
+      <Image source={require('../assets/images/100whitte.png')}/>),
+      headerStyle: {
+        backgroundColor: 'red',
+        height: 70,
+        marginLeft: 10,
+        },
+        headerLeft: (
+          <TouchableOpacity
+  onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
+>
+<Icon
+  name={Platform.OS === "ios" ? "ios-menu" : "md-menu"}
+  size={40}/>
+</TouchableOpacity>
+        ),
+      };
+    };
 
   render() {
     return (
       <View style={styles.container}>
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-          <View style={styles.welcomeContainer}>
-          <Image
-          source={
-            __DEV__
-            ? require('../assets/images/100whitte.png')
-            : require('../assets/images/100whitte.png')
-          }
-          style={styles.logoImage}
-          />
-          </View>
-
 
           <View style={styles.getStartedContainer}>
-          <TouchableOpacity
-      style={styles.createVote}
-      onPress={() => this.props.navigation.navigate('DrawerOpen')}
-      underlayColor='#fff'>
-      <Text style={styles.loginText}>Open Drawer</Text>
-    </TouchableOpacity>
             <TouchableOpacity
                       style={styles.createVote}
                       onPress={() => this.props.navigation.navigate('HomeScreen')}
@@ -58,14 +60,6 @@ export default class HomeScreen extends React.Component {
               </TouchableOpacity>
           </View>
         </ScrollView>
-
-        <View style={styles.tabBarInfoContainer}>
-          <Text style={styles.tabBarInfoText}>This is a tab bar. You can edit it in:</Text>
-
-          <View style={[styles.codeHighlightContainer, styles.navigationFilename]}>
-            <MonoText style={styles.codeHighlightText}>navigation/MainTabNavigator.js</MonoText>
-          </View>
-        </View>
       </View>
     );
   }
