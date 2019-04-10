@@ -6,10 +6,25 @@ import { ScrollView,
   Platform,
   View,
   Text,
+  FlatList,
 } from 'react-native';
 import { DrawerActions } from 'react-navigation';
 import Icon from "react-native-vector-icons/Ionicons";
 import { ExpoLinksView } from '@expo/samples';
+
+const rows = [
+  {id: '0', text: 'Test0'},
+  {id: '1', text: 'Test1'},
+  {id: '2', text: 'Test2'},
+  {id: '3', text: 'Test3'},
+  {id: '4', text: 'Test4'},
+  {id: '5', text: 'Test5'},
+  {id: '6', text: 'Test6'},
+  {id: '7', text: 'Test7'},
+  {id: '8', text: 'Test8'},
+]
+
+const extractKey = ({id}) => id
 
 export default class NewVoteScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -17,7 +32,7 @@ export default class NewVoteScreen extends React.Component {
         headerTitle: (
       <Image source={require('../assets/images/100whitte.png')}/>),
       headerStyle: {
-        backgroundColor: 'red',
+        backgroundColor: '#008080',
         height: 70,
         marginLeft: 10,
         },
@@ -33,20 +48,36 @@ export default class NewVoteScreen extends React.Component {
       };
     };
 
+    renderItem = ({item}) => {
+  return (
+    <Text style={styles.row}>
+      {item.text}
+    </Text>
+  )
+}
+
     render() {
       return (
         <View style={styles.container}>
-          <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-            <View style={styles.categoryContainer}>
             <Text style={styles.categoryLabel}>CATEGORIES</Text>
             <TouchableOpacity
                       style={styles.createOwnCategory}
                       onPress={() => this.props.navigation.navigate('Home')}
                       underlayColor='#fff'>
-                      <Text style={styles.ownCategoryText}>Create your own category!</Text>
+                      <Text style={styles.ownCategoryText}>Create your own category! <Icon
+                        name={Platform.OS === "ios" ? "ios-add-circle-outline" : "md-add-circle-outline"}
+                        size={25}
+                      /></Text>
              </TouchableOpacity>
-            </View>
-          </ScrollView>
+          <View style={styles.readyMadeCategoryContainer}>
+        <Text style={styles.readyMadeCategoryLabel}>Ready made categories</Text>
+        </View>
+        <FlatList
+  style={styles.container}
+  data={rows}
+  renderItem={this.renderItem}
+  keyExtractor={extractKey}
+/>
         </View>
       );
     }
@@ -56,7 +87,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 15,
-    backgroundColor: '#fff',
+    backgroundColor: '#FFFFFF',
   },
   contentContainer: {
     paddingTop: 0,
@@ -68,22 +99,38 @@ const styles = StyleSheet.create({
     fontSize: 50,
     color: '#000000',
     textAlign: 'center',
+    fontFamily: "Roboto-Light",
   },
   createOwnCategory: {
     width: 350,
     height: 70,
     margin: 10,
     padding: 10,
-    backgroundColor:'#1E6738',
+    backgroundColor:'#BA55B3',
     borderRadius:30,
     borderWidth: 1,
     borderColor: '#fff'
   },
   ownCategoryText: {
+    fontFamily: "Roboto-Light",
     color:'#fff',
     fontSize: 25,
     textAlign:'center',
     paddingLeft : 1,
-    paddingRight : 1
+    paddingRight : 1,
   },
+  readyMadeCategoryContainer: {
+    alignItems: 'center',
+  },
+  readyMadeCategoryLabel: {
+    fontFamily: "Roboto-Light",
+    color: '#000000',
+    fontSize: 25,
+  },
+  row: {
+  fontFamily: "Roboto-Light",
+  padding: 15,
+  marginBottom: 5,
+  backgroundColor: 'skyblue',
+},
 });

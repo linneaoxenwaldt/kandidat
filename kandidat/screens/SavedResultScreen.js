@@ -15,7 +15,7 @@ export default class SavedResultScreen extends React.Component {
         headerTitle: (
       <Image source={require('../assets/images/100whitte.png')}/>),
       headerStyle: {
-        backgroundColor: 'red',
+        backgroundColor: '#008080',
         height: 70,
         marginLeft: 10,
         },
@@ -46,6 +46,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 15,
-    backgroundColor: '#fff',
+    backgroundColor: '#FFFFFF',
   },
 });

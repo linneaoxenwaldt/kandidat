@@ -16,7 +16,7 @@ export default class SettingsScreen extends React.Component {
           headerTitle: (
         <Image source={require('../assets/images/100whitte.png')}/>),
         headerStyle: {
-          backgroundColor: 'red',
+          backgroundColor: '#008080',
           height: 70,
           marginLeft: 10,
           },
