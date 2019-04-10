@@ -14,6 +14,7 @@ import NewVoteScreen from '../screens/NewVoteScreen';
 import OngoingVoteScreen from '../screens/OngoingVoteScreen';
 import SavedResultScreen from '../screens/SavedResultScreen';
 import LogOutScreen from '../screens/LogOutScreen';
+import ChangePasswordScreen from '../screens/ChangePasswordScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -164,6 +165,13 @@ LogOutStack.navigationOptions = {
     />),
 };
 
+const ChangePasswordStack = createStackNavigator({
+  ChangePassword: ChangePasswordScreen,
+});
+
+ChangePasswordStack.navigationOptions = {
+};
+
 const LinksStack = createStackNavigator({
   Links: LinksScreen,
 });
@@ -195,6 +203,7 @@ const DrawerComponent = createDrawerNavigator(
 
 const AppStack = createStackNavigator({
   Drawer: { screen: DrawerComponent },
+  ChangePassword: {screen: ChangePasswordStack},
 }, {
   headerMode: 'none',
 });

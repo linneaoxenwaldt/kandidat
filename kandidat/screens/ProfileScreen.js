@@ -56,7 +56,7 @@ export default class ProfileScreen extends React.Component {
       <Text style={styles.passwordText}>Change password</Text>
       <TouchableOpacity
       style={styles.changeIcon}
-      onPress={() => this.props.navigation.navigate('NewVote')}>
+      onPress={() => this.props.navigation.navigate('ChangePassword')}>
       <Icon name={Platform.OS === "ios" ? "ios-create" : "md-create"}
       size={30}
       color='#FFFFFF'/>
