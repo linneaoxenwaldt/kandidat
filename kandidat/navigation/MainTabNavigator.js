@@ -14,6 +14,8 @@ import NewVoteScreen from '../screens/NewVoteScreen';
 import OngoingVoteScreen from '../screens/OngoingVoteScreen';
 import SavedResultScreen from '../screens/SavedResultScreen';
 import LogOutScreen from '../screens/LogOutScreen';
+import NewCategory from '../screens/NewCategory';
+
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -191,10 +193,15 @@ const DrawerComponent = createDrawerNavigator(
   },
 );
 
-
+const NewCategoryStack = createStackNavigator({
+  newCategory: NewCategory,
+});
+NewCategoryStack.navigationOptions = {
+};
 
 const AppStack = createStackNavigator({
   Drawer: { screen: DrawerComponent },
+  NewCategory: { screen: NewCategoryStack },
 }, {
   headerMode: 'none',
 });

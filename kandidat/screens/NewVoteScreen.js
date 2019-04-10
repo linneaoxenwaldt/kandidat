@@ -62,7 +62,7 @@ export default class NewVoteScreen extends React.Component {
             <Text style={styles.categoryLabel}>CATEGORIES</Text>
             <TouchableOpacity
                       style={styles.createOwnCategory}
-                      onPress={() => this.props.navigation.navigate('Home')}
+                      onPress={() => this.props.navigation.navigate('NewCategory')}
                       underlayColor='#fff'>
                       <Text style={styles.ownCategoryText}>Create your own category! <Icon
                         name={Platform.OS === "ios" ? "ios-add-circle-outline" : "md-add-circle-outline"}
