@@ -25,7 +25,8 @@ export default class LogOutScreen extends React.Component {
 >
 <Icon
   name={Platform.OS === "ios" ? "ios-menu" : "md-menu"}
-  size={40}/>
+  size={40}
+  color='#FFFFFF'/>
 </TouchableOpacity>
         ),
       };

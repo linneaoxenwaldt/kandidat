@@ -3,7 +3,10 @@ import { ScrollView,
   StyleSheet,
   Image,
   TouchableOpacity,
-  Platform
+  Platform,
+  View,
+  Text,
+  Alert
 } from 'react-native';
 import { DrawerActions } from 'react-navigation';
 import Icon from "react-native-vector-icons/Ionicons";
@@ -25,7 +28,8 @@ export default class ProfileScreen extends React.Component {
 >
 <Icon
   name={Platform.OS === "ios" ? "ios-menu" : "md-menu"}
-  size={40}/>
+  size={40}
+  color='#FFFFFF'/>
 </TouchableOpacity>
         ),
       };
@@ -33,11 +37,42 @@ export default class ProfileScreen extends React.Component {
 
   render() {
     return (
-      <ScrollView style={styles.container}>
-        {/* Go ahead and delete ExpoLinksView and replace it with your
-           * content, we just wanted to provide you with some helpful links */}
-        <ExpoLinksView />
-      </ScrollView>
+      <View style={styles.container}>
+      <Image source={require('../assets/images/emil.jpg')} style={styles.profilePic}/>
+      <View style={styles.userNameContainer}>
+      <Text style={styles.userNameText}>User name</Text>
+      </View>
+      <View style={styles.emailContainer}>
+      <Text style={styles.emailText}>Test@testtest.se</Text>
+      <TouchableOpacity
+      style={styles.changeIcon}
+      onPress={() => this.props.navigation.navigate('NewVote')}>
+      <Icon name={Platform.OS === "ios" ? "ios-create" : "md-create"}
+      size={30}
+      color='#FFFFFF'/>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.passwordContainer}>
+      <Text style={styles.passwordText}>Change password</Text>
+      <TouchableOpacity
+      style={styles.changeIcon}
+      onPress={() => this.props.navigation.navigate('NewVote')}>
+      <Icon name={Platform.OS === "ios" ? "ios-create" : "md-create"}
+      size={30}
+      color='#FFFFFF'/>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.profilePicContainer}>
+      <Text style={styles.profilePicText}>Change profile picture</Text>
+      <TouchableOpacity
+      style={styles.changeIcon}
+      onPress={() => this.props.navigation.navigate('NewVote')}>
+      <Icon name={Platform.OS === "ios" ? "ios-create" : "md-create"}
+      size={30}
+      color='#FFFFFF'/>
+        </TouchableOpacity>
+      </View>
+      </View>
     );
   }
 }
@@ -47,5 +82,87 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 15,
     backgroundColor: '#FFFFFF',
+    alignItems: 'center',
+  },
+  profilePic: {
+    height: 150,
+    width: 150,
+    borderRadius: 75,
+    borderWidth: 2,
+    borderColor: '#689999',
+  },
+  userNameContainer: {
+    width: 350,
+    height: 70,
+    backgroundColor: '#BEE7F7',
+    //alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 30,
+    marginTop: 20,
+    marginBottom: 5,
+    padding: 10,
+  },
+  userNameText: {
+    fontFamily: 'Roboto-Light',
+    color: '#FFFFFF',
+    fontSize: 20,
+  },
+  emailContainer: {
+    flexDirection:'row',
+    width: 350,
+    height: 70,
+    backgroundColor: '#8FBC8F',
+    justifyContent: 'center',
+    borderRadius: 30,
+    margin: 5,
+    padding: 10,
+  },
+  emailText: {
+    flexGrow: 1,
+    fontFamily: 'Roboto-Light',
+    color: '#FFFFFF',
+    fontSize: 20,
+    alignSelf: 'center',
+  },
+  passwordContainer: {
+    flexDirection:'row',
+    width: 350,
+    height: 70,
+    backgroundColor: '#6ACCCB',
+    justifyContent: 'center',
+    borderRadius: 30,
+    margin: 5,
+    padding: 10,
+  },
+  passwordText: {
+    flexGrow: 1,
+    fontFamily: 'Roboto-Light',
+    color: '#FFFFFF',
+    fontSize: 20,
+    alignSelf: 'center',
+  },
+  profilePicContainer: {
+    flexDirection:'row',
+    width: 350,
+    height: 70,
+    backgroundColor: '#CBA3D5',
+    justifyContent: 'center',
+    borderRadius: 30,
+    margin: 5,
+    padding: 10,
+  },
+  profilePicText: {
+    flexGrow: 1,
+    fontFamily: 'Roboto-Light',
+    color: '#FFFFFF',
+    fontSize: 20,
+    alignSelf: 'center',
+  },
+  changeIcon: {
+    //flexBasis: 50,
+    //justifyContent: 'flex-end',
+    alignSelf: 'center',
+    color: '#FFFFFF',
+    paddingRight: 20,
   },
 });
