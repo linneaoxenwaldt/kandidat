@@ -60,7 +60,7 @@ export default class ProfileScreen extends React.Component {
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      paddingTop: 15,
+      paddingTop: 20,
       backgroundColor: '#FFFFFF',
       justifyContent: 'center',
     },
@@ -78,14 +78,13 @@ export default class ProfileScreen extends React.Component {
       height: 70,
       backgroundColor: '#CBA3D5',
       marginTop: 150,
+      marginLeft: 30,
     },
     nameText: {
       fontFamily: 'Roboto-Light',
       color: '#FFFFFF',
       fontSize: 20,
       alignSelf: 'center',
-      marginTop: 300,
-      marginRight: 50,
     },
     backArrowCon: {
       justifyContent: 'center',
