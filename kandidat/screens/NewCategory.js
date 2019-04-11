@@ -12,7 +12,7 @@ import { ScrollView,
 import Icon from "react-native-vector-icons/Ionicons";
 import data from '../data/engWord.json';
 
-export default class ProfileScreen extends React.Component {
+export default class NewCategory extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
       headerTitle: (
@@ -47,7 +47,7 @@ export default class ProfileScreen extends React.Component {
         <TouchableOpacity
         onPress={() => this.props.navigation.navigate('AlternativeScreen')}>
         <Icon
-        name={Platform.OS === "ios" ? "ios-arrow-back" : "md-arrow-back"}
+        name={Platform.OS === "ios" ? "ios-arrow-forward" : "md-arrow-forward"}
         size={50}/>
         </TouchableOpacity>
 

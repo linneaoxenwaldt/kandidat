@@ -15,7 +15,7 @@ import { ExpoLinksView } from '@expo/samples';
 import AntIcon from "react-native-vector-icons/AntDesign";
 
 
-export default class NewAlternativeScreen extends React.Component {
+export default class AlternativeScreen extends React.Component {
 
   constructor(props){
     super(props);
