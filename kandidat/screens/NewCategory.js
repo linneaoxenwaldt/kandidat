@@ -6,11 +6,13 @@ import { ScrollView,
   Platform,
   View,
   Text,
+  TextInput,
+  Alert
 } from 'react-native';
-import { DrawerActions } from 'react-navigation';
 import Icon from "react-native-vector-icons/Ionicons";
+import data from '../data/engWord.json';
 
-export default class NewCategory extends React.Component {
+export default class ProfileScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
       headerTitle: (
@@ -20,46 +22,35 @@ export default class NewCategory extends React.Component {
           height: 70,
           marginLeft: 10,
         },
-        headerLeft: (
-          <TouchableOpacity
-          onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
-          >
-          <Icon
-          name={Platform.OS === "ios" ? "ios-menu" : "md-menu"}
-          size={40}/>
-          </TouchableOpacity>
-        ),
       };
     };
-
-    renderItem = ({item}) => {
-      return (
-        <Text style={styles.row}>
-        {item.text}
-        </Text>
-      )
-    }
 
     render() {
       return (
         <View style={styles.container}>
+        <View style={styles.picContain}>
+        <Text style={styles.picText}>Upload a photo...</Text>
         <TouchableOpacity
-        style={styles.createOwnCategory}
-        onPress={() => this.props.navigation.navigate('NewCategory')}
-        underlayColor='#fff'>
-        <Text style={styles.ownCategoryText}>Enter Category name...</Text>
+        style={styles.picContain}
+        onPress={() => this.props.navigation.navigate('HomeScreen')}>
+        </TouchableOpacity>
+        </View>
+
+
+        <View style={styles.nameCategoryCon}>
+        <TextInput
+        style={styles.nameText}
+        placeholder="Enter category name..."/>
+        </View>
+
+        <View style={styles.backArrowCon}>
+        <TouchableOpacity
+        onPress={() => this.props.navigation.navigate('AlternativeScreen')}>
+        <Icon
+        name={Platform.OS === "ios" ? "ios-arrow-back" : "md-arrow-back"}
+        size={50}/>
         </TouchableOpacity>
 
-        <TouchableOpacity
-        style={styles.createOwnCategory}
-        onPress={() => this.props.navigation.navigate('NewCategory')}
-        underlayColor='#fff'>
-        <Text style={styles.ownCategoryText}>Upload a picture... <Icon
-        name={Platform.OS === "ios" ? "ios-add-circle-outline" : "md-add-circle-outline"}
-        size={25}
-        /></Text>
-        </TouchableOpacity>
-        <View style={styles.readyMadeCategoryContainer}>
         </View>
         </View>
       );
@@ -71,26 +62,35 @@ export default class NewCategory extends React.Component {
       flex: 1,
       paddingTop: 15,
       backgroundColor: '#FFFFFF',
+      justifyContent: 'center',
     },
-    contentContainer: {
-      paddingTop: 0,
-    },
-    createOwnCategory: {
-      width: 350,
-      height: 70,
+    picContain: {
+      height:150,
+      width:150,
+      backgroundColor: '#CBA3D5',
       margin: 10,
-      padding: 10,
-      backgroundColor:'#BA55B3',
-      borderRadius:30,
-      borderWidth: 1,
-      borderColor: '#fff'
+      marginBottom: 30,
+      alignItems: 'center',
     },
-    ownCategoryText: {
-      fontFamily: "Roboto-Light",
-      color:'#fff',
-      fontSize: 25,
-      textAlign:'center',
-      paddingLeft : 1,
-      paddingRight : 1,
+    nameCategoryCon: {
+      flexDirection:'row',
+      width: 300,
+      height: 70,
+      backgroundColor: '#CBA3D5',
+      marginTop: 150,
     },
+    nameText: {
+      fontFamily: 'Roboto-Light',
+      color: '#FFFFFF',
+      fontSize: 20,
+      alignSelf: 'center',
+      marginTop: 300,
+      marginRight: 50,
+    },
+    backArrowCon: {
+      justifyContent: 'center',
+      marginBottom: 10,
+      marginLeft:5,
+    },
+
   });
