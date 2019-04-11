@@ -1,0 +1,16 @@
+{
+  "createNewVote": "Create new vote",
+  "ongoingVotes": "On going votes",
+  "currentPassword": "Current password",
+  "newPassword": "New password",
+  "confirmPassword": "Confirm password",
+  "currentEmail": "Current email",
+  "newEmail": "New email",
+  "confirmEmail": "Confirm email",
+  "changePassword": "Change password",
+  "changeProfilePic": "Change profile picture",
+  "categories": "CATEGORIES",
+  "createOwnCate": "Create your own category!",
+  "readyMadeCate": "Ready made categories",
+
+}

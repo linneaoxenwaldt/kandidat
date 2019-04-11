@@ -10,10 +10,9 @@ import { ScrollView,
 } from 'react-native';
 import { DrawerActions } from 'react-navigation';
 import Icon from "react-native-vector-icons/Ionicons";
-import { ExpoLinksView } from '@expo/samples';
 import data from '../data/engWord.json';
 
-export default class ChangePasswordScreen extends React.Component {
+export default class ChangeEmailScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
       return {
         headerTitle: (
@@ -29,22 +28,22 @@ export default class ChangePasswordScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-      <View style={styles.passwordInfoContainer}>
-      <Text style={styles.descriptionText}>{data.currentPassword}</Text>
+      <View style={styles.emailInfoContainer}>
+      <Text style={styles.descriptionText}>{data.currentEmail}</Text>
       <TextInput
       style={styles.textInfo}
       backgroundColor='#94B4C1'
-      placeholder="Password"/>
-      <Text style={styles.descriptionText}>{data.newPassword}</Text>
+      placeholder="Email"/>
+      <Text style={styles.descriptionText}>{data.newEmail}</Text>
       <TextInput
       style={styles.textInfo}
       backgroundColor='#8FBC8F'
-      placeholder="New password"/>
-      <Text style={styles.descriptionText}>{data.confirmPassword}</Text>
+      placeholder="New email"/>
+      <Text style={styles.descriptionText}>{data.confirmEmail}</Text>
       <TextInput
       style={styles.textInfo}
       backgroundColor='#6ACCCB'
-      placeholder="New password"/>
+      placeholder="New email"/>
       </View>
       <View style={styles.buttonBottomContainer}>
       <TouchableOpacity
@@ -56,7 +55,7 @@ export default class ChangePasswordScreen extends React.Component {
         color='#000000'/>
 </TouchableOpacity>
 <TouchableOpacity
-  onPress={() => this.props.navigation.navigate('ChangePassword')}
+  onPress={() => this.props.navigation.navigate('ChangeEmail')}
   >
   <Icon
   name={Platform.OS === "ios" ? "ios-arrow-forward" : "md-arrow-forward"}
@@ -76,7 +75,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     alignItems: 'center',
   },
-  passwordInfoContainer: {
+  emailInfoContainer: {
     alignItems: 'center',
     textAlign: 'center',
     flex: 1,

@@ -15,6 +15,7 @@ import OngoingVoteScreen from '../screens/OngoingVoteScreen';
 import SavedResultScreen from '../screens/SavedResultScreen';
 import LogOutScreen from '../screens/LogOutScreen';
 import ChangePasswordScreen from '../screens/ChangePasswordScreen';
+import ChangeEmailScreen from '../screens/ChangeEmailScreen';
 import NewCategory from '../screens/NewCategory';
 
 
@@ -174,6 +175,13 @@ const ChangePasswordStack = createStackNavigator({
 ChangePasswordStack.navigationOptions = {
 };
 
+const ChangeEmailStack = createStackNavigator({
+  ChangeEmail: ChangeEmailScreen,
+});
+
+ChangeEmailStack.navigationOptions = {
+};
+
 const LinksStack = createStackNavigator({
   Links: LinksScreen,
 });
@@ -211,6 +219,7 @@ const AppStack = createStackNavigator({
   Drawer: { screen: DrawerComponent },
   ChangePassword: {screen: ChangePasswordStack},
   NewCategory: { screen: NewCategoryStack },
+  ChangeEmail: {screen: ChangeEmailStack},
 }, {
   headerMode: 'none',
 });

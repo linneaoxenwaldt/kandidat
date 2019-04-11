@@ -10,7 +10,7 @@ import { ScrollView,
 } from 'react-native';
 import { DrawerActions } from 'react-navigation';
 import Icon from "react-native-vector-icons/Ionicons";
-import { ExpoLinksView } from '@expo/samples';
+import data from '../data/engWord.json';
 
 const rows = [
   {id: '0', text: 'Test0'},
@@ -60,18 +60,18 @@ export default class NewVoteScreen extends React.Component {
     render() {
       return (
         <View style={styles.container}>
-            <Text style={styles.categoryLabel}>CATEGORIES</Text>
+            <Text style={styles.categoryLabel}>{data.categories}</Text>
             <TouchableOpacity
                       style={styles.createOwnCategoryContainer}
                       onPress={() => this.props.navigation.navigate('NewCategory')}
                       underlayColor='#fff'>
-                      <Text style={styles.ownCategoryText}>Create your own category! <Icon
+                      <Text style={styles.ownCategoryText}>{data.createOwnCate} <Icon
                         name={Platform.OS === "ios" ? "ios-add-circle-outline" : "md-add-circle-outline"}
                         size={25}
                       /></Text>
              </TouchableOpacity>
           <View style={styles.readyMadeCategoryContainer}>
-        <Text style={styles.readyMadeCategoryLabel}>Ready made categories</Text>
+        <Text style={styles.readyMadeCategoryLabel}>{data.readyMadeCate}</Text>
         </View>
         <FlatList
   style={styles.container}
