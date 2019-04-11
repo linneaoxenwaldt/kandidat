@@ -6,13 +6,58 @@ import { ScrollView,
   Platform,
   View,
   Text,
-  Alert
+  FlatList,
+  TextInput,
 } from 'react-native';
 import { DrawerActions } from 'react-navigation';
 import Icon from "react-native-vector-icons/Ionicons";
-import data from '../data/engWord.json';
+import { ExpoLinksView } from '@expo/samples';
+import AntIcon from "react-native-vector-icons/AntDesign";
 
-export default class AlternativeScreen extends React.Component {
+
+export default class NewAlternativeScreen extends React.Component {
+
+  constructor(props){
+    super(props);
+    this.rows = [
+      {id: '0', text: 'Alternativ 1'},
+      {id: '1', text: 'Alternativ 2'},
+      {id: '2', text: 'Alternativ 3'},
+
+    ]
+    this.extractKey = ({id}) => id
+
+    this.state = {
+      arrayHolder: [],
+      textInput_Holder: ''
+    }
+  }
+
+  componentDidMount() {
+    this.setState({ arrayHolder: [...this.rows] })
+  }
+
+  joinData = () => {
+    this.rows.push({title : this.state.textInput_Holder});
+    this.setState({ arrayHolder: [...this.rows] })
+  }
+
+  FlatListItemSeparator = () => {
+    return (
+      <View
+      style={{
+        height: 2,
+        width: "100%",
+        backgroundColor: "white",
+      }}
+      />
+    );
+  }
+
+  GetItem(item) {
+    Alert.alert(item);
+  }
+
   static navigationOptions = ({ navigation }) => {
     return {
       headerTitle: (
@@ -22,25 +67,69 @@ export default class AlternativeScreen extends React.Component {
           height: 70,
           marginLeft: 10,
         },
-        headerLeft: (
+        headerRight: (
           <TouchableOpacity
           onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
           >
-          <Icon
-          name={Platform.OS === "ios" ? "ios-menu" : "md-menu"}
-          size={40}
-          color='#FFFFFF'/>
+          <AntIcon name="delete" color="white" size={30} style={styles.trashIcon} />
           </TouchableOpacity>
         ),
       };
     };
 
+
+    renderItem = ({item}) => {
+      return (
+        <TouchableOpacity onPress={() => alert('Remove')}
+        style={styles.fab}
+        style={styles.row}
+        underlayColor='#fff'>
+        <Text style={styles.readyMadeAlternativLabel}
+        style={styles.readyMadeAlternativLabel}>
+        {item.text}
+        </Text>
+        <Icon name={Platform.OS === "ios" ? "ios-remove-circle-outline" : "md-add-circle-outline"}
+        size={40}
+        style={styles.RemoveIcon}
+        />
+        </TouchableOpacity>
+      )
+    }
+
+
     render() {
       return (
         <View style={styles.container}>
-        <View style={styles.userNameContainer}>
-        <Text style={styles.userNameText}>AlternativeScreen NU</Text>
-        </View>
+        <Text style={styles.AlternativLabel}>Alternatives</Text>
+        <TouchableOpacity onPress={() => alert('Name of alternative')} style={styles.fab}
+        style={styles.createOwnAlternativ}
+        underlayColor='#fff'>
+
+        <TextInput
+        placeholder="Add new "
+        onChangeText={data => this.setState({ textInput_Holder: data })}
+        style={styles.ownAlternativText}
+        underlineColorAndroid='white'
+        />
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={this.joinData} activeOpacity={0.7}
+        style={styles.AddButton}>
+        <Text style={styles.ownAlternativText}>
+        <Icon name={Platform.OS === "ios" ? "ios-add-circle-outline" : "md-add-circle-outline"}
+        size={40}
+        style={styles.RemoveIcon}
+        /></Text>
+        </TouchableOpacity>
+
+        <FlatList
+        data={this.state.arrayHolder}
+        width='100%'
+        extraData={this.state.arrayHolder}
+        keyExtractor={(index) => index.toString()}
+        ItemSeparatorComponent={this.FlatListItemSeparator}
+        renderItem={({ item }) => <Text style={styles.row} onPress={this.GetItem.bind(this, item.title)} > {item.title} </Text>}
+        />
         </View>
       );
     }
@@ -51,87 +140,93 @@ export default class AlternativeScreen extends React.Component {
       flex: 1,
       paddingTop: 15,
       backgroundColor: '#FFFFFF',
+    },
+    contentContainer: {
+      paddingTop: 0,
+    },
+    AlternativContainer: {
       alignItems: 'center',
     },
-    profilePic: {
-      height: 150,
-      width: 150,
-      borderRadius: 75,
-      borderWidth: 2,
-      borderColor: '#689999',
+    AlternativLabel: {
+      fontSize: 30,
+      color: '#000000',
+      textAlign: 'center',
+      fontFamily: "Roboto-Light",
     },
-    userNameContainer: {
-      width: 350,
+    createOwnAlternativ: {
+      width: 300,
       height: 70,
-      backgroundColor: '#94B4C1',
-      //alignItems: 'center',
-      justifyContent: 'center',
-      borderRadius: 30,
-      marginTop: 20,
+      margin: 30,
+      paddingbottom: 20,
+      backgroundColor:'#BA55B3',
+      borderRadius:30,
+      borderWidth: 1,
+      borderColor: '#fff',
+      justifyContent: 'center'
+    },
+    ownAlternativText: {
+      fontFamily: "Roboto-Light",
+      color:'#fff',
+      fontSize: 25,
+      textAlign:'center',
+      paddingLeft : 1,
+      paddingRight : 1,
+    },
+    readyMadeAlternativContainer: {
+      alignItems: 'center',
+    },
+    readyMadeAlternativLabel: {
+      fontFamily: "Roboto-Light",
+      color: '#000000',
+      fontSize: 25,
+      color: 'white'
+    },
+    row: {
+      fontFamily: "Roboto-Light",
+      padding: 10,
       marginBottom: 5,
-      padding: 10,
-    },
-    userNameText: {
-      fontFamily: 'Roboto-Light',
-      color: '#FFFFFF',
-      fontSize: 20,
-    },
-    emailContainer: {
-      flexDirection:'row',
-      width: 350,
-      height: 70,
-      backgroundColor: '#8FBC8F',
-      justifyContent: 'center',
-      borderRadius: 30,
-      margin: 5,
-      padding: 10,
-    },
-    emailText: {
-      flexGrow: 1,
-      fontFamily: 'Roboto-Light',
-      color: '#FFFFFF',
-      fontSize: 20,
-      alignSelf: 'center',
-    },
-    passwordContainer: {
-      flexDirection:'row',
-      width: 350,
-      height: 70,
       backgroundColor: '#6ACCCB',
-      justifyContent: 'center',
-      borderRadius: 30,
-      margin: 5,
-      padding: 10,
-    },
-    passwordText: {
-      flexGrow: 1,
-      fontFamily: 'Roboto-Light',
-      color: '#FFFFFF',
       fontSize: 20,
-      alignSelf: 'center',
+      color: 'white'
     },
-    profilePicContainer: {
-      flexDirection:'row',
-      width: 350,
+    fab: {
+      position: 'absolute',
+      width: 76,
+      height: 76,
+      alignItems: 'center',
+      justifyContent: 'center',
+      right: 20,
+      bottom: 20,
+      backgroundColor: '#03A9F4',
+      borderRadius: 30,
+      elevation: 8
+    },
+    AddButton: {
+      width: 70,
       height: 70,
-      backgroundColor: '#CBA3D5',
+      margin: 10,
+      paddingbottom: 20,
+      backgroundColor:'#BA55B3',
+      borderRadius:50,
+      borderWidth: 1,
+      borderColor: '#fff',
       justifyContent: 'center',
-      borderRadius: 30,
-      margin: 5,
-      padding: 10,
+
+
     },
-    profilePicText: {
-      flexGrow: 1,
-      fontFamily: 'Roboto-Light',
-      color: '#FFFFFF',
-      fontSize: 20,
-      alignSelf: 'center',
+    AddIcon: {
+      justifyContent: 'flex-end',
+      color: 'white',
     },
-    changeIcon: {
+    RemoveIcon: {
+      justifyContent: 'flex-end',
+      color: 'white',
+    },
+
+    trashIcon: {
       //flexBasis: 50,
-      //justifyContent: 'flex-end',
-      alignSelf: 'center',
+      justifyContent: 'flex-end',
       color: '#FFFFFF',
-      paddingRight: 20,
+      marginLeft: 30,
     },
   });
