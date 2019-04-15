@@ -17,7 +17,7 @@ import LogOutScreen from '../screens/LogOutScreen';
 import ChangePasswordScreen from '../screens/ChangePasswordScreen';
 import ChangeEmailScreen from '../screens/ChangeEmailScreen';
 import NewCategory from '../screens/NewCategory';
-
+import AlternativeScreen from '../screens/AlternativeScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -192,6 +192,18 @@ LinksStack.navigationOptions = {
   ),
 };
 
+const NewCategoryStack = createStackNavigator({
+  newCategory: NewCategory,
+});
+NewCategoryStack.navigationOptions = {
+};
+
+const AlternativeScreenStack = createStackNavigator({
+  alternativeScreen: AlternativeScreen,
+});
+AlternativeScreenStack.navigationOptions = {
+};
+
 const DrawerComponent = createDrawerNavigator(
   {
     'Home': HomeStack,
@@ -205,17 +217,13 @@ const DrawerComponent = createDrawerNavigator(
   },
 );
 
-const NewCategoryStack = createStackNavigator({
-  newCategory: NewCategory,
-});
-NewCategoryStack.navigationOptions = {
-};
 
 const AppStack = createStackNavigator({
   Drawer: { screen: DrawerComponent },
   ChangePassword: {screen: ChangePasswordStack},
   NewCategory: { screen: NewCategoryStack },
   ChangeEmail: {screen: ChangeEmailStack},
+  AlternativeScreen: {screen: AlternativeScreenStack},
 }, {
   headerMode: 'none',
 });

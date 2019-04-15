@@ -7,29 +7,50 @@ import { ScrollView,
   View,
   Text,
   FlatList,
+  Alert
 } from 'react-native';
 import { ListItem } from 'react-native-elements';
 import { DrawerActions } from 'react-navigation';
 import Icon from "react-native-vector-icons/Ionicons";
 import data from '../data/engWord.json';
 
-const rows = [
-  {id: '0', text: 'Test0', img: require('../assets/images/emil.jpg')},
-  {id: '1', text: 'Test1', img: require('../assets/images/robot-dev.png')},
-{id: '2', text: 'Test2', img: require('../assets/images/robot-prod.png')},
-{id: '3', text: 'Test3', img: require('../assets/images/emil.jpg')},
-{id: '4', text: 'Test4', img: require('../assets/images/robot-dev.png')},
-{id: '5', text: 'Test5', img: require('../assets/images/robot-prod.png')},
-{id: '6', text: 'Test6', img: require('../assets/images/emil.jpg')},
-{id: '7', text: 'Test7', img: require('../assets/images/robot-prod.png')},
-{id: '8', text: 'Test8', img: require('../assets/images/robot-dev.png')},
-]
+// const rows = [
+//   {id: '0', text: 'Test0', img: require('../assets/images/emil.jpg')},
+//   {id: '1', text: 'Test1', img: require('../assets/images/robot-dev.png')},
+// {id: '2', text: 'Test2', img: require('../assets/images/robot-prod.png')},
+// {id: '3', text: 'Test3', img: require('../assets/images/emil.jpg')},
+// {id: '4', text: 'Test4', img: require('../assets/images/robot-dev.png')},
+// {id: '5', text: 'Test5', img: require('../assets/images/robot-prod.png')},
+// {id: '6', text: 'Test6', img: require('../assets/images/emil.jpg')},
+// {id: '7', text: 'Test7', img: require('../assets/images/robot-prod.png')},
+// {id: '8', text: 'Test8', img: require('../assets/images/robot-dev.png')},
+// ]
+//
+// const colors = ['#6ACCCB', '#94B4C1', '#8FBC8F', '#CBA3D5', '#689999']
 
-const colors = ['#6ACCCB', '#94B4C1', '#8FBC8F', '#CBA3D5', '#689999']
-
-const extractKey = ({id}) => id
+// const extractKey = ({id}) => id
 
 export default class FriendsScreen extends React.Component {
+  constructor(props){
+    super(props);
+    this.colors = ['#6ACCCB', '#94B4C1', '#8FBC8F', '#CBA3D5', '#689999']
+    const rows = [
+    {id: '0', text: 'Test0', img: require('../assets/images/emil.jpg')},
+    {id: '1', text: 'Test1', img: require('../assets/images/robot-dev.png')},
+    {id: '2', text: 'Test2', img: require('../assets/images/robot-prod.png')},
+    {id: '3', text: 'Test3', img: require('../assets/images/emil.jpg')},
+    {id: '4', text: 'Test4', img: require('../assets/images/robot-dev.png')},
+    {id: '5', text: 'Test5', img: require('../assets/images/robot-prod.png')},
+    {id: '6', text: 'Test6', img: require('../assets/images/emil.jpg')},
+    {id: '7', text: 'Test7', img: require('../assets/images/robot-prod.png')},
+    {id: '8', text: 'Test8', img: require('../assets/images/robot-dev.png')},
+  ]
+  this.extractKey = ({id}) => id
+  this.state = {
+    rows: rows,
+  }
+  }
+
   static navigationOptions = ({ navigation }) => {
       return {
         headerTitle: (
@@ -52,14 +73,31 @@ export default class FriendsScreen extends React.Component {
       };
     };
 
+  deleteFriend(delItem) {
+    this.setState(prevState => ({rows: prevState.rows.filter(item => item !== delItem) }));
+  }
+
 renderItem = ({item, index}) => {
   return (
     <ListItem
-    containerStyle={{ backgroundColor: colors[index % colors.length]}}
-    titleStyle={{color: '#FFFFFF'}}
+    containerStyle={{ backgroundColor: this.colors[index % this.colors.length]}}
+    titleStyle={{color: '#FFFFFF', fontSize: 20}}
     roundAvatar
     title={item.text}
-    leftAvatar = {{source: item.img }}/>)
+    leftAvatar = {{source: item.img }}
+    rightIcon = {<Icon
+      name={Platform.OS === "ios" ? "ios-trash" : "md-trash"}
+      size={40}
+      color='#FFFFFF'
+      onPress={() => Alert.alert(
+  data.deleteFriend,
+  `${data.sureMsg} ${item.text}?` ,
+  [
+    {text: 'Cancel', onPress: () => this.props.navigation.navigate('MyFriends')},
+    {text: 'OK', onPress: () => this.deleteFriend(item)},
+  ],
+  { cancelable: false })}/>}
+    />)
 }
 
   render() {
@@ -79,9 +117,9 @@ renderItem = ({item, index}) => {
      <Text style={styles.myFriendsText}>{data.myFriends}</Text>
      </View>
      <FlatList
-data={rows}
+data={this.state.rows}
 renderItem={this.renderItem}
-keyExtractor={extractKey}
+keyExtractor={this.extractKey}
 />
       </View>
 

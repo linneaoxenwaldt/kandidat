@@ -15,5 +15,7 @@
   "friends": "Friends",
   "addFriend": "Add a new friend",
   "myFriends": "My friends",
+  "deleteFriend": "Delete friend",
+  "sureMsg": "Are you sure you want to delete",
 
 }
