@@ -17,7 +17,7 @@ export default class AddFriendsScreen extends React.Component {
     super(props);
     this.state = {
       text: ''
-    };
+    }
   }
   static navigationOptions = ({ navigation }) => {
       return {

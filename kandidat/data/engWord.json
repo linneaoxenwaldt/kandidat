@@ -20,5 +20,7 @@
   "deleteCategory": "Delete category",
   "friendUsername": "Enter your friends user name",
   "save": "Save",
+  "yourTurn": "Your turn to vote!",
+  "yourFriensTurn": "Your friends turn",
 
 }
