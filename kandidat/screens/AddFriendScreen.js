@@ -10,10 +10,15 @@ import { ScrollView,
 } from 'react-native';
 import { DrawerActions } from 'react-navigation';
 import Icon from "react-native-vector-icons/Ionicons";
-import { ExpoLinksView } from '@expo/samples';
 import data from '../data/engWord.json';
 
-export default class ChangePasswordScreen extends React.Component {
+export default class AddFriendsScreen extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      text: ''
+    };
+  }
   static navigationOptions = ({ navigation }) => {
       return {
         headerTitle: (
@@ -25,7 +30,7 @@ export default class ChangePasswordScreen extends React.Component {
         },
         headerLeft: (
           <TouchableOpacity
-  onPress={() => navigation.navigate('Profile')}
+  onPress={() => navigation.navigate('Friends')}
 >
 <Icon
   name={Platform.OS === "ios" ? "ios-arrow-back" : "md-arrow-back"}
@@ -36,33 +41,32 @@ export default class ChangePasswordScreen extends React.Component {
       };
     };
 
+saveNewFriend() {
+ var index = this.props.navigation.state.params.currentRows.length
+ var newIDnum = parseInt(this.props.navigation.state.params.currentRows[index-1].id, 10) + 1
+ var newID = newIDnum.toString()
+ var newFriend = {id: newID, text: this.state.text, img: require('../assets/images/robot-dev.png')}
+ console.log(newID)
+ this.props.navigation.state.params.currentRows.push(newFriend)
+ this.props.navigation.navigate('Friends')
+ }
+
   render() {
     return (
       <View style={styles.container}>
-      <View style={styles.passwordInfoContainer}>
-      <Text style={styles.descriptionText}>{data.currentPassword}</Text>
+      <Text style={styles.descriptionText}>{data.friendUsername}</Text>
       <TextInput
       style={styles.textInfo}
-      backgroundColor='#94B4C1'
-      placeholder="Password"/>
-      <Text style={styles.descriptionText}>{data.newPassword}</Text>
-      <TextInput
-      style={styles.textInfo}
-      backgroundColor='#8FBC8F'
-      placeholder="New password"/>
-      <Text style={styles.descriptionText}>{data.confirmPassword}</Text>
-      <TextInput
-      style={styles.textInfo}
-      backgroundColor='#6ACCCB'
-      placeholder="New password"/>
-<TouchableOpacity
-style = {styles.saveButton}
-  onPress={() => this.props.navigation.navigate('ChangePassword')}
-  >
-  <Text style={styles.saveText}>{data.save}</Text>
- </TouchableOpacity>
- </View>
-      </View>
+      placeholder="Friends user name"
+      onChangeText={(text) => this.setState({text})}
+      />
+      <TouchableOpacity
+      style = {styles.saveButton}
+        onPress={() => this.saveNewFriend()}
+        >
+        <Text style={styles.saveText}>Save</Text>
+       </TouchableOpacity>
+       </View>
     );
   }
 }
@@ -71,15 +75,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 15,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#fff',
+    textAlign:'center',
     alignItems: 'center',
-  },
-  passwordInfoContainer: {
-    alignItems: 'center',
-    textAlign: 'center',
-    flex: 1,
+    justifyContent: 'center',
   },
   textInfo: {
+    backgroundColor: '#6BCDFD',
     fontSize: 30,
     textAlign:'center',
     alignItems: 'center',
@@ -94,7 +96,7 @@ const styles = StyleSheet.create({
   descriptionText: {
     marginTop:20,
     textAlign:'center',
-    fontSize: 30,
+    fontSize: 25,
     fontFamily: 'Roboto-Light',
     color: '#000000',
   },

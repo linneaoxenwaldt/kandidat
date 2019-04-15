@@ -58,7 +58,7 @@ export default class ChangeEmailScreen extends React.Component {
       style = {styles.saveButton}
         onPress={() => this.props.navigation.navigate('ChangeEmail')}
         >
-        <Text style={styles.saveText}>Save</Text>
+        <Text style={styles.saveText}>{data.save}</Text>
        </TouchableOpacity>
        </View>
             </View>

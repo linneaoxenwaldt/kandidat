@@ -18,5 +18,7 @@
   "deleteFriend": "Delete friend",
   "sureMsg": "Are you sure you want to delete",
   "deleteCategory": "Delete category",
+  "friendUsername": "Enter your friends user name",
+  "save": "Save",
 
 }

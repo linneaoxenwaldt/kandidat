@@ -14,19 +14,6 @@ import { DrawerActions } from 'react-navigation';
 import Icon from "react-native-vector-icons/Ionicons";
 import data from '../data/engWord.json';
 
-const rows = [
-  {id: '0', text: 'Test0'},
-  {id: '1', text: 'Test1'},
-  {id: '2', text: 'Test2'},
-  {id: '3', text: 'Test3'},
-  {id: '4', text: 'Test4'},
-  {id: '5', text: 'Test5'},
-  {id: '6', text: 'Test6'},
-  {id: '7', text: 'Test7'},
-  {id: '8', text: 'Test8'},
-]
-
-const extractKey = ({id}) => id
 
 export default class NewVoteScreen extends React.Component {
   constructor(props){

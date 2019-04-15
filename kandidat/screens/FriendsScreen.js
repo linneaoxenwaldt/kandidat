@@ -7,7 +7,8 @@ import { ScrollView,
   View,
   Text,
   FlatList,
-  Alert
+  Alert,
+  TextInput,
 } from 'react-native';
 import { ListItem } from 'react-native-elements';
 import { DrawerActions } from 'react-navigation';
@@ -78,6 +79,7 @@ export default class FriendsScreen extends React.Component {
   }
 
 renderItem = ({item, index}) => {
+  var msg = `${data.sureMsg} ${item.text}?`
   return (
     <ListItem
     containerStyle={{ backgroundColor: this.colors[index % this.colors.length]}}
@@ -91,9 +93,9 @@ renderItem = ({item, index}) => {
       color='#FFFFFF'
       onPress={() => Alert.alert(
   data.deleteFriend,
-  `${data.sureMsg} ${item.text}?` ,
+  msg,
   [
-    {text: 'Cancel', onPress: () => this.props.navigation.navigate('MyFriends')},
+    {text: 'Cancel', onPress: () => this.props.navigation.navigate('Friends')},
     {text: 'OK', onPress: () => this.deleteFriend(item)},
   ],
   { cancelable: false })}/>}
@@ -106,7 +108,7 @@ renderItem = ({item, index}) => {
       <Text style={styles.friendLabel}>{data.friends}</Text>
       <TouchableOpacity
                 style={styles.addFriendsContainer}
-                onPress={() => this.props.navigation.navigate('NewCategory')}
+                onPress={() => this.props.navigation.navigate('AddFriend', {currentRows: this.state.rows})}
                 underlayColor='#fff'>
                 <Text style={styles.addFriendsText}>{data.addFriend} <Icon
                   name={Platform.OS === "ios" ? "ios-person-add" : "md-add-person-add"}

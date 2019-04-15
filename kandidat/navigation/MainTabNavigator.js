@@ -18,6 +18,7 @@ import ChangePasswordScreen from '../screens/ChangePasswordScreen';
 import ChangeEmailScreen from '../screens/ChangeEmailScreen';
 import NewCategory from '../screens/NewCategory';
 import AlternativeScreen from '../screens/AlternativeScreen';
+import AddFriendScreen from '../screens/AddFriendScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -178,6 +179,13 @@ const ChangeEmailStack = createStackNavigator({
 ChangeEmailStack.navigationOptions = {
 };
 
+const AddFriendStack = createStackNavigator({
+  AddFriend: AddFriendScreen,
+});
+
+ChangeEmailStack.navigationOptions = {
+};
+
 const LinksStack = createStackNavigator({
   Links: LinksScreen,
 });
@@ -224,6 +232,7 @@ const AppStack = createStackNavigator({
   NewCategory: { screen: NewCategoryStack },
   ChangeEmail: {screen: ChangeEmailStack},
   AlternativeScreen: {screen: AlternativeScreenStack},
+  AddFriendScreen: {screen: AddFriendStack},
 }, {
   headerMode: 'none',
 });
