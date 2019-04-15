@@ -24,9 +24,6 @@ const HomeStack = createStackNavigator({
 });
 
 HomeStack.navigationOptions = {
-  headerLeft:(<TouchableOpacity onPress={() => navigation.navigate("DrawerOpen")}>
-                    <Icon name="ios-menu" size={30} />
-                  </TouchableOpacity>),
   drawerIcon: ({ focused }) => (
     <Icon
       name={Platform.OS === "ios" ? "ios-home" : "md-home"}
@@ -58,7 +55,6 @@ const ProfileStack = createStackNavigator({
 });
 
 ProfileStack.navigationOptions = {
-  headerLeft: <Button onPress={() => navigation.openDrawer()} title="Open menu" />,
   tabBarLabel: 'My Profile',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon

@@ -23,6 +23,16 @@ export default class ChangePasswordScreen extends React.Component {
         height: 70,
         marginLeft: 10,
         },
+        headerLeft: (
+          <TouchableOpacity
+  onPress={() => navigation.navigate('Profile')}
+>
+<Icon
+  name={Platform.OS === "ios" ? "ios-arrow-back" : "md-arrow-back"}
+  size={50}
+  color='#FFFFFF'/>
+</TouchableOpacity>
+        ),
       };
     };
 
@@ -45,25 +55,13 @@ export default class ChangePasswordScreen extends React.Component {
       style={styles.textInfo}
       backgroundColor='#6ACCCB'
       placeholder="New password"/>
-      </View>
-      <View style={styles.buttonBottomContainer}>
-      <TouchableOpacity
-        onPress={() => this.props.navigation.navigate('Profile')}
-        >
-        <Icon
-        name={Platform.OS === "ios" ? "ios-arrow-back" : "md-arrow-back"}
-        size={70}
-        color='#000000'/>
-</TouchableOpacity>
 <TouchableOpacity
+style = {styles.saveButton}
   onPress={() => this.props.navigation.navigate('ChangePassword')}
   >
-  <Icon
-  name={Platform.OS === "ios" ? "ios-arrow-forward" : "md-arrow-forward"}
-  size={70}
-  color='#000000'/>
-</TouchableOpacity>
-      </View>
+  <Text style={styles.saveText}>Save</Text>
+ </TouchableOpacity>
+ </View>
       </View>
     );
   }
@@ -100,9 +98,19 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto-Light',
     color: '#000000',
   },
-  buttonBottomContainer: {
-    flexDirection:'row',
-    justifyContent: 'space-between',
-    width: 340,
+  saveButton: {
+    backgroundColor: "#BA55B3",
+    width: 150,
+    height: 70,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 20,
+    marginBottom: 10,
+    marginTop: 50,
+  },
+  saveText: {
+    color: "#FFFFFF",
+    fontSize: 30,
+    fontFamily: 'Roboto-Light',
   },
 });
