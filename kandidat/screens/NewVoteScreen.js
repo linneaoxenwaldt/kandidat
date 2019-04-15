@@ -7,7 +7,9 @@ import { ScrollView,
   View,
   Text,
   FlatList,
+  Alert,
 } from 'react-native';
+import { ListItem } from 'react-native-elements';
 import { DrawerActions } from 'react-navigation';
 import Icon from "react-native-vector-icons/Ionicons";
 import data from '../data/engWord.json';
@@ -27,6 +29,25 @@ const rows = [
 const extractKey = ({id}) => id
 
 export default class NewVoteScreen extends React.Component {
+  constructor(props){
+    super(props)
+    this.colors = ['#6ACCCB', '#94B4C1', '#8FBC8F', '#CBA3D5', '#689999']
+    const rows = [
+    {id: '0', text: 'Test0'},
+    {id: '1', text: 'Test1'},
+    {id: '2', text: 'Test2'},
+    {id: '3', text: 'Test3'},
+    {id: '4', text: 'Test4'},
+    {id: '5', text: 'Test5'},
+    {id: '6', text: 'Test6'},
+    {id: '7', text: 'Test7'},
+    {id: '8', text: 'Test8'},
+  ]
+  this.extractKey = ({id}) => id
+  this.state = {
+    rows: rows,
+  }
+  }
   static navigationOptions = ({ navigation }) => {
       return {
         headerTitle: (
@@ -49,13 +70,30 @@ export default class NewVoteScreen extends React.Component {
       };
     };
 
-    renderItem = ({item}) => {
-  return (
-    <Text style={styles.row}>
-      {item.text}
-    </Text>
-  )
-}
+    deleteCategory(delItem) {
+      this.setState(prevState => ({rows: prevState.rows.filter(item => item !== delItem) }));
+    }
+
+    renderItem = ({item, index}) => {
+      return (
+        <ListItem
+        containerStyle={{ backgroundColor: this.colors[index % this.colors.length]}}
+        titleStyle={{color: '#FFFFFF', fontSize: 20}}
+        title={item.text}
+        rightIcon = {<Icon
+          name={Platform.OS === "ios" ? "ios-trash" : "md-trash"}
+          size={40}
+          color='#FFFFFF'
+          onPress={() => Alert.alert(
+      data.deleteCategory,
+      `${data.sureMsg} ${item.text}?` ,
+      [
+        {text: 'Cancel', onPress: () => this.props.navigation.navigate('NewVote')},
+        {text: 'OK', onPress: () => this.deleteCategory(item)},
+      ],
+      { cancelable: false })}/>}
+        />)
+    }
 
     render() {
       return (
@@ -74,10 +112,9 @@ export default class NewVoteScreen extends React.Component {
         <Text style={styles.readyMadeCategoryLabel}>{data.readyMadeCate}</Text>
         </View>
         <FlatList
-  style={styles.container}
-  data={rows}
+  data={this.state.rows}
   renderItem={this.renderItem}
-  keyExtractor={extractKey}
+  keyExtractor={this.extractKey}
 />
         </View>
       );
