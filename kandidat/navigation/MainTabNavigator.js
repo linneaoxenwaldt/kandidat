@@ -1,7 +1,7 @@
 import React from 'react';
-import { Platform, Button, Text } from 'react-native';
-import { createStackNavigator, createBottomTabNavigator, createDrawerNavigator, createSwitchNavigator,
-TouchableOpacity, } from 'react-navigation';
+import { Platform, Button, Text, TouchableOpacity, } from 'react-native';
+import {SwitchNavigator,createAppContainer, createStackNavigator,
+   createBottomTabNavigator, createDrawerNavigator, createSwitchNavigator} from 'react-navigation';
 import Icon from "react-native-vector-icons/Ionicons";
 
 import TabBarIcon from '../components/TabBarIcon';
@@ -14,6 +14,9 @@ import NewVoteScreen from '../screens/NewVoteScreen';
 import OngoingVoteScreen from '../screens/OngoingVoteScreen';
 import SavedResultScreen from '../screens/SavedResultScreen';
 import LogOutScreen from '../screens/LogOutScreen';
+import LoginScreen from '../screens/auth/LoginScreen'
+import SignupScreen from '../screens/auth/SignupScreen'
+import ForgotPasswordScreen from '../screens/auth/ForgotPasswordScreen'
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -178,6 +181,19 @@ LinksStack.navigationOptions = {
   ),
 };
 
+const LoginStack = createStackNavigator({
+  Links: LoginScreen,
+});
+LoginStack.navigationOptions = {
+  tabBarLabel: 'Login',
+  TabBarIcon: ({ focused}) => (
+    <TabBarIcon
+      focused={focused}
+      name={Platform.OS === 'ios' ? 'ios-log-in' : 'md-log-in'}
+    />
+  ),
+};
+
 const DrawerComponent = createDrawerNavigator(
   {
     'Home': HomeStack,
@@ -188,6 +204,7 @@ const DrawerComponent = createDrawerNavigator(
     'Saved result': SavedResultStack,
     'Settings': SettingsStack,
     'Log out': LogOutStack,
+    'Log in': LoginStack,
   },
 );
 
@@ -202,6 +219,6 @@ const AppStack = createStackNavigator({
 const App = props => <AppStack {...props} />;
 App.router = AppStack.router;
 
-export default createSwitchNavigator({
+export default createAppContainer(createSwitchNavigator({
   app: App,
-});
+}));
