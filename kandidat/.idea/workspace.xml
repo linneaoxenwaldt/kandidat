@@ -2,12 +2,28 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8524dc0d-2c28-4c9d-8b34-dcaf076bafa7" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/assets/fonts/Roboto-Light.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/images/emil.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/images/tacobock.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/engWord.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/screens/AddFriendScreen.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/screens/AlternativeScreen.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/screens/ChangeEmailScreen.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/screens/ChangePasswordScreen.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/screens/NewCategory.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/screens/VoteScreen.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/app.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/navigation/AppNavigator.js" beforeDir="false" afterPath="$PROJECT_DIR$/navigation/AppNavigator.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/navigation/MainTabNavigator.js" beforeDir="false" afterPath="$PROJECT_DIR$/navigation/MainTabNavigator.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/screens/FriendsScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/screens/FriendsScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/screens/HomeScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/screens/HomeScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/screens/LogOutScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/screens/LogOutScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/screens/NewVoteScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/screens/NewVoteScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/screens/OngoingVoteScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/screens/OngoingVoteScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/screens/ProfileScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/screens/ProfileScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/screens/SavedResultScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/screens/SavedResultScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/screens/SettingsScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/screens/SettingsScreen.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />

@@ -17,15 +17,17 @@ import LogOutScreen from '../screens/LogOutScreen';
 import LoginScreen from '../screens/auth/LoginScreen'
 import SignupScreen from '../screens/auth/SignupScreen'
 import ForgotPasswordScreen from '../screens/auth/ForgotPasswordScreen'
+import ChangePasswordScreen from '../screens/ChangePasswordScreen';
+import ChangeEmailScreen from '../screens/ChangeEmailScreen';
+import NewCategory from '../screens/NewCategory';
+import AlternativeScreen from '../screens/AlternativeScreen';
+import AddFriendScreen from '../screens/AddFriendScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
 });
 
 HomeStack.navigationOptions = {
-  headerLeft:(<TouchableOpacity onPress={() => navigation.navigate("DrawerOpen")}>
-                    <Icon name="ios-menu" size={30} />
-                  </TouchableOpacity>),
   drawerIcon: ({ focused }) => (
     <Icon
       name={Platform.OS === "ios" ? "ios-home" : "md-home"}
@@ -57,7 +59,6 @@ const ProfileStack = createStackNavigator({
 });
 
 ProfileStack.navigationOptions = {
-  headerLeft: <Button onPress={() => navigation.openDrawer()} title="Open menu" />,
   tabBarLabel: 'My Profile',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
@@ -167,6 +168,27 @@ LogOutStack.navigationOptions = {
     />),
 };
 
+const ChangePasswordStack = createStackNavigator({
+  ChangePassword: ChangePasswordScreen,
+});
+
+ChangePasswordStack.navigationOptions = {
+};
+
+const ChangeEmailStack = createStackNavigator({
+  ChangeEmail: ChangeEmailScreen,
+});
+
+ChangeEmailStack.navigationOptions = {
+};
+
+const AddFriendStack = createStackNavigator({
+  AddFriend: AddFriendScreen,
+});
+
+ChangeEmailStack.navigationOptions = {
+};
+
 const LinksStack = createStackNavigator({
   Links: LinksScreen,
 });
@@ -181,17 +203,16 @@ LinksStack.navigationOptions = {
   ),
 };
 
-const LoginStack = createStackNavigator({
-  Links: LoginScreen,
+const NewCategoryStack = createStackNavigator({
+  newCategory: NewCategory,
 });
-LoginStack.navigationOptions = {
-  tabBarLabel: 'Login',
-  TabBarIcon: ({ focused}) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-log-in' : 'md-log-in'}
-    />
-  ),
+NewCategoryStack.navigationOptions = {
+};
+
+const AlternativeScreenStack = createStackNavigator({
+  alternativeScreen: AlternativeScreen,
+});
+AlternativeScreenStack.navigationOptions = {
 };
 
 const DrawerComponent = createDrawerNavigator(
@@ -204,14 +225,17 @@ const DrawerComponent = createDrawerNavigator(
     'Saved result': SavedResultStack,
     'Settings': SettingsStack,
     'Log out': LogOutStack,
-    'Log in': LoginStack,
   },
 );
 
 
-
 const AppStack = createStackNavigator({
   Drawer: { screen: DrawerComponent },
+  ChangePassword: {screen: ChangePasswordStack},
+  NewCategory: { screen: NewCategoryStack },
+  ChangeEmail: {screen: ChangeEmailStack},
+  AlternativeScreen: {screen: AlternativeScreenStack},
+  AddFriendScreen: {screen: AddFriendStack},
 }, {
   headerMode: 'none',
 });

@@ -16,7 +16,7 @@ export default class SettingsScreen extends React.Component {
           headerTitle: (
         <Image source={require('../assets/images/100whitte.png')}/>),
         headerStyle: {
-          backgroundColor: 'red',
+          backgroundColor: '#008080',
           height: 70,
           marginLeft: 10,
           },
@@ -26,7 +26,8 @@ export default class SettingsScreen extends React.Component {
   >
   <Icon
     name={Platform.OS === "ios" ? "ios-menu" : "md-menu"}
-    size={40}/>
+    size={40}
+    color='#FFFFFF'/>
   </TouchableOpacity>
           ),
         };
