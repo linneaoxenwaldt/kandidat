@@ -1,7 +1,7 @@
 import React from 'react';
-import { Platform, Button, Text } from 'react-native';
-import { createStackNavigator, createBottomTabNavigator, createDrawerNavigator, createSwitchNavigator,
-TouchableOpacity, } from 'react-navigation';
+import { Platform, Button, Text, TouchableOpacity, } from 'react-native';
+import {SwitchNavigator,createAppContainer, createStackNavigator,
+   createBottomTabNavigator, createDrawerNavigator, createSwitchNavigator} from 'react-navigation';
 import Icon from "react-native-vector-icons/Ionicons";
 
 import TabBarIcon from '../components/TabBarIcon';
@@ -14,6 +14,9 @@ import NewVoteScreen from '../screens/NewVoteScreen';
 import OngoingVoteScreen from '../screens/OngoingVoteScreen';
 import SavedResultScreen from '../screens/SavedResultScreen';
 import LogOutScreen from '../screens/LogOutScreen';
+import LoginScreen from '../screens/auth/LoginScreen'
+import SignupScreen from '../screens/auth/SignupScreen'
+import ForgotPasswordScreen from '../screens/auth/ForgotPasswordScreen'
 import ChangePasswordScreen from '../screens/ChangePasswordScreen';
 import ChangeEmailScreen from '../screens/ChangeEmailScreen';
 import NewCategory from '../screens/NewCategory';
@@ -240,6 +243,6 @@ const AppStack = createStackNavigator({
 const App = props => <AppStack {...props} />;
 App.router = AppStack.router;
 
-export default createSwitchNavigator({
+export default createAppContainer(createSwitchNavigator({
   app: App,
-});
+}));
