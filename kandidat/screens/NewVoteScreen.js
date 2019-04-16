@@ -13,12 +13,15 @@ import { ListItem } from 'react-native-elements';
 import { DrawerActions } from 'react-navigation';
 import Icon from "react-native-vector-icons/Ionicons";
 import data from '../data/engWord.json';
+import * as firebase from 'firebase';
+import 'firebase/firestore';
 
 
 export default class NewVoteScreen extends React.Component {
   constructor(props){
     super(props)
     this.colors = ['#6ACCCB', '#94B4C1', '#8FBC8F', '#CBA3D5', '#689999']
+    this.getReadyMadeCat();
     const rows = [
     {id: '0', text: 'Test0'},
     {id: '1', text: 'Test1'},
@@ -56,6 +59,16 @@ export default class NewVoteScreen extends React.Component {
         ),
       };
     };
+
+    getReadyMadeCat() {
+      var db = firebase.firestore();
+      db.collection("Category").get().then(function(querySnapshot) {
+          querySnapshot.forEach(function(doc) {
+              // doc.data() is never undefined for query doc snapshots
+              console.log(doc.id, " => ", doc.data());
+          });
+      });
+    }
 
     deleteCategory(delItem) {
       this.setState(prevState => ({rows: prevState.rows.filter(item => item !== delItem) }));
