@@ -3,13 +3,23 @@ import { ScrollView,
   StyleSheet,
   Image,
   TouchableOpacity,
-  Platform
+  Platform,
+  Button,
+  View
 } from 'react-native';
 import { DrawerActions } from 'react-navigation';
 import Icon from "react-native-vector-icons/Ionicons";
 import { ExpoLinksView } from '@expo/samples';
+import * as firebase from 'firebase';
+
+
 
 export default class LogOutScreen extends React.Component {
+
+  onSignoutPress = () => {
+    firebase.auth().signOut();
+  }
+
   static navigationOptions = ({ navigation }) => {
       return {
         headerTitle: (
@@ -34,11 +44,11 @@ export default class LogOutScreen extends React.Component {
 
   render() {
     return (
-      <ScrollView style={styles.container}>
-        {/* Go ahead and delete ExpoLinksView and replace it with your
-           * content, we just wanted to provide you with some helpful links */}
-        <ExpoLinksView />
-      </ScrollView>
+
+      <View style={styles.container}>
+      <Button title = 'Logout' onPress = {this.onSignoutPress} />
+      </View>
+
     );
   }
 }

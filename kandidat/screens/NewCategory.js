@@ -88,19 +88,23 @@ export default class NewCategory extends React.Component {
               style={styles.nameText}
               placeholder="Enter a category name..."/>
               </View>
-              <View>
-              <TouchableOpacity style={styles.forwardArrow}
-              onPress={() => this.props.navigation.navigate('AlternativeScreen')}>
-              <Icon
-              name={Platform.OS === "ios" ? "ios-arrow-forward" : "md-arrow-forward"}
-              size={50}/>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.backArrow}
-              onPress={() => this.props.navigation.navigate('NewVote')}>
-              <Icon
-              name={Platform.OS === "ios" ? "ios-arrow-back" : "md-arrow-back"}
-              size={50}/>
-              </TouchableOpacity>
+              <View style={styles.buttonBottomContainer}>
+              <TouchableOpacity
+                onPress={() => this.props.navigation.navigate('NewVote')}
+                >
+                <Icon
+                name={Platform.OS === "ios" ? "ios-arrow-back" : "md-arrow-back"}
+                size={70}
+                color="#A9A9A9"/>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => this.props.navigation.navigate('AlternativeScreen')}
+          >
+          <Icon
+          name={Platform.OS === "ios" ? "ios-arrow-forward" : "md-arrow-forward"}
+          size={70}
+          color="#A9A9A9"/>
+        </TouchableOpacity>
               </View>
               </View>
             );
@@ -113,7 +117,9 @@ export default class NewCategory extends React.Component {
             flex: 1,
             paddingTop: 20,
             backgroundColor: '#FFFFFF',
-            marginLeft: 30,
+            //marginLeft: 30,
+            textAlign: "center",
+            alignItems: "center",
           },
           picContain: {
             height:200,
@@ -121,7 +127,7 @@ export default class NewCategory extends React.Component {
             backgroundColor: '#CBA3D5',
             alignItems: 'center',
             justifyContent: 'center',
-            marginLeft: 50,
+            //marginLeft: 50,
             borderRadius: 5,
             borderWidth: 6,
             borderColor: '#BA55B3',
@@ -177,12 +183,9 @@ export default class NewCategory extends React.Component {
             fontSize: 24,
             textAlign: 'center',
           },
-          forwardArrow: {
-            marginTop: 30,
-            marginLeft:280,
-          },
-          backArrow: {
-            margin: 0,
-            padding: 0,
-          },
+          buttonBottomContainer: {
+  flexDirection:'row',
+  justifyContent: 'space-between',
+  width: 340,
+},
         });
