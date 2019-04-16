@@ -21,23 +21,27 @@ export default class NewVoteScreen extends React.Component {
   constructor(props){
     super(props)
     this.colors = ['#6ACCCB', '#94B4C1', '#8FBC8F', '#CBA3D5', '#689999']
-    this.getReadyMadeCat();
-    const rows = [
-    {id: '0', text: 'Test0'},
-    {id: '1', text: 'Test1'},
-    {id: '2', text: 'Test2'},
-    {id: '3', text: 'Test3'},
-    {id: '4', text: 'Test4'},
-    {id: '5', text: 'Test5'},
-    {id: '6', text: 'Test6'},
-    {id: '7', text: 'Test7'},
-    {id: '8', text: 'Test8'},
-  ]
+    // this.getReadyMadeCat();
+  //   const rows = [
+  //   {id: '0', text: 'Test0'},
+  //   {id: '1', text: 'Test1'},
+  //   {id: '2', text: 'Test2'},
+  //   {id: '3', text: 'Test3'},
+  //   {id: '4', text: 'Test4'},
+  //   {id: '5', text: 'Test5'},
+  //   {id: '6', text: 'Test6'},
+  //   {id: '7', text: 'Test7'},
+  //   {id: '8', text: 'Test8'},
+  // ]
+  // console.log(rows)
   this.extractKey = ({id}) => id
   this.state = {
-    rows: rows,
+    rows: [],
   }
+  this.getReadyMadeCat();
+  // console.log(this.state)
   }
+
   static navigationOptions = ({ navigation }) => {
       return {
         headerTitle: (
@@ -61,11 +65,16 @@ export default class NewVoteScreen extends React.Component {
     };
 
     getReadyMadeCat() {
+      var that = this
+      //const rows = []
       var db = firebase.firestore();
       db.collection("Category").get().then(function(querySnapshot) {
           querySnapshot.forEach(function(doc) {
               // doc.data() is never undefined for query doc snapshots
-              console.log(doc.id, " => ", doc.data());
+              const value = doc.get('CatName');
+              that.setState(prevState => ({
+                rows: [...prevState.rows, {id: doc.id, text: value}]
+              }))
           });
       });
     }
