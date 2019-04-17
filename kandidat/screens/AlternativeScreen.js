@@ -14,6 +14,8 @@ import { ListItem } from 'react-native-elements';
 import { DrawerActions } from 'react-navigation';
 import Icon from "react-native-vector-icons/Ionicons";
 import data from '../data/engWord.json';
+import * as firebase from 'firebase';
+import 'firebase/firestore';
 
 
 
@@ -21,22 +23,23 @@ export default class AlternativeScreen extends React.Component {
   constructor(props){
     super(props);
     this.colors = ['#6ACCCB', '#94B4C1', '#8FBC8F', '#CBA3D5', '#689999']
-    const rows = [
-    {id: '0', text: 'Alternativ 1'},
-    {id: '1', text: 'Alternativ 2'},
-    {id: '2', text: 'Alternativ 3'},
-    {id: '3', text: 'Alternativ 4'},
-    {id: '4', text: 'Alternativ 5'},
-    {id: '5', text: 'Alternativ 6'},
-    {id: '6', text: 'Alternativ 7'},
-    {id: '7', text: 'Alternativ 8'},
-    {id: '8', text: 'Alternativ 9'},
-  ]
+  //   const rows = [
+  //   {id: '0', text: 'Alternativ 1'},
+  //   {id: '1', text: 'Alternativ 2'},
+  //   {id: '2', text: 'Alternativ 3'},
+  //   {id: '3', text: 'Alternativ 4'},
+  //   {id: '4', text: 'Alternativ 5'},
+  //   {id: '5', text: 'Alternativ 6'},
+  //   {id: '6', text: 'Alternativ 7'},
+  //   {id: '7', text: 'Alternativ 8'},
+  //   {id: '8', text: 'Alternativ 9'},
+  // ]
   this.extractKey = ({id}) => id
   this.state = {
-    rows: rows,
+    rows: [],
     text: ''
   }
+  this.getReadyMadeAlt()
   }
 
   static navigationOptions = ({ navigation }) => {
@@ -59,6 +62,27 @@ export default class AlternativeScreen extends React.Component {
         ),
       };
     };
+
+    getReadyMadeAlt() {
+      var that = this
+      if(this.props.navigation.state.params !== undefined) {
+        var catID = this.props.navigation.state.params.CatID
+        var db = firebase.firestore();
+        db.collection("Category").doc(catID).collection('Alternative').get().then(function(querySnapshot) {
+            querySnapshot.forEach(function(doc) {
+                // doc.data() is never undefined for query doc snapshots
+                const name = doc.get('Name');
+                const votes = doc.get('Votes')
+                that.setState(prevState => ({
+                  rows: [...prevState.rows, {id: doc.id, text: name, votes: votes}]
+                }))
+            });
+        });
+      }
+      else {
+        that.state.rows = []
+      }
+      }
 
     addNewAlternative() {
      var index = this.state.rows.length

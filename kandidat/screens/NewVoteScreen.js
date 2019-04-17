@@ -85,6 +85,8 @@ export default class NewVoteScreen extends React.Component {
 
     renderItem = ({item, index}) => {
       return (
+        <TouchableOpacity
+        onPress={() => this.props.navigation.navigate('AlternativeScreen', {CatID: item.id})}>
         <ListItem
         containerStyle={{ backgroundColor: this.colors[index % this.colors.length]}}
         titleStyle={{color: '#FFFFFF', fontSize: 20}}
@@ -101,7 +103,7 @@ export default class NewVoteScreen extends React.Component {
         {text: 'OK', onPress: () => this.deleteCategory(item)},
       ],
       { cancelable: false })}/>}
-        />)
+        /></TouchableOpacity>)
     }
 
     render() {
