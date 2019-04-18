@@ -46,7 +46,6 @@ saveNewFriend() {
  var newIDnum = parseInt(this.props.navigation.state.params.currentRows[index-1].id, 10) + 1
  var newID = newIDnum.toString()
  var newFriend = {id: newID, text: this.state.text, img: require('../assets/images/robot-dev.png')}
- console.log(newID)
  this.props.navigation.state.params.currentRows.push(newFriend)
  this.props.navigation.navigate('Friends')
  }

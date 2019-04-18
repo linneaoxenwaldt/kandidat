@@ -12,6 +12,8 @@ import { ScrollView,
 } from 'react-native';
 import Icon from "react-native-vector-icons/Ionicons";
 import data from '../data/engWord.json';
+import * as firebase from 'firebase';
+import 'firebase/firestore';
 
 export default class NewCategory extends React.Component {
 
@@ -27,13 +29,37 @@ export default class NewCategory extends React.Component {
       };
     };
 
-    constructor() {
-      super()
+    constructor(props) {
+      super(props)
       this.state={
         showMe: false,
         borderSize: 0,
+        text: "",
       }
     }
+
+    createNewCat() {
+      var that = this
+      console.log(this.state.text)
+      if(this.state.text == "") {
+        Alert.alert(
+    data.missingCatName,
+)
+      }
+      else {
+      var db = firebase.firestore();
+      db.collection("Category").add({
+    CatName: this.state.text,
+})
+.then(function(docRef) {
+    console.log("Document written with ID: ", docRef.id);
+    that.props.navigation.navigate('AlternativeScreen', {CatID: docRef.id})
+})
+.catch(function(error) {
+    console.error("Error adding document: ", error);
+});
+    }
+  }
 
     handleClick = () => {
            if (this.state.borderWidth === 0){
@@ -86,7 +112,8 @@ export default class NewCategory extends React.Component {
               <View style={styles.nameCategoryCon}>
               <TextInput
               style={styles.nameText}
-              placeholder="Enter a category name..."/>
+              placeholder="Enter a category name..."
+              onChangeText={(text) => this.setState({text})}/>
               </View>
               <View style={styles.buttonBottomContainer}>
               <TouchableOpacity
@@ -98,7 +125,7 @@ export default class NewCategory extends React.Component {
                 color="#A9A9A9"/>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => this.props.navigation.navigate('AlternativeScreen')}
+          onPress={() => this.createNewCat()}
           >
           <Icon
           name={Platform.OS === "ios" ? "ios-arrow-forward" : "md-arrow-forward"}

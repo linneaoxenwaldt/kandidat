@@ -85,19 +85,51 @@ export default class AlternativeScreen extends React.Component {
       }
 
     addNewAlternative() {
-     var index = this.state.rows.length
-     var newIDnum = parseInt(this.state.rows[index-1].id, 10) + 1
-     var newID = newIDnum.toString()
-     var newAlternative = {id: newID, text: this.state.text}
-     this.state.rows.push(newAlternative)
+     // var index = this.state.rows.length
+     // var newIDnum = parseInt(this.state.rows[index-1].id, 10) + 1
+     // var newID = newIDnum.toString()
+     // var newAlternative = {id: newID, text: this.state.text}
+     // this.state.rows.push(newAlternative)
 
-
-
+     console.log(this.state.text)
+     var that = this
+     var catID = this.props.navigation.state.params.CatID
+     if(this.state.text == "") {
+       Alert.alert(
+         data.missingAltName,
+       )
      }
+     else {
+       var db = firebase.firestore();
+       db.collection("Category").doc(catID).collection('Alternative').add({
+         Name: this.state.text,
+         Votes: 0,
+       })
+       .then(function(docRef) {
+         console.log("Document written with ID: ", docRef.id);
+         that.textInput.clear()
+         that.setState(prevState => ({
+           rows: [...prevState.rows, {id: docRef.id, text: that.state.text, votes: 0}]
+         }))
+         that.state.text = ""
+       })
+       .catch(function(error) {
+         console.error("Error adding document: ", error);
+       });
+     }
+   }
 
-  deleteAlternative(delItem) {
-    this.setState(prevState => ({rows: prevState.rows.filter(item => item !== delItem) }));
-  }
+   deleteAlternative(delItem) {
+     var that = this
+     var catID = this.props.navigation.state.params.CatID
+     var db = firebase.firestore();
+     db.collection("Category").doc(catID).collection("Alternative").doc(delItem.id).delete().then(function() {
+       console.log("Document successfully deleted!");
+     }).catch(function(error) {
+       console.error("Error removing document: ", error);
+     });
+     this.setState(prevState => ({rows: prevState.rows.filter(item => item !== delItem) }));
+   }
 
 renderItem = ({item, index}) => {
   var msg = `${data.sureMsg} ${item.text}?`
@@ -126,6 +158,7 @@ renderItem = ({item, index}) => {
       <View style={styles.container}>
       <Text style={styles.alternativeLabel}>{data.alternatives}</Text>
       <TextInput
+      ref={input => { this.textInput = input }}
       style={styles.textInput}
       placeholder="Add new"
       onChangeText={(text) => this.setState({text})}

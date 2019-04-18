@@ -22,5 +22,7 @@
   "save": "Save",
   "yourTurn": "Your turn to vote!",
   "yourFriensTurn": "Your friends turn",
+  "missingCatName": "You have not entered a name for your category",
+  "missingAltName": "You have not entered a name for your alternative",
 
 }
