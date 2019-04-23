@@ -95,9 +95,9 @@ export default class NewVoteScreen extends React.Component {
 
     renderItem = ({item, index}) => {
       return (
-        <ImageBackground source={{uri: item.img}} style={{width: '100%', height: 150}}>
         <TouchableOpacity
-        onPress={() => this.props.navigation.navigate('AlternativeScreen', {CatID: item.id})}>
+        onPress={() => this.props.navigation.navigate('AlternativeScreen', {CatID: item.id, prePage: "Old"})}>
+        <ImageBackground source={{uri: item.img}} style={{width: '100%', height: 150}}>
         <ListItem
         //containerStyle={{ backgroundColor: this.colors[index % this.colors.length]}}
         containerStyle={{ backgroundColor: 'transparent'}}
@@ -115,7 +115,7 @@ export default class NewVoteScreen extends React.Component {
         {text: 'OK', onPress: () => this.deleteCategory(item)},
       ],
       { cancelable: false })}/>}
-        /></TouchableOpacity></ImageBackground>)
+        /></ImageBackground></TouchableOpacity>)
     }
 
     render() {
