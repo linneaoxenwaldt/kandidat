@@ -145,13 +145,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: 350,
     height: 70,
-    margin: 10,
+    marginBottom: 0,
     padding: 10,
     backgroundColor:'#6BCDFD',
     borderRadius:30,
     borderWidth: 1,
     borderColor: '#fff',
+<<<<<<< HEAD
     marginTop: 100,
+=======
+  //  marginTop: 300,
+>>>>>>> c55e63841c8578f4ace387f65943a303c4d5fea1
   },
 
 

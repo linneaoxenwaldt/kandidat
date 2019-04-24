@@ -11,6 +11,7 @@ import { ScrollView,
 import { DrawerActions } from 'react-navigation';
 import Icon from "react-native-vector-icons/Ionicons";
 import data from '../data/engWord.json';
+import * as firebase from 'firebase';
 
 export default class ProfileScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -35,15 +36,44 @@ export default class ProfileScreen extends React.Component {
       };
     };
 
+    constructor(props){
+      super(props);
+      this.state = {
+        username: "",
+        email: "",
+      }
+      this.getUser()
+      }
+
+      getUser() {
+        var that = this
+      var db = firebase.firestore();
+      var user = firebase.auth().currentUser;
+      var userID = user.uid;
+      console.log(user.uid)
+      var docRef = db.collection('Users').doc(userID);
+docRef.get().then(function(doc) {
+    if (doc.exists) {
+        that.setState({username: doc.data().Username, email : doc.data().Email})
+        console.log("Document data:", that.state.username);
+    } else {
+        // doc.data() will be undefined in this case
+        console.log("No such document!");
+    }
+}).catch(function(error) {
+    console.log("Error getting document:", error);
+});
+    }
+
     render() {
       return (
         <View style={styles.container}>
         <Image source={require('../assets/images/emil.jpg')} style={styles.profilePic}/>
         <View style={styles.userNameContainer}>
-        <Text style={styles.userNameText}>User name</Text>
+        <Text style={styles.userNameText}>{this.state.username}</Text>
         </View>
         <View style={styles.emailContainer}>
-        <Text style={styles.emailText}>Test@testtest.se</Text>
+        <Text style={styles.emailText}>{this.state.email}</Text>
         <TouchableOpacity
         style={styles.changeIcon}
         onPress={() => this.props.navigation.navigate('ChangeEmail')}>
