@@ -97,11 +97,11 @@ export default class NewVoteScreen extends React.Component {
       return (
         <TouchableOpacity
         onPress={() => this.props.navigation.navigate('AlternativeScreen', {CatID: item.id, prePage: "Old"})}>
-        <ImageBackground source={{uri: item.img}} style={{width: '100%', height: 150}}>
+        <ImageBackground source={{uri: item.img}} style={{width: '100%', height: 100}}>
         <ListItem
         //containerStyle={{ backgroundColor: this.colors[index % this.colors.length]}}
         containerStyle={{ backgroundColor: 'transparent'}}
-        titleStyle={{color: '#FFFFFF', fontSize: 20}}
+        titleStyle={{color: '#FFFFFF', fontSize: 30}}
         title={item.text}
         rightIcon = {<Icon
           name={Platform.OS === "ios" ? "ios-trash" : "md-trash"}
