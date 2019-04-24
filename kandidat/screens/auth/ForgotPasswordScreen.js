@@ -47,7 +47,7 @@ render(){
     />
 
     <Button title = 'Reset Password' onPress = {this.onResetPasswordPress} />
-    // <Button style={styles.backButton} title = 'Back to Login' onPress = {this.onBackToLoginPress}/>
+    <Button style={styles.backButton} title = 'Back to Login' onPress = {this.onBackToLoginPress}/>
 
     </View>
 
