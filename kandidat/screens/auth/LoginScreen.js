@@ -48,6 +48,7 @@ firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password
       />
 
       <TextInput style = {styles.textInputContainer}
+      secureTextEntry={true}
       style={styles.textInput}
       placeholder="Password"
       value = {this.state.password}
