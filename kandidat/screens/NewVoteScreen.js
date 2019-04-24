@@ -8,6 +8,7 @@ import { ScrollView,
   Text,
   FlatList,
   Alert,
+  ImageBackground,
 } from 'react-native';
 import { ListItem } from 'react-native-elements';
 import { DrawerActions } from 'react-navigation';
@@ -72,8 +73,10 @@ export default class NewVoteScreen extends React.Component {
           querySnapshot.forEach(function(doc) {
               // doc.data() is never undefined for query doc snapshots
               const value = doc.get('CatName');
+              const img = doc.get('CatImg');
+              // console.log(img)
               that.setState(prevState => ({
-                rows: [...prevState.rows, {id: doc.id, text: value}]
+                rows: [...prevState.rows, {id: doc.id, text: value, img: img}]
               }))
           });
       });
@@ -93,9 +96,11 @@ export default class NewVoteScreen extends React.Component {
     renderItem = ({item, index}) => {
       return (
         <TouchableOpacity
-        onPress={() => this.props.navigation.navigate('AlternativeScreen', {CatID: item.id})}>
+        onPress={() => this.props.navigation.navigate('AlternativeScreen', {CatID: item.id, prePage: "Old"})}>
+        <ImageBackground source={{uri: item.img}} style={{width: '100%', height: 150}}>
         <ListItem
-        containerStyle={{ backgroundColor: this.colors[index % this.colors.length]}}
+        //containerStyle={{ backgroundColor: this.colors[index % this.colors.length]}}
+        containerStyle={{ backgroundColor: 'transparent'}}
         titleStyle={{color: '#FFFFFF', fontSize: 20}}
         title={item.text}
         rightIcon = {<Icon
@@ -110,7 +115,7 @@ export default class NewVoteScreen extends React.Component {
         {text: 'OK', onPress: () => this.deleteCategory(item)},
       ],
       { cancelable: false })}/>}
-        /></TouchableOpacity>)
+        /></ImageBackground></TouchableOpacity>)
     }
 
     render() {
@@ -182,6 +187,5 @@ const styles = StyleSheet.create({
   fontFamily: "Roboto-Light",
   padding: 15,
   marginBottom: 5,
-  backgroundColor: 'skyblue',
 },
 });

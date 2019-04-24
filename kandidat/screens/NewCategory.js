@@ -47,18 +47,18 @@ export default class NewCategory extends React.Component {
         )
       }
       else {
-        var db = firebase.firestore();
-        db.collection("Category").add({
-          CatName: this.state.text,
-        })
-        .then(function(docRef) {
-          console.log("Document written with ID: ", docRef.id);
-          that.props.navigation.navigate('AlternativeScreen', {CatID: docRef.id})
-        })
-        .catch(function(error) {
-          console.error("Error adding document: ", error);
-        });
-      }
+      var db = firebase.firestore();
+      db.collection("Category").add({
+    CatName: this.state.text,
+})
+.then(function(docRef) {
+    console.log("Document written with ID: ", docRef.id);
+    that.props.navigation.navigate('AlternativeScreen', {CatID: docRef.id, prePage: "New"})
+})
+.catch(function(error) {
+    console.error("Error adding document: ", error);
+});
+>>>>>>> b051ffb851143040e7d1be4ba38b439aa1985da8
     }
 
     handleClick = () => {

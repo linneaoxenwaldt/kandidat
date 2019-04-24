@@ -51,15 +51,6 @@ export default class AlternativeScreen extends React.Component {
         height: 70,
         marginLeft: 10,
         },
-        headerRight: (
-          <TouchableOpacity onPress={() => navigation.navigate('HomeScreen')}
->
-<Icon
-  name={Platform.OS === "ios" ? "ios-trash" : "md-trash"}
-  size={40}
-  color='#FFFFFF'/>
-</TouchableOpacity>
-        ),
       };
     };
 
@@ -131,6 +122,18 @@ export default class AlternativeScreen extends React.Component {
      this.setState(prevState => ({rows: prevState.rows.filter(item => item !== delItem) }));
    }
 
+   checkPrePage() {
+     //var that = this
+     var prePage = this.props.navigation.state.params.prePage
+     console.log(prePage)
+     if (prePage === "New") {
+       this.props.navigation.navigate('NewCategory')
+     }
+     if (prePage === "Old") {
+       this.props.navigation.navigate('NewVote')
+     }
+   }
+
 renderItem = ({item, index}) => {
   var msg = `${data.sureMsg} ${item.text}?`
   return (
@@ -146,7 +149,7 @@ renderItem = ({item, index}) => {
   data.deleteAlternative,
   msg,
   [
-
+    {text: 'Cancel', onPress: () => this.props.navigation.navigate('AlternativeScreen')},
     {text: 'OK', onPress: () => this.deleteAlternative(item)},
   ],
   { cancelable: false })}/>}
@@ -157,13 +160,13 @@ renderItem = ({item, index}) => {
     return (
       <View style={styles.container}>
       <Text style={styles.alternativeLabel}>{data.alternatives}</Text>
+      <View style={styles.addMoreAlt}>
       <TextInput
       ref={input => { this.textInput = input }}
       style={styles.textInput}
       placeholder="Add new"
       onChangeText={(text) => this.setState({text})}
       />
-
       <TouchableOpacity
       style = {styles.saveButton}
         onPress={() => this.addNewAlternative()}
@@ -174,6 +177,7 @@ renderItem = ({item, index}) => {
         color= {'white'}
         />
        </TouchableOpacity>
+       </View>
 
      <FlatList
 data={this.state.rows}
@@ -181,18 +185,22 @@ renderItem={this.renderItem}
 keyExtractor={this.extractKey}
 />
 
-<View>
-<TouchableOpacity style={styles.forwardArrow}
-onPress={() => this.props.navigation.navigate('AlternativeScreen')}>
+<View style={styles.buttonBottomContainer}>
+<TouchableOpacity
+  onPress={() => this.checkPrePage()}
+  >
+  <Icon
+  name={Platform.OS === "ios" ? "ios-arrow-back" : "md-arrow-back"}
+  size={70}
+  color="#A9A9A9"/>
+</TouchableOpacity>
+<TouchableOpacity
+onPress={() => this.props.navigation.navigate('AlternativeScreen')}
+>
 <Icon
 name={Platform.OS === "ios" ? "ios-arrow-forward" : "md-arrow-forward"}
-size={50}/>
-</TouchableOpacity>
-<TouchableOpacity style={styles.backArrow}
-onPress={() => this.props.navigation.navigate('NewVote')}>
-<Icon
-name={Platform.OS === "ios" ? "ios-arrow-back" : "md-arrow-back"}
-size={50}/>
+size={70}
+color="#A9A9A9"/>
 </TouchableOpacity>
 </View>
       </View>
@@ -216,35 +224,38 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily: "Roboto-Light",
   },
-  addAlternative: {
-    justifyContent: 'center',
-    width: 350,
-    height: 70,
-    margin: 10,
-    padding: 10,
-    backgroundColor:'#BA55B3',
-    borderRadius:30,
-    borderWidth: 1,
-    borderColor: '#fff'
-  },
-  addAlternativeText: {
-    fontFamily: "Roboto-Light",
-    color:'#fff',
-    fontSize: 25,
-    textAlign:'center',
-    paddingLeft : 1,
-    paddingRight : 1,
-  },
-  alternativeContainer: {
-    marginTop: 40,
-    textAlign: 'center',
+  addMoreAlt: {
     alignItems: 'center',
   },
-  alternativeText: {
-    fontFamily: "Roboto-Light",
-    color: '#000000',
-    fontSize: 25,
-  },
+  // addAlternative: {
+  //   justifyContent: 'center',
+  //   width: 350,
+  //   height: 70,
+  //   margin: 10,
+  //   padding: 10,
+  //   backgroundColor:'#BA55B3',
+  //   borderRadius:30,
+  //   borderWidth: 1,
+  //   borderColor: '#fff'
+  // },
+  // addAlternativeText: {
+  //   fontFamily: "Roboto-Light",
+  //   color:'#fff',
+  //   fontSize: 25,
+  //   textAlign:'center',
+  //   paddingLeft : 1,
+  //   paddingRight : 1,
+  // },
+  // alternativeContainer: {
+  //   marginTop: 40,
+  //   textAlign: 'center',
+  //   alignItems: 'center',
+  // },
+  // alternativeText: {
+  //   fontFamily: "Roboto-Light",
+  //   color: '#000000',
+  //   fontSize: 25,
+  // },
   row: {
   fontFamily: "Roboto-Light",
   color: '#FFFFFF',
@@ -262,7 +273,7 @@ textInput: {
   height: 70,
   //backgroundColor: '#8FBC8F',
   borderRadius: 30,
-  marginBottom: 10,
+  // marginBottom: 10,
   padding: 10,
   color: '#FFFFFF',
 },
@@ -273,18 +284,19 @@ saveButton: {
   alignItems: 'center',
   justifyContent: 'center',
   borderRadius: 100,
-  marginBottom: 10,
-  marginTop: 50,
+  marginBottom: 20,
+  marginTop: 10,
 },
 addIcon: {
   color: "#FFFFFF",
   fontSize: 30,
   fontFamily: 'Roboto-Light',
 },
-forwardArrow: {
-  justifyContent: 'center',
-},
-backArrow: {
-  justifyContent: 'center',
+buttonBottomContainer: {
+flexDirection:'row',
+justifyContent: 'space-between',
+//width: '100%',
+marginLeft: 10,
+marginRight: 10,
 },
 });
