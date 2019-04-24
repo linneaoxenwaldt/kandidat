@@ -168,6 +168,11 @@ LogOutStack.navigationOptions = {
     />),
 };
 
+
+const LoginStack = createStackNavigator({
+  LoginScreen: LoginScreen,
+});
+
 const ChangePasswordStack = createStackNavigator({
   ChangePassword: ChangePasswordScreen,
 });
@@ -236,6 +241,7 @@ const AppStack = createStackNavigator({
   ChangeEmail: {screen: ChangeEmailStack},
   AlternativeScreen: {screen: AlternativeScreenStack},
   AddFriendScreen: {screen: AddFriendStack},
+  LoginScreen: {screen: LoginStack},
 }, {
   headerMode: 'none',
 });
