@@ -58,16 +58,8 @@ export default class NewCategory extends React.Component {
 .catch(function(error) {
     console.error("Error adding document: ", error);
 });
->>>>>>> b051ffb851143040e7d1be4ba38b439aa1985da8
     }
-
-    handleClick = () => {
-      if (this.state.borderWidth === 0){
-        this.setState({borderSize: 12});
-      } else {
-        this.setState({borderSize: 0});
-      }
-    }
+}
 
     render() {
       return (
