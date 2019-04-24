@@ -21,6 +21,7 @@ export default class SignupScreen extends React.Component{
     constructor(props){
       super(props);
       this.state ={
+        username: '',
         email : '',
         password : '',
         passwordConfirm : '',
@@ -34,10 +35,28 @@ export default class SignupScreen extends React.Component{
       }
       firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
       .then(() => {
-
+        this.createAccountDatabase()
       },(error) =>{
         Alert.alert(error.message);
       });
+    }
+
+    createAccountDatabase() {
+      var user = firebase.auth().currentUser;
+      var userID = user.uid;
+      var that = this
+      console.log(user)
+      var db = firebase.firestore();
+      db.collection("Users").doc(userID).set({
+    Email: this.state.email,
+    Username: this.state.username,
+})
+.then(function() {
+    console.log("Document written with ID: ");
+})
+.catch(function(error) {
+    console.error("Error adding document: ", error);
+});
     }
 
     render(){
@@ -49,8 +68,8 @@ export default class SignupScreen extends React.Component{
         <TextInput style={styles.inputText}
         placeholder="Enter a username... "
         backgroundColor = "#6ACCCB"
-        value = {this.state.email}
-        onChangeText = {(text) => {this.setState({ email : text}) }}
+        value = {this.state.username}
+        onChangeText = {(text) => {this.setState({ username : text}) }}
         />
         <TextInput style={styles.inputText}
         placeholder="Enter an email... "

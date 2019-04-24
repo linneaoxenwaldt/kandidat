@@ -145,13 +145,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: 350,
     height: 70,
-    margin: 10,
+    marginBottom: 0,
     padding: 10,
     backgroundColor:'#6BCDFD',
     borderRadius:30,
     borderWidth: 1,
     borderColor: '#fff',
-    marginTop: 300,
+  //  marginTop: 300,
   },
 
 
