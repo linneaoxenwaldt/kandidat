@@ -151,23 +151,25 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
   categoryLabel: {
-    fontSize: 50,
+    fontSize: 40,
     color: '#000000',
     textAlign: 'center',
     fontFamily: "Roboto-Light",
   },
   createOwnCategoryContainer: {
+    alignItems: 'center',
     justifyContent: 'center',
     width: 350,
     height: 70,
-    margin: 10,
+    margin: 20,
     padding: 10,
     backgroundColor:'#BA55B3',
-    borderRadius:30,
+    borderRadius:50,
     borderWidth: 1,
     borderColor: '#fff'
   },
   ownCategoryText: {
+    justifyContent: 'center',
     fontFamily: "Roboto-Light",
     color:'#fff',
     fontSize: 25,
@@ -181,11 +183,13 @@ const styles = StyleSheet.create({
   readyMadeCategoryLabel: {
     fontFamily: "Roboto-Light",
     color: '#000000',
-    fontSize: 25,
+    fontSize: 20,
+    margin: 20,
   },
   row: {
   fontFamily: "Roboto-Light",
   padding: 15,
   marginBottom: 5,
+
 },
 });

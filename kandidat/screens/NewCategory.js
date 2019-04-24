@@ -143,7 +143,7 @@ export default class NewCategory extends React.Component {
         picContain: {
           height:200,
           width:200,
-          backgroundColor: '#CBA3D5',
+          backgroundColor: '#BA55B3',
           alignItems: 'center',
           justifyContent: 'center',
           //marginLeft: 50,
@@ -192,8 +192,8 @@ export default class NewCategory extends React.Component {
           backgroundColor: '#6BCDFD',
           marginTop: 30,
           justifyContent: 'center',
-          borderRadius: 30,
-          borderWidth: 6,
+          borderRadius: 50,
+          borderWidth: 4,
           borderColor: '#3BCDFD',
         },
         nameText: {

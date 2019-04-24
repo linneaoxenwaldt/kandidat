@@ -50,7 +50,7 @@ export default class SignupScreen extends React.Component{
         placeholder="Enter a username... "
         backgroundColor = "#6ACCCB"
         value = {this.state.email}
-        onChangeText = {(text) => {this.setState({ email : text}) }}
+        onChangeText = {(text) => {this.setState({ username : text}) }}
         />
         <TextInput style={styles.inputText}
         placeholder="Enter an email... "

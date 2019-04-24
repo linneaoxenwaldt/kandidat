@@ -16,6 +16,7 @@ import { DrawerNavigator, NavigationActions, DrawerActions } from 'react-navigat
 import { MonoText } from '../components/StyledText';
 import Icon from "react-native-vector-icons/Ionicons";
 import data from '../data/engWord.json';
+import { LinearGradient } from 'expo';
 
 
 export default class HomeScreen extends React.Component {
@@ -42,6 +43,11 @@ export default class HomeScreen extends React.Component {
     };
 
     render() {
+
+      const config = {
+            velocityThreshold: 0.3,
+            directionalOffsetThreshold: 80
+          };
       return (
         <View style={styles.container}>
         <View style={styles.buttonContainer}>
@@ -58,6 +64,12 @@ export default class HomeScreen extends React.Component {
         <Text style={styles.buttonText}>{data.ongoingVotes}</Text>
         </TouchableOpacity>
         </View>
+
+        <LinearGradient
+        colors={['#FFFFFF', '#6ACCCB']}
+        style={{ height: '37%'}}>
+        </LinearGradient>
+
         </View>
       );
     }
@@ -68,38 +80,39 @@ export default class HomeScreen extends React.Component {
     container: {
       flex: 1,
       backgroundColor: '#FFFFFF',
+      justifyContent:'center'
     },
     buttonContainer: {
       alignItems: 'center',
       marginHorizontal: 50,
+
     },
     createVote: {
-      width: 350,
-      height: 200,
-      margin:10,
+      width: 300,
+      height: 150,
+      marginBottom:20,
       padding: 10,
       backgroundColor: '#BA55B3',
       borderRadius:50,
-      borderWidth: 1,
-      borderColor: '#fff',
+      justifyContent:'center',
     },
     buttonText:{
       fontFamily: "Roboto-Light",
       color:'#fff',
-      fontSize: 70,
+      fontSize: 40,
       textAlign:'center',
       paddingLeft : 1,
       paddingRight : 1
+
     },
     ongoingVote:{
-      width: 350,
-      height: 200,
-      margin: 10,
+      width: 300,
+      height: 150,
+      marginTop: 20,
       padding: 10,
       backgroundColor:'#6BCDFD',
       borderRadius:50,
-      borderWidth: 1,
-      borderColor: '#fff'
+      justifyContent:'center'
     },
     logo: {
       color: '#FF7F50',
