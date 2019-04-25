@@ -25,7 +25,16 @@ constructor(props){
   };
 }
 
+
+
 onResetPasswordPress = () => {
+  var user = firebase.auth().currentUser;
+  firebase.auth().sendPasswordResetEmail(this.state.email).then(function(){
+    // Email sent.
+    alert('Please check your email...')
+  }).catch(function(error) {
+    // An error happened.
+  });
 }
 onBackToLoginPress = () => {
   this.props.navigation.navigate('Login')
