@@ -111,8 +111,8 @@ renderItem = ({item, index}) => {
                 style={styles.addFriendsContainer}
                 onPress={() => this.props.navigation.navigate('AddFriend', {currentRows: this.state.rows})}
                 underlayColor='#fff'>
-                <Text style={styles.addFriendsText}>{data.addFriend} <Icon
-                  name={Platform.OS === "ios" ? "ios-person-add" : "md-add-person-add"}
+                <Text style={styles.addFriendsText}>Expire date <Icon
+                  name={Platform.OS === "ios" ? "ios-calendar" : "md-calendar"}
                   size={25}
                 /></Text>
        </TouchableOpacity>

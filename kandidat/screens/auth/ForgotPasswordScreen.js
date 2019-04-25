@@ -16,6 +16,7 @@ export default class SignupScreen extends React.Component{
       height: 70,
       marginLeft: 10,
     },
+    headerLeft: null
   };
 };
 

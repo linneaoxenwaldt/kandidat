@@ -6,6 +6,9 @@ import { ExpoLinksView } from '@expo/samples';
 import * as firebase from 'firebase';
 
 export default class LoginScreen extends React.Component{
+  static navigationOptions = {
+      header: null
+  }
 
   constructor(props){
     super(props);
@@ -15,9 +18,6 @@ password:'',
 
      };
   }
-
-
-
 
   onLoginPress = () => {
 firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
@@ -34,15 +34,17 @@ firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password
   onForgotPasswordPress = () => {
     this.props.navigation.navigate('ForgotPassword')
   }
+
     render(){
       return(
       <View style = {styles.container}>
-      <Text style = {styles.logInLabel}>Login</Text>
+      <Image source={{uri: 'https://firebasestorage.googleapis.com/v0/b/swipesolver.appspot.com/o/100whitte.png?alt=media&token=46064aae-8998-4a9e-81fe-0af7174862fa'}} style={{width: 300, height: 80, marginBottom: 50, marginTop: 50}}/>
+
 
 
       <TextInput style = {styles.textInputContainer}
       style={styles.textInput}
-      placeholder="Username"
+      placeholder="Email"
       value = {this.state.email}
       onChangeText = {(text) => {this.setState({ email : text}) }}
       />
@@ -64,12 +66,14 @@ firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password
        <Button title = 'Forgot password?' onPress = {this.onForgotPasswordPress} color = 'white'/>
 
 
+
        <TouchableOpacity
                  style = {styles.createAccount}
                  onPress={this.onCreateAccountPress}
                  underlayColor='#fff'>
                  <Text style= {styles.logInText}>Create account </Text>
         </TouchableOpacity>
+
 
 
 
@@ -86,8 +90,9 @@ firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password
 
 const styles = StyleSheet.create({
   container:{
+    height:'100%',
     backgroundColor: '#008080',
-    padding:10,
+
     alignItems:'center',
 
   },
@@ -98,8 +103,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#94B4C1',
     //alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 30,
-    marginTop: 20,
+    borderRadius: 50,
+    marginTop: 40,
     marginBottom: 5,
     padding: 10,
   },
@@ -118,7 +123,7 @@ const styles = StyleSheet.create({
     width: 350,
     height: 70,
     //backgroundColor: '#8FBC8F',
-    borderRadius: 30,
+    borderRadius: 50,
     marginBottom: 10,
     marginTop:10,
     padding: 10,
@@ -131,30 +136,37 @@ const styles = StyleSheet.create({
     margin: 10,
     padding: 10,
     backgroundColor:'#BA55B3',
-    borderRadius:30,
+    borderRadius:50,
     borderWidth: 1,
     borderColor: '#fff'
   },
   logInText:{
+    justifyContent:'center',
     fontSize:20,
     textAlign:'center',
     alignItems:'center',
     color: 'white',
   },
   createAccount: {
-
+    flexDirection:'row',
+    marginBottom:10,
     justifyContent: 'center',
     width: 350,
     height: 70,
     marginBottom: 0,
     padding: 10,
     backgroundColor:'#6BCDFD',
-    borderRadius:30,
+    borderRadius:50,
     borderWidth: 1,
     borderColor: '#fff',
-    marginTop: 100,
+    marginTop: 50,
+    marginLeft: 10,
+    marginRight: 10,
+    marginBottom:10,
+    alignItems: 'center',
 
   },
+
 
 
 

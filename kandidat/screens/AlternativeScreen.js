@@ -45,7 +45,7 @@ export default class AlternativeScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
       return {
         headerTitle: (
-      <Image source={require('../assets/images/100whitte.png')}/>),
+      <Image source={{uri: 'https://firebasestorage.googleapis.com/v0/b/swipesolver.appspot.com/o/100whitte.png?alt=media&token=46064aae-8998-4a9e-81fe-0af7174862fa'}} style={{width: 200, height: 50}}/>),
       headerStyle: {
         backgroundColor: '#008080',
         height: 70,
@@ -146,10 +146,10 @@ renderItem = ({item, index}) => {
   return (
     <ListItem
     containerStyle={{ backgroundColor: this.colors[index % this.colors.length]}}
-    titleStyle={{color: '#FFFFFF', fontSize: 20}}
+    titleStyle={{color: '#FFFFFF', fontSize: 30}}
     title={item.text}
-    rightIcon = {<Icon name={Platform.OS === "ios" ? "ios-remove-circle-outline" : "md-add-circle-outline"}
-    size={40}
+    rightIcon = {<Icon name={Platform.OS === "ios" ? "ios-trash" : "md-trash"}
+    size={30}
     style={styles.RemoveIcon}
     color= {'white'}
     onPress={() => Alert.alert(
@@ -198,15 +198,15 @@ keyExtractor={this.extractKey}
   >
   <Icon
   name={Platform.OS === "ios" ? "ios-arrow-back" : "md-arrow-back"}
-  size={70}
+  size={55}
   color="#A9A9A9"/>
 </TouchableOpacity>
 <TouchableOpacity
-onPress={() => this.props.navigation.navigate('AlternativeScreen')}
+onPress={() => this.props.navigation.navigate('VoteAddFriends')}
 >
 <Icon
 name={Platform.OS === "ios" ? "ios-arrow-forward" : "md-arrow-forward"}
-size={70}
+size={55}
 color="#A9A9A9"/>
 </TouchableOpacity>
 </View>
@@ -221,12 +221,12 @@ color="#A9A9A9"/>
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 15,
+    paddingTop: 20,
     backgroundColor: '#FFFFFF',
     justifyContent:'center',
   },
   alternativeLabel: {
-    fontSize: 50,
+    fontSize: 40,
     color: '#000000',
     textAlign: 'center',
     fontFamily: "Roboto-Light",
@@ -266,23 +266,28 @@ const styles = StyleSheet.create({
   row: {
   fontFamily: "Roboto-Light",
   color: '#FFFFFF',
-  padding: 15,
+  padding: 10,
   marginBottom: 5,
   fontSize: 20,
   justifyContent: 'center',
+
 },
 textInput: {
   backgroundColor: '#6BCDFD',
-  fontSize: 30,
+  fontSize: 25,
   textAlign:'center',
   alignItems: 'center',
   width: 350,
   height: 70,
   //backgroundColor: '#8FBC8F',
   borderRadius: 30,
-  // marginBottom: 10,
+  margin: 20,
   padding: 10,
   color: '#FFFFFF',
+  borderColor: '#3BCDFD',
+  borderWidth:4,
+
+
 },
 saveButton: {
   backgroundColor: "#BA55B3",
@@ -291,8 +296,8 @@ saveButton: {
   alignItems: 'center',
   justifyContent: 'center',
   borderRadius: 100,
+  marginTop:10,
   marginBottom: 20,
-  marginTop: 10,
 },
 addIcon: {
   color: "#FFFFFF",
