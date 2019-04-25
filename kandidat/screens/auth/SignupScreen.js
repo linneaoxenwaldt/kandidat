@@ -52,12 +52,53 @@ export default class SignupScreen extends React.Component{
     Username: this.state.username,
 })
 .then(function() {
-    console.log("Document written with ID: ");
+    console.log("User written with ID: ");
 })
 .catch(function(error) {
-    console.error("Error adding document: ", error);
+    console.error("Error adding user: ", error);
 });
+var info1 = {CatName: "Colors", CatImg: 'https://firebasestorage.googleapis.com/v0/b/swipesolver.appspot.com/o/Category%20Image%2Fcolors.jpg?alt=media&token=e65f0a39-c9b9-4db0-b261-428313aa42d3', Alternatives: ["Blue", "Green", "Grey", "Yellow", "Red"]}
+var info2 = {CatName: "Animals", CatImg: 'https://firebasestorage.googleapis.com/v0/b/swipesolver.appspot.com/o/Category%20Image%2Fanimals.jpg?alt=media&token=b37a7136-2043-4f5f-ae03-a5afd5aed9a3', Alternatives: ["Dog", "Bird", "Cat", "Horse", "Rat"]}
+var info = [info1, info2]
+for(let i = 0; i < info.length; i++){
+  var createObj = info[i];
+  console.log(createObj)
+  that.createCategory(userID, createObj)
+}
+}
+
+    createCategory(userID, createObj) {
+      var that = this
+      var db = firebase.firestore();
+      db.collection("Users").doc(userID).collection('Category').add({
+        CatName: createObj.CatName,
+        CatImg: createObj.CatImg,
+      })
+      .then(function(docRef) {
+        console.log("Category written with ID: ", docRef.id);
+        var catID = docRef.id
+        that.createAlternative(userID, catID, createObj)
+      })
+      .catch(function(error) {
+        console.error("Error adding category: ", error);
+      });
     }
+
+      createAlternative(userID, catID, createObj) {
+        var db = firebase.firestore();
+        for(let i = 0; i < createObj.Alternatives.length; i++){
+        db.collection("Users").doc(userID).collection('Category').doc(catID).collection('Alternative').add({
+          Name: createObj.Alternatives[i],
+          Votes: 0,
+        })
+        .then(function(docRef) {
+          console.log("Alternativ written with ID: ", docRef.id);
+        })
+        .catch(function(error) {
+          console.error("Error adding alternativ: ", error);
+        });
+      }
+      }
 
     render(){
       return(

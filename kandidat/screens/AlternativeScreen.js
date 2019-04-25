@@ -58,8 +58,11 @@ export default class AlternativeScreen extends React.Component {
       var that = this
       if(this.props.navigation.state.params !== undefined) {
         var catID = this.props.navigation.state.params.CatID
+        // var db = firebase.firestore();
+        var user = firebase.auth().currentUser;
+        var userID = user.uid;
         var db = firebase.firestore();
-        db.collection("Category").doc(catID).collection('Alternative').get().then(function(querySnapshot) {
+        db.collection("Users").doc(userID).collection("Category").doc(catID).collection('Alternative').get().then(function(querySnapshot) {
             querySnapshot.forEach(function(doc) {
                 // doc.data() is never undefined for query doc snapshots
                 const name = doc.get('Name');
@@ -91,8 +94,10 @@ export default class AlternativeScreen extends React.Component {
        )
      }
      else {
+       var user = firebase.auth().currentUser;
+       var userID = user.uid;
        var db = firebase.firestore();
-       db.collection("Category").doc(catID).collection('Alternative').add({
+       db.collection("Users").doc(userID).collection("Category").doc(catID).collection('Alternative').add({
          Name: this.state.text,
          Votes: 0,
        })
@@ -113,8 +118,10 @@ export default class AlternativeScreen extends React.Component {
    deleteAlternative(delItem) {
      var that = this
      var catID = this.props.navigation.state.params.CatID
+     var user = firebase.auth().currentUser;
+     var userID = user.uid;
      var db = firebase.firestore();
-     db.collection("Category").doc(catID).collection("Alternative").doc(delItem.id).delete().then(function() {
+     db.collection("Users").doc(userID).collection("Category").doc(catID).collection("Alternative").doc(delItem.id).delete().then(function() {
        console.log("Document successfully deleted!");
      }).catch(function(error) {
        console.error("Error removing document: ", error);

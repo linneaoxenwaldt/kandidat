@@ -67,9 +67,13 @@ export default class NewVoteScreen extends React.Component {
 
     getReadyMadeCat() {
       var that = this
-      //const rows = []
+      // //const rows = []
+      // var db = firebase.firestore();
+      var user = firebase.auth().currentUser;
+      var userID = user.uid;
       var db = firebase.firestore();
-      db.collection("Category").get().then(function(querySnapshot) {
+      // db.collection("Category").
+      db.collection("Users").doc(userID).collection('Category').get().then(function(querySnapshot) {
           querySnapshot.forEach(function(doc) {
               // doc.data() is never undefined for query doc snapshots
               const value = doc.get('CatName');
@@ -84,8 +88,12 @@ export default class NewVoteScreen extends React.Component {
 
     deleteCategory(delItem) {
       var that = this
+      // var db = firebase.firestore();
+      var user = firebase.auth().currentUser;
+      var userID = user.uid;
       var db = firebase.firestore();
-      db.collection("Category").doc(delItem.id).delete().then(function() {
+      db.collection("Users").doc(userID).collection('Category').doc(delItem.id).delete().then(function() {
+      // db.collection("Category").doc(delItem.id).delete().then(function() {
         console.log("Document successfully deleted!");
       }).catch(function(error) {
         console.error("Error removing document: ", error);
