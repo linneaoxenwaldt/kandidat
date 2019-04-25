@@ -36,6 +36,7 @@ export default class NewCategory extends React.Component {
         borderSize: 0,
         text: "",
       }
+      this.getCatImg()
     }
 
     createNewCat() {
@@ -47,9 +48,12 @@ export default class NewCategory extends React.Component {
         )
       }
       else {
-      var db = firebase.firestore();
-      db.collection("Category").add({
+        var user = firebase.auth().currentUser;
+        var userID = user.uid;
+        var db = firebase.firestore();
+        db.collection("Users").doc(userID).collection("Category").add({
     CatName: this.state.text,
+    CatImg: "https://www.atlantisbahamas.com/media/Things%20To%20Do/Water%20Park/Beaches/Hero/Experiences_Beach.jpg"
 })
 .then(function(docRef) {
     console.log("Document written with ID: ", docRef.id);
@@ -59,6 +63,10 @@ export default class NewCategory extends React.Component {
     console.error("Error adding document: ", error);
 });
     }
+}
+
+getCatImg() {
+
 }
 
     render() {
