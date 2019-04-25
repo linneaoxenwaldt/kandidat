@@ -48,6 +48,7 @@ firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password
       />
 
       <TextInput style = {styles.textInputContainer}
+      secureTextEntry={true}
       style={styles.textInput}
       placeholder="Password"
       value = {this.state.password}
@@ -151,11 +152,8 @@ const styles = StyleSheet.create({
     borderRadius:30,
     borderWidth: 1,
     borderColor: '#fff',
-<<<<<<< HEAD
     marginTop: 100,
-=======
-  //  marginTop: 300,
->>>>>>> c55e63841c8578f4ace387f65943a303c4d5fea1
+
   },
 
 

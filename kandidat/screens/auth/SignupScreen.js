@@ -68,11 +68,7 @@ export default class SignupScreen extends React.Component{
         <TextInput style={styles.inputText}
         placeholder="Enter a username... "
         backgroundColor = "#6ACCCB"
-<<<<<<< HEAD
-        value = {this.state.email}
-=======
         value = {this.state.username}
->>>>>>> c55e63841c8578f4ace387f65943a303c4d5fea1
         onChangeText = {(text) => {this.setState({ username : text}) }}
         />
         <TextInput style={styles.inputText}
@@ -82,6 +78,7 @@ export default class SignupScreen extends React.Component{
         onChangeText = {(text) => {this.setState({ email : text}) }}
         />
         <TextInput style={styles.inputText}
+        secureTextEntry={true}
         placeholder="Enter a password..."
         backgroundColor='#94B4C1'
         value = {this.state.password}
@@ -89,6 +86,7 @@ export default class SignupScreen extends React.Component{
         onChangeText = {(text) => {this.setState({ password : text}) }}
         />
         <TextInput style={styles.inputText}
+        secureTextEntry={true}
         placeholder="Confirm the password..."
         backgroundColor='#8FBC8F'
         value = {this.state.passwordConfirm}
