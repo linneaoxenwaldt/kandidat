@@ -190,15 +190,6 @@ renderItem = ({item, index}) => {
           alignItems: "center",
         },
         picContain: {
-<<<<<<< HEAD
-          height:200,
-          width:200,
-
-=======
-          height:80,
-          width:80,
-          backgroundColor: '#BA55B3',
->>>>>>> 6d5f73556956073b3ac3e516f138eb0b07e75f8f
           alignItems: 'center',
           justifyContent: 'center',
           textAlign: 'center',
@@ -207,6 +198,8 @@ renderItem = ({item, index}) => {
           borderWidth: 6,
           borderColor: '#BA55B3',
           marginTop: 20,
+          height:200,
+          width:200,
         },
         picText:{
           // marginBottom: 15,
