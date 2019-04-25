@@ -119,6 +119,7 @@ for(let i = 0; i < info.length; i++){
         onChangeText = {(text) => {this.setState({ email : text}) }}
         />
         <TextInput style={styles.inputText}
+        secureTextEntry={true}
         placeholder="Enter a password..."
         backgroundColor='#94B4C1'
         value = {this.state.password}
@@ -126,6 +127,7 @@ for(let i = 0; i < info.length; i++){
         onChangeText = {(text) => {this.setState({ password : text}) }}
         />
         <TextInput style={styles.inputText}
+        secureTextEntry={true}
         placeholder="Confirm the password..."
         backgroundColor='#8FBC8F'
         value = {this.state.passwordConfirm}
