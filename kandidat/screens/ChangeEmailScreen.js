@@ -28,7 +28,7 @@ export default class ChangeEmailScreen extends React.Component {
 >
 <Icon
   name={Platform.OS === "ios" ? "ios-arrow-back" : "md-arrow-back"}
-  size={50}
+  size={55}
   color='#FFFFFF'/>
 </TouchableOpacity>
         ),
@@ -42,17 +42,23 @@ export default class ChangeEmailScreen extends React.Component {
       <Text style={styles.descriptionText}>{data.currentEmail}</Text>
       <TextInput
       style={styles.textInfo}
+      borderColor='#758e99'
+      borderWidth= '4'
       backgroundColor='#94B4C1'
       placeholder="Email"/>
       <Text style={styles.descriptionText}>{data.newEmail}</Text>
       <TextInput
       style={styles.textInfo}
       backgroundColor='#8FBC8F'
+      borderColor='#6f936f'
+      borderWidth= '4'
       placeholder="New email"/>
       <Text style={styles.descriptionText}>{data.confirmEmail}</Text>
       <TextInput
       style={styles.textInfo}
       backgroundColor='#6ACCCB'
+      borderColor='#5db3b2'
+      borderWidth= '4'
       placeholder="New email"/>
       <TouchableOpacity
       style = {styles.saveButton}
@@ -79,7 +85,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   textInfo: {
-    fontSize: 30,
+    fontSize: 25,
     textAlign:'center',
     alignItems: 'center',
     width: 350,
@@ -90,6 +96,7 @@ const styles = StyleSheet.create({
     padding: 10,
     color: '#FFFFFF',
   },
+
   descriptionText: {
     marginTop:20,
     textAlign:'center',
@@ -109,7 +116,7 @@ const styles = StyleSheet.create({
   },
   saveText: {
     color: "#FFFFFF",
-    fontSize: 30,
+    fontSize: 25,
     fontFamily: 'Roboto-Light',
   },
 });

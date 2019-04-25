@@ -141,8 +141,9 @@ getCatImg() {
 
       const styles = StyleSheet.create({
         container: {
+          height: '100%',
           flex: 1,
-          paddingTop: 20,
+
           backgroundColor: '#FFFFFF',
           //marginLeft: 30,
           textAlign: "center",
@@ -151,7 +152,7 @@ getCatImg() {
         picContain: {
           height:200,
           width:200,
-          backgroundColor: '#BA55B3',
+
           alignItems: 'center',
           justifyContent: 'center',
           //marginLeft: 50,

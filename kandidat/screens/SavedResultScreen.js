@@ -65,12 +65,12 @@ export default class SavedResultScreen extends React.Component {
       return (
         <ListItem
         containerStyle={{ backgroundColor: this.colors[index % this.colors.length]}}
-        titleStyle={{color: '#FFFFFF', fontSize: 20}}
+        titleStyle={{color: '#FFFFFF', fontSize: 30}}
         roundAvatar
         title={item.text}
         rightIcon = {<Icon
           name={Platform.OS === "ios" ? "ios-trash" : "md-trash"}
-          size={40}
+          size={25}
           color='#FFFFFF'
           onPress={() => Alert.alert(
             data.deleteResult,

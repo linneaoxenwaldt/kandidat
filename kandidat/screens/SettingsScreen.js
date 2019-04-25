@@ -152,7 +152,7 @@ export default class SettingsScreen extends React.Component {
 
       saveResultText:{
         alignItems:'center',
-        fontSize:20,
+        fontSize:25,
         textAlign:'center',
         alignItems:'center',
         color: 'white',

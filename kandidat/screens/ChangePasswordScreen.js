@@ -44,16 +44,22 @@ export default class ChangePasswordScreen extends React.Component {
       <TextInput
       style={styles.textInfo}
       backgroundColor='#94B4C1'
+      borderColor='#758e99'
+      borderWidth= '4'
       placeholder="Password"/>
       <Text style={styles.descriptionText}>{data.newPassword}</Text>
       <TextInput
       style={styles.textInfo}
       backgroundColor='#8FBC8F'
+      borderColor='#6f936f'
+      borderWidth= '4'
       placeholder="New password"/>
       <Text style={styles.descriptionText}>{data.confirmPassword}</Text>
       <TextInput
       style={styles.textInfo}
       backgroundColor='#6ACCCB'
+      borderColor='#5db3b2'
+      borderWidth= '4'
       placeholder="New password"/>
 <TouchableOpacity
 style = {styles.saveButton}
@@ -80,7 +86,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   textInfo: {
-    fontSize: 30,
+    fontSize: 25,
     textAlign:'center',
     alignItems: 'center',
     width: 350,
@@ -94,7 +100,7 @@ const styles = StyleSheet.create({
   descriptionText: {
     marginTop:20,
     textAlign:'center',
-    fontSize: 30,
+    fontSize: 25,
     fontFamily: 'Roboto-Light',
     color: '#000000',
   },
@@ -110,7 +116,7 @@ const styles = StyleSheet.create({
   },
   saveText: {
     color: "#FFFFFF",
-    fontSize: 30,
+    fontSize: 25,
     fontFamily: 'Roboto-Light',
   },
 });

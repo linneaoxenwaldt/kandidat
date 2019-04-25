@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
   },
   textInfo: {
     backgroundColor: '#6BCDFD',
-    fontSize: 30,
+    fontSize: 25,
     textAlign:'center',
     alignItems: 'center',
     width: 350,
@@ -94,6 +94,7 @@ const styles = StyleSheet.create({
   },
   descriptionText: {
     marginTop:20,
+    marginBottom:20,
     textAlign:'center',
     fontSize: 25,
     fontFamily: 'Roboto-Light',
@@ -107,11 +108,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 20,
     marginBottom: 10,
-    marginTop: 50,
+    marginTop: 20,
   },
   saveText: {
     color: "#FFFFFF",
-    fontSize: 30,
+    fontSize: 25,
     fontFamily: 'Roboto-Light',
   },
 });

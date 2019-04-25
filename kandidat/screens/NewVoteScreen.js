@@ -130,6 +130,7 @@ export default class NewVoteScreen extends React.Component {
       return (
         <View style={styles.container}>
             <Text style={styles.categoryLabel}>{data.categories}</Text>
+            <View style ={styles.buttonContainer}>
             <TouchableOpacity
                       style={styles.createOwnCategoryContainer}
                       onPress={() => this.props.navigation.navigate('NewCategory')}
@@ -139,6 +140,7 @@ export default class NewVoteScreen extends React.Component {
                         size={25}
                       /></Text>
              </TouchableOpacity>
+             </View>
           <View style={styles.readyMadeCategoryContainer}>
         <Text style={styles.readyMadeCategoryLabel}>{data.readyMadeCate}</Text>
         </View>
@@ -157,6 +159,10 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 15,
     backgroundColor: '#FFFFFF',
+  },
+  buttonContainer:{
+    alignItems:'center',
+
   },
   categoryLabel: {
     fontSize: 40,
