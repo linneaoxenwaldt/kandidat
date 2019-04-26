@@ -22,6 +22,7 @@ import ChangeEmailScreen from '../screens/ChangeEmailScreen';
 import NewCategory from '../screens/NewCategory';
 import AlternativeScreen from '../screens/AlternativeScreen';
 import AddFriendScreen from '../screens/AddFriendScreen';
+import VoteAddFriends from '../screens/VoteAddFriends';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -220,6 +221,10 @@ const AlternativeScreenStack = createStackNavigator({
 AlternativeScreenStack.navigationOptions = {
 };
 
+const VoteAddFriendsStack = createStackNavigator({
+  VoteAddFriends: VoteAddFriends,
+});
+
 const DrawerComponent = createDrawerNavigator(
   {
     'Home': HomeStack,
@@ -242,6 +247,7 @@ const AppStack = createStackNavigator({
   AlternativeScreen: {screen: AlternativeScreenStack},
   AddFriendScreen: {screen: AddFriendStack},
   LoginScreen: {screen: LoginStack},
+  VoteAddFriends: {screen: VoteAddFriendsStack}
 }, {
   headerMode: 'none',
 });

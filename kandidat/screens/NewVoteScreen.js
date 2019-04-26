@@ -46,7 +46,7 @@ export default class NewVoteScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
       return {
         headerTitle: (
-      <Image source={require('../assets/images/100whitte.png')}/>),
+      <Image source={{uri: 'https://firebasestorage.googleapis.com/v0/b/swipesolver.appspot.com/o/100whitte.png?alt=media&token=46064aae-8998-4a9e-81fe-0af7174862fa'}} style={{width: 200, height: 50}}/>),
       headerStyle: {
         backgroundColor: '#008080',
         height: 70,
@@ -130,6 +130,7 @@ export default class NewVoteScreen extends React.Component {
       return (
         <View style={styles.container}>
             <Text style={styles.categoryLabel}>{data.categories}</Text>
+            <View style ={styles.buttonContainer}>
             <TouchableOpacity
                       style={styles.createOwnCategoryContainer}
                       onPress={() => this.props.navigation.navigate('NewCategory')}
@@ -139,6 +140,7 @@ export default class NewVoteScreen extends React.Component {
                         size={25}
                       /></Text>
              </TouchableOpacity>
+             </View>
           <View style={styles.readyMadeCategoryContainer}>
         <Text style={styles.readyMadeCategoryLabel}>{data.readyMadeCate}</Text>
         </View>
@@ -157,6 +159,10 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 15,
     backgroundColor: '#FFFFFF',
+  },
+  buttonContainer:{
+    alignItems:'center',
+
   },
   categoryLabel: {
     fontSize: 40,

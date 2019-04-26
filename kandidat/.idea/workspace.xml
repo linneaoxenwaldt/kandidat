@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8524dc0d-2c28-4c9d-8b34-dcaf076bafa7" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/screens/auth/SignupScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/screens/auth/SignupScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/navigation/MainTabNavigator.js" beforeDir="false" afterPath="$PROJECT_DIR$/navigation/MainTabNavigator.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -35,11 +36,12 @@
     <session id="1220723344">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="5" />
+          <entry key="project.closed" value="7" />
           <entry key="project.open.time.11" value="3" />
+          <entry key="project.open.time.12" value="1" />
           <entry key="project.open.time.16" value="1" />
           <entry key="project.open.time.8" value="1" />
-          <entry key="project.opened" value="5" />
+          <entry key="project.opened" value="6" />
         </counts>
       </usages-collector>
     </session>
@@ -60,7 +62,7 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="1">
     <option name="x" value="83" />
     <option name="y" value="23" />
     <option name="width" value="1753" />
@@ -122,8 +124,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="67" y="19" width="1402" height="778" extended-state="0" />
-    <editor active="true" />
+    <frame x="67" y="19" width="1402" height="778" extended-state="1" />
     <layout>
       <window_info id="Captures" order="0" weight="0.25" />
       <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.31794873" />

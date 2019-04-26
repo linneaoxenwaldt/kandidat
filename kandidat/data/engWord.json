@@ -25,4 +25,6 @@
   "missingCatName": "You have not entered a name for your category",
   "missingAltName": "You have not entered a name for your alternative",
   "alternatives": "ALTERNATIVES",
+  "chooseBackground": "Choose a background picture",
+  "photo": "Choose a photo",
 }

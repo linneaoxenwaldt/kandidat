@@ -45,8 +45,8 @@ onAuthStateChanged = (user) => {
     } else {
       return (
         <View style={styles.container}>
-          {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-          {Platform.OS === 'android' && <View style = {styles.statusBarUnderlay}/>}
+        {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+        {Platform.OS === 'android' && <View style = {styles.statusBarUnderlay}/>}
           {(this.state.isAuthenticated)?  <MainTabNavigator /> : <AppNavigator />}
 
         </View>

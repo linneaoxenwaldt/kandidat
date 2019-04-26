@@ -22,7 +22,7 @@ export default class AddFriendsScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
       return {
         headerTitle: (
-      <Image source={require('../assets/images/100whitte.png')}/>),
+      <Image source={{uri: 'https://firebasestorage.googleapis.com/v0/b/swipesolver.appspot.com/o/100whitte.png?alt=media&token=46064aae-8998-4a9e-81fe-0af7174862fa'}} style={{width: 200, height: 50}}/>),
       headerStyle: {
         backgroundColor: '#008080',
         height: 70,
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
   },
   textInfo: {
     backgroundColor: '#6BCDFD',
-    fontSize: 30,
+    fontSize: 25,
     textAlign:'center',
     alignItems: 'center',
     width: 350,
@@ -94,6 +94,7 @@ const styles = StyleSheet.create({
   },
   descriptionText: {
     marginTop:20,
+    marginBottom:20,
     textAlign:'center',
     fontSize: 25,
     fontFamily: 'Roboto-Light',
@@ -107,11 +108,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 20,
     marginBottom: 10,
-    marginTop: 50,
+    marginTop: 20,
   },
   saveText: {
     color: "#FFFFFF",
-    fontSize: 30,
+    fontSize: 25,
     fontFamily: 'Roboto-Light',
   },
 });
