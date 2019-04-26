@@ -6,6 +6,9 @@ import { ExpoLinksView } from '@expo/samples';
 import * as firebase from 'firebase';
 
 export default class LoginScreen extends React.Component{
+  static navigationOptions = {
+      header: null
+  }
 
   constructor(props){
     super(props);
@@ -15,9 +18,6 @@ password:'',
 
      };
   }
-
-
-
 
   onLoginPress = () => {
 firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
@@ -34,10 +34,12 @@ firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password
   onForgotPasswordPress = () => {
     this.props.navigation.navigate('ForgotPassword')
   }
+
     render(){
       return(
       <View style = {styles.container}>
-      <Text style = {styles.logInLabel}>Login</Text>
+      <Image source={{uri: 'https://firebasestorage.googleapis.com/v0/b/swipesolver.appspot.com/o/100whitte.png?alt=media&token=46064aae-8998-4a9e-81fe-0af7174862fa'}} style={{width: 300, height: 80, marginBottom: 50, marginTop: 50}}/>
+
 
 
       <TextInput style = {styles.textInputContainer}
@@ -102,7 +104,7 @@ const styles = StyleSheet.create({
     //alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 50,
-    marginTop: 20,
+    marginTop: 40,
     marginBottom: 5,
     padding: 10,
   },

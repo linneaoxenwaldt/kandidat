@@ -8,13 +8,14 @@ import Icon from "react-native-vector-icons/Ionicons";
 export default class SignupScreen extends React.Component{
   static navigationOptions = ({ navigation }) => {
     return {
-      headerTitle: ( <Text> 'Logggoooo häär' </Text>
+      headerTitle: (<Image source={{uri: 'https://firebasestorage.googleapis.com/v0/b/swipesolver.appspot.com/o/100whitte.png?alt=media&token=46064aae-8998-4a9e-81fe-0af7174862fa'}} style={{width: 200, height: 50}}/>
         ),
         headerStyle: {
-          //backgroundColor: '#008080',
+          backgroundColor: '#008080',
           height: 70,
           marginLeft: 10,
         },
+        headerLeft: null
       };
     };
 
@@ -25,6 +26,7 @@ export default class SignupScreen extends React.Component{
         email : '',
         password : '',
         passwordConfirm : '',
+        profilePic: 'https://firebasestorage.googleapis.com/v0/b/swipesolver.appspot.com/o/Profile%20Image%2Fanka.png?alt=media&token=21f921e3-067a-410d-a689-a2997d80611c',
       };
     }
 
@@ -50,6 +52,7 @@ export default class SignupScreen extends React.Component{
       db.collection("Users").doc(userID).set({
     Email: this.state.email,
     Username: this.state.username,
+    ProfilePic: this.state.profilePic,
 })
 .then(function() {
     console.log("User written with ID: ");
