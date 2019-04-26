@@ -22,6 +22,7 @@
     "react": "16.5.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
     "react-native-check-box": "^2.1.7",
+    "react-native-checkbox": "^2.0.0",
     "react-native-circle-checkbox": "^0.1.6",
     "react-native-elements": "^1.1.0",
     "react-native-modal-datetime-picker": "^7.4.0",

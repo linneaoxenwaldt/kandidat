@@ -23,6 +23,7 @@ import NewCategory from '../screens/NewCategory';
 import AlternativeScreen from '../screens/AlternativeScreen';
 import AddFriendScreen from '../screens/AddFriendScreen';
 import VoteAddFriends from '../screens/VoteAddFriends';
+import RequestScreen from '../screens/RequestScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -225,6 +226,10 @@ const VoteAddFriendsStack = createStackNavigator({
   VoteAddFriends: VoteAddFriends,
 });
 
+const RequestStack = createStackNavigator({
+  Requstscreen: RequestScreen,
+});
+
 const DrawerComponent = createDrawerNavigator(
   {
     'Home': HomeStack,
@@ -247,6 +252,7 @@ const AppStack = createStackNavigator({
   AlternativeScreen: {screen: AlternativeScreenStack},
   AddFriendScreen: {screen: AddFriendStack},
   LoginScreen: {screen: LoginStack},
+  RequestScreen: {screen: RequestStack},
   VoteAddFriends: {screen: VoteAddFriendsStack}
 }, {
   headerMode: 'none',
