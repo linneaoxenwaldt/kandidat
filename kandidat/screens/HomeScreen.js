@@ -70,7 +70,7 @@ export default class HomeScreen extends React.Component {
         </TouchableOpacity>
         </View>
 
-        <Icon style={{ position: 'absolute', top: 305, left: 240 }}
+        <Icon style={{ position: 'absolute', top: 320, left: 240 }}
         name={Platform.OS === "ios" ? "ios-notifications" : "md-notifications-outline"}
         size={40}
         color='red'/>
@@ -93,7 +93,7 @@ export default class HomeScreen extends React.Component {
     buttonContainer: {
       alignItems: 'center',
       justifyContent: 'center',
-      marginTop: 70,
+      marginTop: 50,
     },
     buttonText:{
       fontFamily: "Roboto-Light",

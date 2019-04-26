@@ -26,28 +26,64 @@ export default class SignupScreen extends React.Component{
         email : '',
         password : '',
         passwordConfirm : '',
+        rows : [],
         profilePic: 'https://firebasestorage.googleapis.com/v0/b/swipesolver.appspot.com/o/Profile%20Image%2Fanka.png?alt=media&token=21f921e3-067a-410d-a689-a2997d80611c',
       };
+      this.getAllUserNames()
     }
+
+    getAllUserNames() {
+      var that = this
+      var db = firebase.firestore();
+      db.collection("Users").get().then(function(querySnapshot) {
+          querySnapshot.forEach(function(doc) {
+              // doc.data() is never undefined for query doc snapshots
+              const dispName = doc.get('Username');
+              that.setState(prevState =>({
+                rows: [...prevState.rows, {userName : dispName}]
+              }))
+
+              }
+
+          );
+      });
+    }
+    checkUserNames(){
+      var nameTaken = false
+      for (let i = 0; i < this.state.rows.length; i++){
+        if (this.state.username == this.state.rows[i].userName){
+          nameTaken = true
+          console.log('nametaken true')
+        }
+      }
+      if (nameTaken == true){
+        Alert.alert('this userame is taken')
+      }else{
+        firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
+        .then(() => {
+          this.createAccountDatabase()
+      })}
+    }
+
+
 
     onSignupPress = () => {
       if (this.state.password !== this.state.passwordConfirm){
         Alert.alert('Passwords do not match')
+        console.log('no match alert')
         return;
-      }
-      firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
-      .then(() => {
-        this.createAccountDatabase()
-      },(error) =>{
+      } else{
+        this.checkUserNames()
+        console.log('should create')
+      } (error) =>{
         Alert.alert(error.message);
-      });
+      };
     }
 
     createAccountDatabase() {
       var user = firebase.auth().currentUser;
       var userID = user.uid;
       var that = this
-      console.log(user)
       var db = firebase.firestore();
       db.collection("Users").doc(userID).set({
     Email: this.state.email,
@@ -55,17 +91,17 @@ export default class SignupScreen extends React.Component{
     ProfilePic: this.state.profilePic,
 })
 .then(function() {
-    console.log("User written with ID: ");
+    //console.log("User written with ID: ");
 })
 .catch(function(error) {
-    console.error("Error adding user: ", error);
+    //console.error("Error adding user: ", error);
 });
 var info1 = {CatName: "Colors", CatImg: 'https://firebasestorage.googleapis.com/v0/b/swipesolver.appspot.com/o/Category%20Image%2Fcolors.jpg?alt=media&token=e65f0a39-c9b9-4db0-b261-428313aa42d3', Alternatives: ["Blue", "Green", "Grey", "Yellow", "Red"]}
 var info2 = {CatName: "Animals", CatImg: 'https://firebasestorage.googleapis.com/v0/b/swipesolver.appspot.com/o/Category%20Image%2Fanimals.jpg?alt=media&token=b37a7136-2043-4f5f-ae03-a5afd5aed9a3', Alternatives: ["Dog", "Bird", "Cat", "Horse", "Rat"]}
 var info = [info1, info2]
 for(let i = 0; i < info.length; i++){
   var createObj = info[i];
-  console.log(createObj)
+  //console.log(createObj)
   that.createCategory(userID, createObj)
 }
 }
@@ -78,12 +114,12 @@ for(let i = 0; i < info.length; i++){
         CatImg: createObj.CatImg,
       })
       .then(function(docRef) {
-        console.log("Category written with ID: ", docRef.id);
+        //console.log("Category written with ID: ", docRef.id);
         var catID = docRef.id
         that.createAlternative(userID, catID, createObj)
       })
       .catch(function(error) {
-        console.error("Error adding category: ", error);
+        //console.error("Error adding category: ", error);
       });
     }
 
@@ -95,10 +131,10 @@ for(let i = 0; i < info.length; i++){
           Votes: 0,
         })
         .then(function(docRef) {
-          console.log("Alternativ written with ID: ", docRef.id);
+          //console.log("Alternativ written with ID: ", docRef.id);
         })
         .catch(function(error) {
-          console.error("Error adding alternativ: ", error);
+          //console.error("Error adding alternativ: ", error);
         });
       }
       }

@@ -58,8 +58,13 @@
         <entry file="file://$PROJECT_DIR$/screens/HomeScreen.js">
           <provider selected="true" editor-type-id="text-editor">
 <<<<<<< HEAD
+<<<<<<< HEAD
             <state relative-caret-position="170">
               <caret line="16" column="10" selection-start-line="16" selection-start-column="10" selection-end-line="16" selection-end-column="10" />
+=======
+            <state relative-caret-position="306">
+              <caret line="18" selection-start-line="18" selection-end-line="24" selection-end-column="20" />
+>>>>>>> a273f693237df3035a4460acfbafea802411fcea
 =======
             <state relative-caret-position="306">
               <caret line="18" selection-start-line="18" selection-end-line="24" selection-end-column="20" />
@@ -136,8 +141,12 @@
   </component>
   <component name="ToolWindowManager">
 <<<<<<< HEAD
+<<<<<<< HEAD
     <frame x="56" y="16" width="1168" height="648" extended-state="0" />
     <editor active="true" />
+=======
+    <frame x="67" y="19" width="1402" height="778" extended-state="1" />
+>>>>>>> a273f693237df3035a4460acfbafea802411fcea
 =======
     <frame x="67" y="19" width="1402" height="778" extended-state="1" />
 >>>>>>> a273f693237df3035a4460acfbafea802411fcea
@@ -175,16 +184,22 @@
     <entry file="file://$PROJECT_DIR$/screens/HomeScreen.js">
       <provider selected="true" editor-type-id="text-editor">
 <<<<<<< HEAD
+<<<<<<< HEAD
         <state relative-caret-position="170">
           <caret line="16" column="10" selection-start-line="16" selection-start-column="10" selection-end-line="16" selection-end-column="10" />
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> a273f693237df3035a4460acfbafea802411fcea
         <state relative-caret-position="306">
           <caret line="18" selection-start-line="18" selection-end-line="24" selection-end-column="20" />
 =======
         <state relative-caret-position="187">
           <caret line="17" column="10" selection-start-line="17" selection-start-column="10" selection-end-line="17" selection-end-column="10" />
 >>>>>>> aeaef58f0f82037d0cfa6bc854c112a125846115
+<<<<<<< HEAD
+>>>>>>> a273f693237df3035a4460acfbafea802411fcea
+=======
 >>>>>>> a273f693237df3035a4460acfbafea802411fcea
         </state>
       </provider>

@@ -26,6 +26,7 @@ export default class OngoingVoteScreen extends React.Component {
       {id: '4', text: 'FriendRequest4',  friendReq: true},
       {id: '5', text: 'FriendRequest5',  friendReq: true},
       {id: '6', text: 'FriendRequest6',  friendReq: true},
+      {id: '7', text: 'FriendRequest7',  friendReq: true},
     ]
     this.extractKey = ({id}) => id
     this.state = {
@@ -147,10 +148,10 @@ export default class OngoingVoteScreen extends React.Component {
           fontFamily: "Roboto-Light",
         },
         voteReq: {
-          height: 230,
+          height: 260,
         },
         friendReq: {
-          height: 230,
+          height: 260,
         },
         arrowBack: {
           marginLeft: 10,
