@@ -21,9 +21,10 @@
       <usages-collector id="statistics.lifecycle.project">
         <counts>
           <entry key="project.open.time.0" value="1" />
+          <entry key="project.open.time.13" value="1" />
           <entry key="project.open.time.14" value="1" />
           <entry key="project.open.time.9" value="1" />
-          <entry key="project.opened" value="3" />
+          <entry key="project.opened" value="4" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -56,8 +57,13 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/screens/HomeScreen.js">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="170">
               <caret line="16" column="10" selection-start-line="16" selection-start-column="10" selection-end-line="16" selection-end-column="10" />
+=======
+            <state relative-caret-position="306">
+              <caret line="18" selection-start-line="18" selection-end-line="24" selection-end-column="20" />
+>>>>>>> a273f693237df3035a4460acfbafea802411fcea
             </state>
           </provider>
         </entry>
@@ -67,11 +73,11 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="84" />
-    <option name="y" value="24" />
-    <option name="width" value="1752" />
-    <option name="height" value="972" />
+  <component name="ProjectFrameBounds" extendedState="1">
+    <option name="x" value="83" />
+    <option name="y" value="23" />
+    <option name="width" value="1753" />
+    <option name="height" value="973" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -79,6 +85,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
@@ -96,7 +103,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -129,11 +135,15 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
+<<<<<<< HEAD
     <frame x="56" y="16" width="1168" height="648" extended-state="0" />
     <editor active="true" />
+=======
+    <frame x="67" y="19" width="1402" height="778" extended-state="1" />
+>>>>>>> a273f693237df3035a4460acfbafea802411fcea
     <layout>
       <window_info id="Captures" order="0" weight="0.25" />
-      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.31918657" />
+      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.31794873" />
       <window_info id="Structure" order="2" side_tool="true" />
       <window_info id="Image Layers" order="3" />
       <window_info id="Designer" order="4" />
@@ -164,8 +174,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/screens/HomeScreen.js">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="170">
           <caret line="16" column="10" selection-start-line="16" selection-start-column="10" selection-end-line="16" selection-end-column="10" />
+=======
+<<<<<<< HEAD
+        <state relative-caret-position="306">
+          <caret line="18" selection-start-line="18" selection-end-line="24" selection-end-column="20" />
+=======
+        <state relative-caret-position="187">
+          <caret line="17" column="10" selection-start-line="17" selection-start-column="10" selection-end-line="17" selection-end-column="10" />
+>>>>>>> aeaef58f0f82037d0cfa6bc854c112a125846115
+>>>>>>> a273f693237df3035a4460acfbafea802411fcea
         </state>
       </provider>
     </entry>
