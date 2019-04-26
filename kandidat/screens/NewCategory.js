@@ -101,7 +101,7 @@ renderItem = ({item, index}) => {
   return (
     <TouchableOpacity
     onPress={() => this.setBackground(item)}>
-    <Image borderWidth={this.state.borderSize} onPress={() => handleClick(this)} source={{uri: item.img}} style={styles.picStyle}/>
+    <Image source={{uri: item.img}} style={styles.picStyle}/>
     </TouchableOpacity>
   )
 }
@@ -198,8 +198,9 @@ renderItem = ({item, index}) => {
           borderWidth: 6,
           borderColor: '#BA55B3',
           marginTop: 20,
-          height:200,
-          width:200,
+          height:80,
+          width:80,
+          backgroundColor: '#BA55B3',
         },
         picText:{
           // marginBottom: 15,

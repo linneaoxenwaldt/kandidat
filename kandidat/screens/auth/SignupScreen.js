@@ -26,6 +26,7 @@ export default class SignupScreen extends React.Component{
         email : '',
         password : '',
         passwordConfirm : '',
+        profilePic: 'https://firebasestorage.googleapis.com/v0/b/swipesolver.appspot.com/o/Profile%20Image%2Fanka.png?alt=media&token=21f921e3-067a-410d-a689-a2997d80611c',
       };
     }
 
@@ -51,6 +52,7 @@ export default class SignupScreen extends React.Component{
       db.collection("Users").doc(userID).set({
     Email: this.state.email,
     Username: this.state.username,
+    ProfilePic: this.state.profilePic,
 })
 .then(function() {
     console.log("User written with ID: ");
