@@ -50,6 +50,8 @@ export default class HomeScreen extends React.Component {
           };
       return (
         <View style={styles.container}>
+
+
         <View style={styles.buttonContainer}>
         <TouchableOpacity
         style={styles.createVote}
@@ -67,7 +69,7 @@ export default class HomeScreen extends React.Component {
 
         <LinearGradient
         colors={['#FFFFFF', '#6ACCCB']}
-        style={{ height: '37%'}}>
+        style={{ height: '35%'}}>
         </LinearGradient>
 
         </View>
@@ -84,7 +86,9 @@ export default class HomeScreen extends React.Component {
     },
     buttonContainer: {
       alignItems: 'center',
-      marginHorizontal: 50,
+      justifyContent: 'center',
+      marginTop: 40,
+      // marginHorizontal: 50,
 
     },
     createVote: {
