@@ -7,17 +7,24 @@ import { ScrollView,
   View,
   Text,
   TextInput,
+  Alert,
 } from 'react-native';
 import { DrawerActions } from 'react-navigation';
 import Icon from "react-native-vector-icons/Ionicons";
 import data from '../data/engWord.json';
+import * as firebase from 'firebase';
+import FriendsScreen from '../screens/FriendsScreen';
 
 export default class AddFriendsScreen extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      text: ''
+      text: '',
+      users: [],
+      friends: [],
     }
+    this.getAllUsers()
+    this.getYourFriends()
   }
   static navigationOptions = ({ navigation }) => {
       return {
@@ -41,14 +48,121 @@ export default class AddFriendsScreen extends React.Component {
       };
     };
 
-saveNewFriend() {
- var index = this.props.navigation.state.params.currentRows.length
- var newIDnum = parseInt(this.props.navigation.state.params.currentRows[index-1].id, 10) + 1
- var newID = newIDnum.toString()
- var newFriend = {id: newID, text: this.state.text, img: require('../assets/images/robot-dev.png')}
- this.props.navigation.state.params.currentRows.push(newFriend)
- this.props.navigation.navigate('Friends')
+getAllUsers() {
+  var that = this
+  var db = firebase.firestore();
+  db.collection("Users").get().then(function(querySnapshot) {
+      querySnapshot.forEach(function(doc) {
+          // doc.data() is never undefined for query doc snapshots
+          const name = doc.get('Username');
+          const id = doc.id;
+          that.setState(prevState => ({
+            users: [...prevState.users, {id: id, userName: name}]
+          }))
+      });
+  });
+ // var index = this.props.navigation.state.params.currentRows.length
+ // var newIDnum = parseInt(this.props.navigation.state.params.currentRows[index-1].id, 10) + 1
+ // var newID = newIDnum.toString()
+ // var newFriend = {id: newID, text: this.state.text, img: require('../assets/images/robot-dev.png')}
+ // this.props.navigation.state.params.currentRows.push(newFriend)
  }
+
+ getYourFriends() {
+   var that = this
+   var user = firebase.auth().currentUser;
+   var userID = user.uid;
+   var db = firebase.firestore();
+   db.collection("Users").doc(userID).collection("Friends").get().then(function(querySnapshot) {
+       querySnapshot.forEach(function(doc) {
+           // doc.data() is never undefined for query doc snapshots
+           const name = doc.get('Username');
+           const id = doc.id;
+           that.setState(prevState => ({
+             friends: [...prevState.friends, {id: id, userName: name}]
+           }))
+       });
+   });
+ }
+
+ checkUsername() {
+   if (this.state.text == "") {
+     Alert.alert(
+       data.noFriendName,
+     )
+   }
+   else {
+   var existFriend = false
+   for (let i=0; i< this.state.users.length; i++) {
+     // console.log(this.state.users[i].userName)
+     // console.log(this.state.users[i].id)
+     // console.log(this.state.text)
+     if (this.state.text == this.state.users[i].userName) {
+       existFriend = true
+       var friend = this.state.users[i]
+       console.log("användare finns")
+     }
+   }
+   if (existFriend == true){
+     this.checkIfAlreadyFriends(friend)
+   }
+   else {
+     Alert.alert(
+       data.missingFriendName,
+     )
+   }
+ }
+ }
+
+ checkIfAlreadyFriends(friend) {
+   var alreadyFriend = false
+   for (let i=0; i< this.state.friends.length; i++) {
+     if (friend.id == this.state.friends[i].id) {
+       alreadyFriend = true
+     }
+   }
+   if (alreadyFriend == false) {
+     this.addUser(friend)
+   }
+   else {
+     Alert.alert(
+       data.alreadyFriends,
+     )
+   }
+ }
+
+ addUser(friend){
+   var that = this
+   var user = firebase.auth().currentUser;
+   var userID = user.uid;
+   var friendID = friend.id
+   var db = firebase.firestore();
+   if (userID == friendID) {
+     Alert.alert(
+       data.noAddYourself,
+     )
+   }
+else {
+   db.collection("Users").doc(userID).collection("Friends").doc(friendID).set({
+})
+.then(function() {
+console.log("Document written with ID: ");
+var currentRows = that.props.navigation.state.params
+var docRef = db.collection('Users').doc(friendID);
+docRef.get().then(function(doc) {
+  if (doc.exists) {
+    const username = doc.data().Username
+    const profilePic = doc.data().ProfilePic
+    var newFriend = {id: friendID, username: username, profilePic: profilePic}
+    that.props.navigation.state.params.updateFriends(newFriend);
+    that.props.navigation.navigate('Friends')
+}})
+.catch(function(error) {
+console.error("Error adding document: ", error);
+});
+})
+}
+}
 
   render() {
     return (
@@ -61,7 +175,7 @@ saveNewFriend() {
       />
       <TouchableOpacity
       style = {styles.saveButton}
-        onPress={() => this.saveNewFriend()}
+        onPress={() => this.checkUsername()}
         >
         <Text style={styles.saveText}>Save</Text>
        </TouchableOpacity>

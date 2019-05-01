@@ -14,6 +14,7 @@ import { ListItem } from 'react-native-elements';
 import { DrawerActions } from 'react-navigation';
 import Icon from "react-native-vector-icons/Ionicons";
 import data from '../data/engWord.json';
+import * as firebase from 'firebase';
 
 // const rows = [
 //   {id: '0', text: 'Test0', img: require('../assets/images/emil.jpg')},
@@ -35,22 +36,28 @@ export default class FriendsScreen extends React.Component {
   constructor(props){
     super(props);
     this.colors = ['#6ACCCB', '#94B4C1', '#8FBC8F', '#CBA3D5', '#689999']
-    const rows = [
-    {id: '0', text: 'Test0', img: require('../assets/images/emil.jpg')},
-    {id: '1', text: 'Test1', img: require('../assets/images/robot-dev.png')},
-    {id: '2', text: 'Test2', img: require('../assets/images/robot-prod.png')},
-    {id: '3', text: 'Test3', img: require('../assets/images/emil.jpg')},
-    {id: '4', text: 'Test4', img: require('../assets/images/robot-dev.png')},
-    {id: '5', text: 'Test5', img: require('../assets/images/robot-prod.png')},
-    {id: '6', text: 'Test6', img: require('../assets/images/emil.jpg')},
-    {id: '7', text: 'Test7', img: require('../assets/images/robot-prod.png')},
-    {id: '8', text: 'Test8', img: require('../assets/images/robot-dev.png')},
-  ]
+  //   const rows = [
+  //   {id: '0', text: 'Test0', img: require('../assets/images/emil.jpg')},
+  //   {id: '1', text: 'Test1', img: require('../assets/images/robot-dev.png')},
+  //   {id: '2', text: 'Test2', img: require('../assets/images/robot-prod.png')},
+  //   {id: '3', text: 'Test3', img: require('../assets/images/emil.jpg')},
+  //   {id: '4', text: 'Test4', img: require('../assets/images/robot-dev.png')},
+  //   {id: '5', text: 'Test5', img: require('../assets/images/robot-prod.png')},
+  //   {id: '6', text: 'Test6', img: require('../assets/images/emil.jpg')},
+  //   {id: '7', text: 'Test7', img: require('../assets/images/robot-prod.png')},
+  //   {id: '8', text: 'Test8', img: require('../assets/images/robot-dev.png')},
+  // ]
   this.extractKey = ({id}) => id
   this.state = {
-    rows: rows,
+    friendsInfo: [],
   }
+  this.getYourFriends()
   }
+
+//   componentWillMount() {
+//     console.log("componentDidMount")
+// this.updateFriends()
+//  }
 
   static navigationOptions = ({ navigation }) => {
       return {
@@ -75,18 +82,80 @@ export default class FriendsScreen extends React.Component {
     };
 
   deleteFriend(delItem) {
-    this.setState(prevState => ({rows: prevState.rows.filter(item => item !== delItem) }));
+    var that = this
+    var user = firebase.auth().currentUser;
+    var userID = user.uid;
+    var db = firebase.firestore();
+    db.collection("Users").doc(userID).collection("Friends").doc(delItem.id).delete().then(function() {
+      console.log("Document successfully deleted!");
+    }).catch(function(error) {
+      console.error("Error removing document: ", error);
+    });
+    this.setState(prevState => ({friendsInfo: prevState.friendsInfo.filter(item => item !== delItem) }));
   }
 
+updateFriends(friend) {
+  var db = firebase.firestore();
+  var that = this
+  var friendID = friend.id
+  var docRef = db.collection('Users').doc(friendID);
+  docRef.get().then(function(doc) {
+      if (doc.exists) {
+        const username = doc.data().Username
+        const profilePic = doc.data().ProfilePic
+        that.setState(prevState => ({
+          friendsInfo: [...prevState.friendsInfo, {id: friendID, username: username, profilePic: profilePic}]
+        }))
+        console.log("Document data: 1");
+      } else {
+        // doc.data() will be undefined in this case
+        console.log("No such document!");
+      }
+      }).catch(function(error) {
+          console.log("Error getting document:", error);
+      });
+  //}
+}
+
+  getYourFriends() {
+    var that = this
+    var user = firebase.auth().currentUser;
+    var userID = user.uid;
+    var db = firebase.firestore();
+    db.collection("Users").doc(userID).collection("Friends").get().then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+            // doc.data() is never undefined for query doc snapshots
+            const id = doc.id;
+            var docRef = db.collection('Users').doc(id);
+            docRef.get().then(function(doc) {
+              if (doc.exists) {
+                const username = doc.data().Username
+                const profilePic = doc.data().ProfilePic
+                that.setState(prevState => ({
+                  friendsInfo: [...prevState.friendsInfo, {id: id, username: username, profilePic: profilePic}]
+                }))
+                //console.log("Document data: 2");
+              } else {
+                // doc.data() will be undefined in this case
+                console.log("No such document!");
+              }
+              }).catch(function(error) {
+                  console.log("Error getting document:", error);
+              });
+            })
+        });
+    }
+
+
 renderItem = ({item, index}) => {
-  var msg = `${data.sureMsg} ${item.text}?`
+  var msg = `${data.sureMsg} ${item.username}?`
   return (
     <ListItem
     containerStyle={{ backgroundColor: this.colors[index % this.colors.length]}}
     titleStyle={{color: '#FFFFFF', fontSize: 25}}
     roundAvatar
-    title={item.text}
-    leftAvatar = {{source: item.img }}
+    title={item.username}
+    leftAvatar = {{source: {uri: item.profilePic}}}
     rightIcon = {<Icon
       name={Platform.OS === "ios" ? "ios-trash" : "md-trash"}
       size={30}
@@ -109,7 +178,7 @@ renderItem = ({item, index}) => {
       <View style= {styles.buttonContainer}>
       <TouchableOpacity
                 style={styles.addFriendsContainer}
-                onPress={() => this.props.navigation.navigate('AddFriend', {currentRows: this.state.rows})}
+                onPress={() => this.props.navigation.navigate('AddFriend', { updateFriends: this.updateFriends.bind(this) })}
                 underlayColor='#fff'>
                 <Text style={styles.addFriendsText}>{data.addFriend} <Icon
                   name={Platform.OS === "ios" ? "ios-person-add" : "md-add-person-add"}
@@ -121,7 +190,7 @@ renderItem = ({item, index}) => {
      <Text style={styles.myFriendsText}>{data.myFriends}</Text>
      </View>
      <FlatList
-data={this.state.rows}
+data={this.state.friendsInfo}
 renderItem={this.renderItem}
 keyExtractor={this.extractKey}
 />
