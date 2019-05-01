@@ -147,7 +147,7 @@ else {
 })
 .then(function() {
 console.log("Document written with ID: ");
-var currentRows = that.props.navigation.state.params
+//var currentRows = that.props.navigation.state.params
 var docRef = db.collection('Users').doc(friendID);
 docRef.get().then(function(doc) {
   if (doc.exists) {
