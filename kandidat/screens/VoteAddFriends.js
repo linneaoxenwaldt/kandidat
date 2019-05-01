@@ -9,11 +9,15 @@ import { ScrollView,
   FlatList,
   Alert,
   TextInput,
+
 } from 'react-native';
 import { ListItem } from 'react-native-elements';
 import { DrawerActions } from 'react-navigation';
 import Icon from "react-native-vector-icons/Ionicons";
 import data from '../data/engWord.json';
+import CircleCheckBox from 'react-native-check-box';
+import RoundCheckbox from 'rn-round-checkbox';
+import DateTimePicker from "react-native-modal-datetime-picker";
 
 // const rows = [
 //   {id: '0', text: 'Test0', img: require('../assets/images/emil.jpg')},
@@ -49,6 +53,7 @@ export default class FriendsScreen extends React.Component {
   this.extractKey = ({id}) => id
   this.state = {
     rows: rows,
+    isDateTimePickerVisible: false,
   }
   }
 
@@ -78,6 +83,19 @@ export default class FriendsScreen extends React.Component {
     this.setState(prevState => ({rows: prevState.rows.filter(item => item !== delItem) }));
   }
 
+  showDateTimePicker = () => {
+  this.setState({ isDateTimePickerVisible: true });
+};
+
+hideDateTimePicker = () => {
+    this.setState({ isDateTimePickerVisible: false });
+  };
+
+  handleDatePicked = date => {
+   console.log("A date has been picked: ", date);
+   this.hideDateTimePicker();
+ };
+
 renderItem = ({item, index}) => {
   var msg = `${data.sureMsg} ${item.text}?`
   return (
@@ -87,18 +105,24 @@ renderItem = ({item, index}) => {
     roundAvatar
     title={item.text}
     leftAvatar = {{source: item.img }}
-    rightIcon = {<Icon
-      name={Platform.OS === "ios" ? "ios-trash" : "md-trash"}
-      size={30}
-      color='#FFFFFF'
-      onPress={() => Alert.alert(
-  data.deleteFriend,
-  msg,
-  [
-    {text: 'Cancel', onPress: () => this.props.navigation.navigate('Friends')},
-    {text: 'OK', onPress: () => this.deleteFriend(item)},
-  ],
-  { cancelable: false })}/>}
+    rightIcon = { <RoundCheckbox
+      checked={this.state.isSelected}
+      onPress={() => this.setState({checked: !this.state.checked})}
+      onValueChange={(newValue) => {console.log(newValue)}}
+    size={30}
+    checkedIcon={<Icon
+      name={Platform.OS === "ios" ? "ios-menu" : "md-menu"}
+      size={40}
+      color='blue'/>}
+    uncheckedIcon={<Icon
+      name={Platform.OS === "ios" ? "ios-menu" : "md-menu"}
+      size={40}
+      color='blue' />}
+
+
+/>
+
+      }
     />)
 }
 
@@ -106,15 +130,23 @@ renderItem = ({item, index}) => {
     return (
       <View style={styles.container}>
       <Text style={styles.friendLabel}>{data.friends}</Text>
+
+
       <View style= {styles.buttonContainer}>
       <TouchableOpacity
                 style={styles.addFriendsContainer}
-                onPress={() => this.props.navigation.navigate('AddFriend', {currentRows: this.state.rows})}
+                onPress={this.showDateTimePicker}
                 underlayColor='#fff'>
+                <DateTimePicker
+                  isVisible={this.state.isDateTimePickerVisible}
+                  onConfirm={this.handleDatePicked}
+                  onCancel={this.hideDateTimePicker}
+                />
                 <Text style={styles.addFriendsText}>Expire date <Icon
-                  name={Platform.OS === "ios" ? "ios-calendar" : "md-calendar"}
-                  size={25}
-                /></Text>
+                    name={Platform.OS === "ios" ? "ios-calendar" : "md-calendar"}
+                    size={25}
+                  /></Text>
+
        </TouchableOpacity>
        </View>
        <View style={styles.myFriendsContainer}>
