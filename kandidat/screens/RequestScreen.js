@@ -126,6 +126,14 @@ export default class OngoingVoteScreen extends React.Component {
             console.error("Error removing document: ", error);
           });
           this.setState(prevState => ({friendReq: prevState.friendReq.filter(item => item !== friendItem) }));
+
+          db.collection("Users").doc(friendItem.id).collection("Friends").doc(userID).set({
+          })
+          db.collection("Users").doc(friendItem.id).collection("PendingFriendRequests").doc(userID).delete().then(function() {
+            console.log("FriendReq successfully deleted!" + friendItem.id);
+          }).catch(function(error) {
+            console.error("Error removing document: ", error);
+          });
         }
 
         render() {
