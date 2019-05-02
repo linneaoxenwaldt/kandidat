@@ -6,7 +6,6 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  TouchableHighlight,
   View,
   Button,
   Header,
@@ -31,13 +30,13 @@ export default class HomeScreen extends React.Component {
         },
         headerLeft: (
           <TouchableOpacity
-  onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
->
-<Icon
-  name={Platform.OS === "ios" ? "ios-menu" : "md-menu"}
-  size={40}
-  color='#FFFFFF'/>
-</TouchableOpacity>
+          onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
+          >
+          <Icon
+          name={Platform.OS === "ios" ? "ios-menu" : "md-menu"}
+          size={40}
+          color='#FFFFFF'/>
+          </TouchableOpacity>
         ),
       };
     };
@@ -45,33 +44,41 @@ export default class HomeScreen extends React.Component {
     render() {
 
       const config = {
-            velocityThreshold: 0.3,
-            directionalOffsetThreshold: 80
-          };
+        velocityThreshold: 0.3,
+        directionalOffsetThreshold: 80
+      };
       return (
         <View style={styles.container}>
-
 
         <View style={styles.buttonContainer}>
         <TouchableOpacity
         style={styles.createVote}
-        onPress={() => this.props.navigation.navigate('NewVote')}
-        underlayColor='#fff'>
+        onPress={() => this.props.navigation.navigate('NewVote')}>
         <Text style={styles.buttonText}>{data.createNewVote}</Text>
         </TouchableOpacity>
+
         <TouchableOpacity
         style={styles.ongoingVote}
-        onPress={() => this.props.navigation.navigate('OngoingVote')}
-        underlayColor='#fff'>
+        onPress={() => this.props.navigation.navigate('OngoingVote')}>
         <Text style={styles.buttonText}>{data.ongoingVotes}</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+        style={styles.ongoingRequest}
+        onPress={() => this.props.navigation.navigate('RequestScreen')}>
+        <Text style={styles.buttonText}> {data.requests} </Text>
         </TouchableOpacity>
         </View>
 
-        <LinearGradient
-        colors={['#FFFFFF', '#6ACCCB']}
-        style={{ height: '35%'}}>
-        </LinearGradient>
+        <Icon style={{ position: 'absolute', top: 320, left: 240 }}
+        name={Platform.OS === "ios" ? "ios-notifications" : "md-notifications-outline"}
+        size={40}
+        color='red'/>
 
+        <LinearGradient
+        colors={['#FFFFFF', '#6ACCCB', '#6ACCCB']}
+        style={{ height: '30%'}}>
+        </LinearGradient>
         </View>
       );
     }
@@ -81,60 +88,50 @@ export default class HomeScreen extends React.Component {
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#FFFFFF',
       justifyContent:'center'
     },
     buttonContainer: {
       alignItems: 'center',
       justifyContent: 'center',
-      marginTop: 40,
-      // marginHorizontal: 50,
-
+      marginTop: 50,
+    },
+    buttonText:{
+      fontFamily: "Roboto-Light",
+      color:'#fff',
+      fontSize: 32,
+      textAlign:'center',
     },
     createVote: {
-      width: 300,
-      height: 150,
+      width: 250,
+      height: 100,
+      marginTop: 40,
       marginBottom:20,
       padding: 10,
       backgroundColor: '#BA55B3',
       borderRadius:50,
       justifyContent:'center',
     },
-    buttonText:{
-      fontFamily: "Roboto-Light",
-      color:'#fff',
-      fontSize: 40,
-      textAlign:'center',
-      paddingLeft : 1,
-      paddingRight : 1
-
-    },
     ongoingVote:{
-      width: 300,
-      height: 150,
+      width: 250,
+      height: 100,
       marginTop: 20,
+      marginBottom: 20,
       padding: 10,
-      backgroundColor:'#6BCDFD',
+      backgroundColor: '#6BCDFD',
       borderRadius:50,
       justifyContent:'center'
     },
-    logo: {
-      color: '#FF7F50',
-      fontSize: 50,
-      fontFamily: 'Cochin',
+    ongoingRequest: {
+      width: 250,
+      height: 100,
+      marginTop: 20,
+      padding: 10,
+      backgroundColor:'#A9A9A9',
+      borderRadius:50,
+      justifyContent:'center'
     },
-    logoPic: {
-      width: 10,
-      height: 10,
-    },
-    button: {
-      position: 'absolute',
-      top: 50,
-      left: 0,
-      width: 150,
-      height: 50,
-      backgroundColor: '#f39c12',
-      alignItems: 'center',
-      justifyContent: 'center'
-    },
+    notification: {
+      paddingLeft: 180,
+
+    }
   });

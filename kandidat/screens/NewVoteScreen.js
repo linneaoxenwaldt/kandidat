@@ -101,6 +101,33 @@ export default class NewVoteScreen extends React.Component {
       this.setState(prevState => ({rows: prevState.rows.filter(item => item !== delItem) }));
     }
 
+    addToCategoryList(newCat) {
+      console.log("new cat" + newCat.id)
+      var db = firebase.firestore();
+      var that = this
+      var user = firebase.auth().currentUser;
+      var userID = user.uid;
+      var catID = newCat.id
+      var docRef = db.collection('Users').doc(userID).collection('Category').doc(catID);
+      docRef.get().then(function(doc) {
+          if (doc.exists) {
+            const catName = doc.data().CatName
+            console.log("name:" + catName)
+            const img = doc.data().CatImg
+            that.setState(prevState => ({
+              rows: [...prevState.rows, {id: catID, text: catName, img: img}]
+            }))
+            console.log("Document data: 1");
+            console.log(that.state.rows)
+          } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+          }
+          }).catch(function(error) {
+              console.log("Error getting document:", error);
+          });
+    }
+
     renderItem = ({item, index}) => {
       return (
         <TouchableOpacity
@@ -133,7 +160,7 @@ export default class NewVoteScreen extends React.Component {
             <View style ={styles.buttonContainer}>
             <TouchableOpacity
                       style={styles.createOwnCategoryContainer}
-                      onPress={() => this.props.navigation.navigate('NewCategory')}
+                      onPress={() => this.props.navigation.navigate('NewCategory', {addToCategoryList: this.addToCategoryList.bind(this)})}
                       underlayColor='#fff'>
                       <Text style={styles.ownCategoryText}>{data.createOwnCate} <Icon
                         name={Platform.OS === "ios" ? "ios-add-circle-outline" : "md-add-circle-outline"}

@@ -1,6 +1,7 @@
 {
   "createNewVote": "Create new vote",
   "ongoingVotes": "On going votes",
+  "requests": "Requests",
   "currentPassword": "Current password",
   "newPassword": "New password",
   "confirmPassword": "Confirm password",
@@ -27,4 +28,8 @@
   "alternatives": "ALTERNATIVES",
   "chooseBackground": "Choose a background picture",
   "photo": "Choose a photo",
+  "noFriendName": "You have not entered a username for your friend",
+  "missingFriendName": "It does not exist a friend with that username",
+  "noAddYourself": "You cannot add yourself!",
+  "alreadyFriends": "You are already friends!"
 }
