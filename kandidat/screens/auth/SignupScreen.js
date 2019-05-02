@@ -111,19 +111,32 @@ for(let i = 0; i < info.length; i++){
         <View style={styles.inputFields}>
         <TextInput style={styles.inputText}
         placeholder="Enter a username... "
+        backgroundColor= '#94B4C1'
+        borderColor= '#758e99'
+        borderWidth='4'
+
         //backgroundColor = "#6ACCCB"
         value = {this.state.username}
         onChangeText = {(text) => {this.setState({ username : text}) }}
         />
         <TextInput style={styles.inputText}
         placeholder="Enter an email... "
-        //backgroundColor = "#CBA3D5"
+        backgroundColor='#8FBC8F'
+        borderColor= '#6f936f'
+        borderWidth='4'
+
+
         value = {this.state.email}
         onChangeText = {(text) => {this.setState({ email : text}) }}
         />
         <TextInput style={styles.inputText}
         secureTextEntry={true}
         placeholder="Enter a password..."
+        backgroundColor='#6ACCCB'
+        borderColor= '#5db3b2'
+        borderWidth='4'
+
+
         //backgroundColor='#94B4C1'
         value = {this.state.password}
         //display = 'block'
@@ -132,12 +145,23 @@ for(let i = 0; i < info.length; i++){
         <TextInput style={styles.inputText}
         secureTextEntry={true}
         placeholder="Confirm the password..."
+        backgroundColor='#689999'
+        borderColor= '#567f7f'
+        borderWidth='4'
+        borderColor= '#567f7f'
+        borderWidth='4'
         //backgroundColor='#8FBC8F'
         value = {this.state.passwordConfirm}
         onChangeText = {(text) => {this.setState({ passwordConfirm : text}) }}
         />
+        <TouchableOpacity
+                  style = {styles.signInResult}
+                   onPress = {this.onSignupPress}
+                  underlayColor='#fff'>
+                  <Text style= {styles.signInResultText}> Sign in
+                  </Text>
+         </TouchableOpacity>
 
-        <Button style={styles.signButton} title = 'Sign up' onPress = {this.onSignupPress}/>
 
         </View>
 
@@ -147,6 +171,8 @@ for(let i = 0; i < info.length; i++){
         size={50}
         color="#A9A9A9"/>
         </TouchableOpacity>
+
+
 
         </View>
       );
@@ -166,16 +192,35 @@ for(let i = 0; i < info.length; i++){
     inputFields: {
       paddingTop: 15,
       alignItems : 'center',
+
     },
     inputText: {
-      width : 250,
-      height : 60,
-      margin: 15,
-      borderWidth : 1,
-      borderRadius: 20,
+      margin: 5,
       textAlign:'center',
       fontSize: 20,
       fontFamily: 'Roboto-Light',
+      color:'white',
+      width: 350,
+      height: 70,
+      borderRadius:50,
+    },
+    signInResult: {
+      justifyContent: 'center',
+      width: 100,
+      height: 70,
+      margin: 10,
+      padding: 10,
+      marginTop:20,
+      backgroundColor:'#BA55B3',
+      borderRadius:20,
+      borderWidth: 1,
+      borderColor: '#fff'
+    },
+    signInResultText:{
+      fontSize:20,
+      textAlign:'center',
+      alignItems:'center',
+      color: 'white',
     },
     arrowback: {
       marginLeft: '5%',

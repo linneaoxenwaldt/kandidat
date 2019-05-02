@@ -110,6 +110,7 @@ renderItem = ({item, index}) => {
     render() {
       return (
         <View style={styles.container}>
+        <Text style={styles.categoryLabel}> Your own category</Text>
         <Modal visible={this.state.showMe}>
         <View style={styles.modalView}>
         <Text style={styles.modalText}>{data.chooseBackground}</Text>
@@ -129,11 +130,14 @@ renderItem = ({item, index}) => {
           </Modal>
 
             <View style={styles.nameCategoryCon}>
+
             <TextInput
             style={styles.nameText}
             placeholder="Enter a category name..."
             onChangeText={(text) => this.setState({text})}/>
             </View>
+
+
 
             <View style={styles.picContain}>
             <TouchableOpacity
@@ -141,13 +145,20 @@ renderItem = ({item, index}) => {
               this.setState({
                 showMe: true
               })}}>
+              <Text style={styles.picText}>{data.photo}
+              <Text style={styles.picText}>  </Text>
               <Icon name={Platform.OS === "ios" ? "ios-image" : "md-image"}
               color='#FFFFFF'
-              size={40}/>
-              </TouchableOpacity>
-              <Text style={styles.picText}>{data.photo}
+              size={30}/>
               </Text>
+              </TouchableOpacity>
+
+
+
               </View>
+
+
+
 
               <View style={styles.createdCat}>
               <ImageBackground source={{uri: this.state.choosenImg}} style={{width: '100%', height: 100, justifyContent: 'center'}}>
@@ -161,7 +172,7 @@ renderItem = ({item, index}) => {
             >
             <Icon
             name={Platform.OS === "ios" ? "ios-arrow-back" : "md-arrow-back"}
-            size={70}
+            size={55}
             color="#A9A9A9"/>
             </TouchableOpacity>
             <TouchableOpacity
@@ -169,10 +180,13 @@ renderItem = ({item, index}) => {
             >
             <Icon
             name={Platform.OS === "ios" ? "ios-arrow-forward" : "md-arrow-forward"}
-            size={70}
+            size={55}
             color="#A9A9A9"/>
             </TouchableOpacity>
             </View>
+
+
+
             </View>
           );
         }
@@ -189,34 +203,41 @@ renderItem = ({item, index}) => {
           textAlign: "center",
           alignItems: "center",
         },
+
+
         picContain: {
           alignItems: 'center',
           justifyContent: 'center',
           textAlign: 'center',
           //marginLeft: 50,
-          borderRadius: 5,
-          borderWidth: 6,
+          borderRadius: 50,
+          //borderWidth: 6,
           borderColor: '#BA55B3',
           marginTop: 20,
-          height:80,
-          width:80,
+          height:70,
+          width:350,
           backgroundColor: '#BA55B3',
+          marginBottom: 30,
         },
         picText:{
+          justifyContent:'center',
           // marginBottom: 15,
           fontFamily: 'Roboto-Light',
           color: '#FFFFFF',
-          fontSize: 12,
-          textAlign: 'center'
+          fontSize: 20,
+          textAlign: 'center',
+          margin:10,
+          paddingBottom:10
         },
         modalView:{
           flex: 1,
           width: '100%',
-          marginTop: 20,
+          marginTop: 10,
           backgroundColor: '#FFFFFF',
           alignItems: 'center',
           borderWidth: 3,
           borderColor: '#BA55B3',
+
         },
         modalText: {
           paddingTop: 10,
@@ -239,14 +260,15 @@ renderItem = ({item, index}) => {
           borderColor: '#BA55B3',
         },
         nameCategoryCon: {
-          width: 300,
+          width: 350,
           height: 70,
           backgroundColor: '#6BCDFD',
-          marginTop: 30,
+          marginTop: 10,
           justifyContent: 'center',
           borderRadius: 50,
           borderWidth: 4,
           borderColor: '#3BCDFD',
+
         },
         nameText: {
           fontFamily: 'Roboto-Light',
@@ -258,17 +280,29 @@ renderItem = ({item, index}) => {
           flexDirection:'row',
           justifyContent: 'space-between',
           width: 340,
+          marginTop: 50,
+
         },
         createdCat: {
-          marginTop: 20,
+          marginTop: 10,
           height: 100,
           width: '100%',
           backgroundColor: 'transparent',
           justifyContent: 'center',
+          borderRadius:6,
+          borderColor:'black'
         },
         createdCatText: {
           fontSize: 30,
           color: '#FFFFFF',
           marginLeft: 10,
         },
+        categoryLabel: {
+          margin:20,
+          fontSize: 40,
+          color: '#000000',
+          textAlign: 'center',
+          fontFamily: "Roboto-Light",
+        },
+
       });
