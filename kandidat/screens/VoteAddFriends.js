@@ -36,7 +36,7 @@ import * as firebase from 'firebase';
 
 // const extractKey = ({id}) => id
 
-export default class FriendsScreen extends React.Component {
+export default class VoteAddFriends extends React.Component {
   constructor(props){
     super(props);
     this.colors = ['#6ACCCB', '#94B4C1', '#8FBC8F', '#CBA3D5', '#689999']
@@ -158,7 +158,7 @@ renderItem = ({item, index}) => {
   render() {
     return (
       <View style={styles.container}>
-      <Text style={styles.friendLabel}>{data.friends}</Text>
+      <Text style={styles.friendLabel}>{data.invitefriends}</Text>
 
 
       <View style= {styles.buttonContainer}>
@@ -217,7 +217,6 @@ color="#A9A9A9"/>
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 15,
     backgroundColor: '#FFFFFF',
 
   },
