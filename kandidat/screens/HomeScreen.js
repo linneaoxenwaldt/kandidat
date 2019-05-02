@@ -131,4 +131,5 @@ export default class HomeScreen extends React.Component {
     notification: {
       paddingLeft: 180,
     }
+    
   });
