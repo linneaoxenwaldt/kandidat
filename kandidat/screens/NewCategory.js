@@ -116,7 +116,7 @@ renderItem = ({item, index}) => {
         <Modal visible={this.state.showMe}>
         <View style={styles.modalView}>
         <Text style={styles.modalText}>{data.chooseBackground}</Text>
-        <TouchableOpacity onPress={()=>{
+        <TouchableOpacity style={styles.closeContainer}onPress={()=>{
           this.setState({
             showMe: false
           })}}>
@@ -237,14 +237,13 @@ renderItem = ({item, index}) => {
           marginTop: 10,
           backgroundColor: '#FFFFFF',
           alignItems: 'center',
-          borderWidth: 3,
-          borderColor: '#BA55B3',
+
 
         },
         modalText: {
-          paddingTop: 10,
+          paddingTop: 50,
           fontFamily: 'Roboto-Light',
-          fontSize: 20,
+          fontSize: 25,
           paddingBottom: 10,
         },
         picStyle: {
@@ -253,13 +252,26 @@ renderItem = ({item, index}) => {
           margin: 5,
         },
         closeText: {
-          marginBottom: 20,
+          marginBottom: 10,
+          marginTop: 10,
+          alignItems: 'center',
+          fontSize: 15,
+          color: 'white',
+          justifyContent:'center',
+
+        },
+
+        closeContainer: {
+          marginBottom: 30,
           marginTop: 10,
           backgroundColor: '#CBA3D5',
           alignItems: 'center',
-          borderRadius: 5,
-          borderWidth: 3,
-          borderColor: '#BA55B3',
+          borderRadius: 20,
+          width:150,
+          height: 50,
+          alignItems:'center',
+          justifyContent:'center',
+
         },
         nameCategoryCon: {
           width: 350,

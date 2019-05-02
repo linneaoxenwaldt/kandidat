@@ -31,5 +31,6 @@
   "noFriendName": "You have not entered a username for your friend",
   "missingFriendName": "It does not exist a friend with that username",
   "noAddYourself": "You cannot add yourself!",
-  "alreadyFriends": "You are already friends!"
+  "alreadyFriends": "You are already friends!",
+  "invitefriends":"INVITE FRIENDS"
 }
