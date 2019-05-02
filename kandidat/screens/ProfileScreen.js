@@ -198,11 +198,13 @@ showsHorizontalScrollIndicator={false}
       marginTop: 20,
       marginBottom: 5,
       padding: 10,
+      alignItems:'center'
     },
     userNameText: {
       fontFamily: 'Roboto-Light',
       color: '#FFFFFF',
       fontSize: 20,
+      justifyContent:'center',
     },
     emailContainer: {
       flexDirection:'row',
@@ -213,6 +215,7 @@ showsHorizontalScrollIndicator={false}
       borderRadius: 30,
       margin: 5,
       padding: 10,
+      alignItems:'center'
     },
     emailText: {
       flexGrow: 1,
@@ -220,6 +223,7 @@ showsHorizontalScrollIndicator={false}
       color: '#FFFFFF',
       fontSize: 20,
       alignSelf: 'center',
+      justifyContent:'center',
     },
     passwordContainer: {
       flexDirection:'row',
@@ -230,6 +234,7 @@ showsHorizontalScrollIndicator={false}
       borderRadius: 30,
       margin: 5,
       padding: 10,
+      alignItems:'center'
     },
     passwordText: {
       flexGrow: 1,
@@ -237,6 +242,7 @@ showsHorizontalScrollIndicator={false}
       color: '#FFFFFF',
       fontSize: 20,
       alignSelf: 'center',
+      justifyContent:'center',
     },
     profilePicContainer: {
       flexDirection:'row',
@@ -247,6 +253,7 @@ showsHorizontalScrollIndicator={false}
       borderRadius: 30,
       margin: 5,
       padding: 10,
+      alignItems:'center'
     },
     profilePicText: {
       flexGrow: 1,
@@ -254,6 +261,7 @@ showsHorizontalScrollIndicator={false}
       color: '#FFFFFF',
       fontSize: 20,
       alignSelf: 'center',
+      justifyContent:'center',
     },
     changeIcon: {
       //flexBasis: 50,

@@ -22,9 +22,11 @@ export default class AddFriendsScreen extends React.Component {
       text: '',
       users: [],
       friends: [],
+      pendingFriends: [],
     }
     this.getAllUsers()
     this.getYourFriends()
+    this.getPendingFriends()
   }
   static navigationOptions = ({ navigation }) => {
       return {
@@ -85,6 +87,23 @@ getAllUsers() {
    });
  }
 
+ getPendingFriends() {
+   var that = this
+   var user = firebase.auth().currentUser;
+   var userID = user.uid;
+   var db = firebase.firestore();
+   db.collection("Users").doc(userID).collection("PendingFriendRequests").get().then(function(querySnapshot) {
+       querySnapshot.forEach(function(doc) {
+           // doc.data() is never undefined for query doc snapshots
+           const name = doc.get('Username');
+           const id = doc.id;
+           that.setState(prevState => ({
+             pendingFriends: [...prevState.pendingFriends, {id: id, userName: name}]
+           }))
+       });
+   });
+ }
+
  checkUsername() {
    if (this.state.text == "") {
      Alert.alert(
@@ -122,11 +141,28 @@ getAllUsers() {
      }
    }
    if (alreadyFriend == false) {
-     this.addUser(friend)
+     this.checkIfPendingFriendReq(friend)
    }
    else {
      Alert.alert(
        data.alreadyFriends,
+     )
+   }
+ }
+
+ checkIfPendingFriendReq(friend) {
+   var pendingFriend = false
+   for (let i=0; i< this.state.pendingFriends.length; i++) {
+     if (friend.id == this.state.pendingFriends[i].id) {
+       pendingFriend = true
+     }
+   }
+   if (pendingFriend == false) {
+     this.addUser(friend)
+   }
+   else {
+     Alert.alert(
+       data.alreadyFriendReq,
      )
    }
  }
@@ -143,7 +179,7 @@ getAllUsers() {
      )
    }
 else {
-   db.collection("Users").doc(userID).collection("Friends").doc(friendID).set({
+   db.collection("Users").doc(userID).collection("PendingFriendRequests").doc(friendID).set({
 })
 .then(function() {
 console.log("Document written with ID: ");
@@ -154,7 +190,7 @@ docRef.get().then(function(doc) {
     const username = doc.data().Username
     const profilePic = doc.data().ProfilePic
     var newFriend = {id: friendID, username: username, profilePic: profilePic}
-    that.props.navigation.state.params.updateFriends(newFriend);
+    that.sendFriendRequest(friendID, userID)
     that.props.navigation.navigate('Friends')
 }})
 .catch(function(error) {
@@ -162,6 +198,12 @@ console.error("Error adding document: ", error);
 });
 })
 }
+}
+
+sendFriendRequest(friendID, userID) {
+  var db = firebase.firestore();
+  db.collection("Users").doc(friendID).collection("FriendRequests").doc(userID).set({
+})
 }
 
   render() {

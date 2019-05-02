@@ -47,8 +47,9 @@ render(){
     directionalOffsetThreshold: 80
   };
   return(
-    <View>
+
     <View style={styles.container}>
+    <View style={styles.input}>
     <Text style={styles.textComp}> Forgot Password? </Text>
 
     <TextInput style={styles.inputContain}
@@ -57,23 +58,25 @@ render(){
     onChangeText = {(text) => {this.setState({ email : text}) }}
     />
 
-    <Button title = 'Reset Password' onPress = {this.onResetPasswordPress} />
-    <Button style={styles.backButton} title = 'Back to Login' onPress = {this.onBackToLoginPress}/>
+    <TouchableOpacity
+              style = {styles.signUp}
+              onPress = {this.onResetPasswordPress}
+              underlayColor='#fff'>
+              <Text style= {styles.signUpText}> Reset Password
+              </Text>
+     </TouchableOpacity>
+     </View>
 
-    </View>
 
-    <TouchableOpacity style={styles.arrowback} onPress={() => this.props.navigation.navigate('Login')}>
+    <View>
+    <TouchableOpacity style = {styles.arrowback} onPress={() => this.props.navigation.navigate('Login')}>
     <Icon
     name={Platform.OS === "ios" ? "ios-arrow-back" : "md-arrow-back"}
-    size={50}
+    size={55}
     color="#A9A9A9"/>
     </TouchableOpacity>
+    </View>
 
-
-    <LinearGradient
-    colors={['#FFFFFF', '#6ACCCB']}
-    style={{ height: '100%', alignItems: 'center', borderRadius: 5 }}>
-    </LinearGradient>
     </View>
 
   );
@@ -82,30 +85,55 @@ render(){
 }
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 50,
-    alignItems: 'center',
+    padding: 10,
   },
   textComp: {
     textAlign:'center',
-    fontSize: 24,
+    fontSize: 25,
     fontFamily: 'Roboto-Light',
     padding: 20,
   },
+
+input: {
+alignItems: 'center',
+paddingTop: 50,
+},
+
   inputContain: {
-    width : 250,
-    height : 40,
-    borderWidth : 2,
-    borderRadius: 15,
+    width : 350,
+    height : 70,
+    borderWidth : 4,
+    borderRadius: 50,
     borderColor: '#BA55B3',
     backgroundColor: '#CBA3D5',
-    margin: 30,
+    margin: 10,
     textAlign: 'center',
     color: '#FFFFFF',
-    fontSize: 16,
+    fontSize: 20,
     fontFamily: 'Roboto-Light',
   },
+  signUp: {
+    justifyContent: 'center',
+    width: 200,
+    height: 70,
+    margin: 10,
+    padding: 10,
+    marginTop:20,
+    backgroundColor:'#BA55B3',
+    borderRadius:20,
+    borderWidth: 1,
+    borderColor: '#fff'
+  },
+  signUpText:{
+    fontSize:20,
+    textAlign:'center',
+    alignItems:'center',
+    color: 'white',
+  },
   arrowback: {
-    marginLeft:'5%',
+    alignItems: 'flex-start',
+    marginTop: 200,   //dålig lösning men fick den ej på botten :D
+
   }
 
   

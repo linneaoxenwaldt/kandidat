@@ -92,6 +92,12 @@ export default class FriendsScreen extends React.Component {
       console.error("Error removing document: ", error);
     });
     this.setState(prevState => ({friendsInfo: prevState.friendsInfo.filter(item => item !== delItem) }));
+
+    db.collection("Users").doc(delItem.id).collection("Friends").doc(userID).delete().then(function() {
+      console.log("Document successfully deleted!");
+    }).catch(function(error) {
+      console.error("Error removing document: ", error);
+    });
   }
 
 updateFriends(friend) {
