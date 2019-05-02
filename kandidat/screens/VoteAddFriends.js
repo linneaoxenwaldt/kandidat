@@ -55,6 +55,7 @@ export default class FriendsScreen extends React.Component {
   this.state = {
     friends: [],
     isDateTimePickerVisible: false,
+    date: [] ,
   }
   this.getYourFriends()
   }
@@ -94,8 +95,11 @@ hideDateTimePicker = () => {
   };
 
   handleDatePicked = date => {
+    this.setState({date});
    console.log("A date has been picked: ", date);
    this.hideDateTimePicker();
+
+
  };
 
  getYourFriends() {
@@ -140,15 +144,9 @@ renderItem = ({item, index}) => {
       checked={this.state.isSelected}
       onPress={() => this.setState({checked: !this.state.checked})}
       onValueChange={(newValue) => {console.log(newValue)}}
-    size={30}
-    checkedIcon={<Icon
-      name={Platform.OS === "ios" ? "ios-menu" : "md-menu"}
-      size={40}
-      color='blue'/>}
-    uncheckedIcon={<Icon
-      name={Platform.OS === "ios" ? "ios-menu" : "md-menu"}
-      size={40}
-      color='blue' />}
+      size={30}
+
+
 
 
 />
@@ -172,11 +170,14 @@ renderItem = ({item, index}) => {
                   isVisible={this.state.isDateTimePickerVisible}
                   onConfirm={this.handleDatePicked}
                   onCancel={this.hideDateTimePicker}
+
                 />
                 <Text style={styles.addFriendsText}>Expire date <Icon
                     name={Platform.OS === "ios" ? "ios-calendar" : "md-calendar"}
                     size={25}
                   /></Text>
+
+                  <Text>{[this.state.date]}</Text>
 
        </TouchableOpacity>
        </View>
