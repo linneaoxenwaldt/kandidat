@@ -13,6 +13,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import Icon2 from "react-native-vector-icons/MaterialCommunityIcons";
 import { ListItem } from 'react-native-elements';
 import data from '../data/engWord.json';
+import * as firebase from 'firebase';
 
 export default class OngoingVoteScreen extends React.Component {
   constructor(props){
@@ -23,15 +24,17 @@ export default class OngoingVoteScreen extends React.Component {
       {id: '1', text: 'Request1',  voteReq: true},
       {id: '2', text: 'Request2',  voteReq: true},
       {id: '3', text: 'Request3',  voteReq: true},
-      {id: '4', text: 'FriendRequest4',  friendReq: true},
-      {id: '5', text: 'FriendRequest5',  friendReq: true},
-      {id: '6', text: 'FriendRequest6',  friendReq: true},
-      {id: '7', text: 'FriendRequest7',  friendReq: true},
+      // {id: '4', text: 'FriendRequest4',  friendReq: true},
+      // {id: '5', text: 'FriendRequest5',  friendReq: true},
+      // {id: '6', text: 'FriendRequest6',  friendReq: true},
+      // {id: '7', text: 'FriendRequest7',  friendReq: true},
     ]
     this.extractKey = ({id}) => id
     this.state = {
       rows: rows,
+      friendReq: [],
     }
+    this.getFriendReq()
   }
 
   static navigationOptions = ({ navigation }) => {
@@ -67,13 +70,62 @@ export default class OngoingVoteScreen extends React.Component {
       }
 
       friendRequests = ({item, index}) => {
-        if(item.friendReq == true ) {
+        //if(item.friendReq == true ) {
           return (
             <ListItem
             containerStyle={{ backgroundColor: this.colors[index % this.colors.length]}}
             titleStyle={{color: '#FFFFFF', textAlign:'center', fontSize: 20,}}
-            title={item.text}/>
+            title={item.username}
+            leftAvatar = {{source: {uri: item.profilePic}}}
+            rightIcon = {<Icon2
+            onPress={() => this.acceptFriend(item)}
+              name={'gesture-swipe-right'}
+              size={30}/>}/>
           )}
+        //}
+
+        getFriendReq() {
+          var that = this
+          var user = firebase.auth().currentUser;
+          var userID = user.uid;
+          var db = firebase.firestore();
+          db.collection("Users").doc(userID).collection("FriendRequests").get().then(function(querySnapshot) {
+              querySnapshot.forEach(function(doc) {
+                  // doc.data() is never undefined for query doc snapshots
+                  const id = doc.id;
+                  var docRef = db.collection('Users').doc(id);
+                  docRef.get().then(function(doc) {
+                    if (doc.exists) {
+                      const username = doc.data().Username
+                      const profilePic = doc.data().ProfilePic
+                      that.setState(prevState => ({
+                        friendReq: [...prevState.friendReq, {id: id, username: username, profilePic: profilePic}]
+                      }))
+                      //console.log("Document data: 2");
+                    } else {
+                      // doc.data() will be undefined in this case
+                      console.log("No such document!");
+                    }
+                    }).catch(function(error) {
+                        console.log("Error getting document:", error);
+                    });
+                  })
+              });
+        }
+
+        acceptFriend(friendItem) {
+          var that = this
+          var user = firebase.auth().currentUser;
+          var userID = user.uid;
+          var db = firebase.firestore();
+          db.collection("Users").doc(userID).collection("Friends").doc(friendItem.id).set({
+          })
+          db.collection("Users").doc(userID).collection("FriendRequests").doc(friendItem.id).delete().then(function() {
+            console.log("FriendReq successfully deleted!" + friendItem.id);
+          }).catch(function(error) {
+            console.error("Error removing document: ", error);
+          });
+          this.setState(prevState => ({friendReq: prevState.friendReq.filter(item => item !== friendItem) }));
         }
 
         render() {
@@ -110,7 +162,7 @@ export default class OngoingVoteScreen extends React.Component {
               size={30}/></Text>
             </View>
             <FlatList
-            data={this.state.rows}
+            data={this.state.friendReq}
             renderItem={this.friendRequests}
             keyExtractor={this.extractKey}
             />

@@ -227,8 +227,23 @@ const VoteAddFriendsStack = createStackNavigator({
 });
 
 const RequestStack = createStackNavigator({
-  Requstscreen: RequestScreen,
+  RequestScreen: RequestScreen,
 });
+
+RequestStack.navigationOptions = {
+  tabBarLabel: 'Requests',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={Platform.OS === 'ios' ? 'ios-help' : 'md-help'}
+    />
+  ),
+  drawerIcon: ({ focused }) => (
+    <Icon
+      name={Platform.OS === "ios" ? "ios-help" : "md-help"}
+      size={25}
+    />),
+};
 
 const DrawerComponent = createDrawerNavigator(
   {
@@ -237,6 +252,7 @@ const DrawerComponent = createDrawerNavigator(
     'My Friends': FriendsStack,
     'Create new vote': NewVoteStack,
     'Ongoing votes': OngoingVoteStack,
+    'Requests': RequestStack,
     'Saved result': SavedResultStack,
     'Settings': SettingsStack,
     'Log out': LogOutStack,
@@ -252,7 +268,7 @@ const AppStack = createStackNavigator({
   AlternativeScreen: {screen: AlternativeScreenStack},
   AddFriendScreen: {screen: AddFriendStack},
   LoginScreen: {screen: LoginStack},
-  RequestScreen: {screen: RequestStack},
+  //RequestScreen: {screen: RequestStack},
   VoteAddFriends: {screen: VoteAddFriendsStack}
 }, {
   headerMode: 'none',
