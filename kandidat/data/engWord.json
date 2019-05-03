@@ -36,4 +36,5 @@
   "invitefriends":"INVITE FRIENDS",
   "alreadyFriendReq": "You have already sent a request!",
   "missingFriends": "You have not choosen any friends",
+  "sentFrom": "Sent from"
 }

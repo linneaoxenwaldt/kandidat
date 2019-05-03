@@ -6,7 +6,8 @@ import { ScrollView,
   Platform,
   View,
   FlatList,
-  Text
+  Text,
+  ImageBackground
 } from 'react-native';
 import { DrawerActions } from 'react-navigation';
 import Icon from "react-native-vector-icons/Ionicons";
@@ -20,21 +21,24 @@ export default class OngoingVoteScreen extends React.Component {
     super(props);
     this.colors = ['#6ACCCB', '#94B4C1', '#8FBC8F', '#CBA3D5', '#689999']
     const rows = [
-      {id: '0', text: 'Request 0', voteReq: true},
-      {id: '1', text: 'Request1',  voteReq: true},
-      {id: '2', text: 'Request2',  voteReq: true},
-      {id: '3', text: 'Request3',  voteReq: true},
+      // {id: '0', text: 'Request 0', voteReq: true},
+      // {id: '1', text: 'Request1',  voteReq: true},
+      // {id: '2', text: 'Request2',  voteReq: true},
+      // {id: '3', text: 'Request3',  voteReq: true},
       // {id: '4', text: 'FriendRequest4',  friendReq: true},
       // {id: '5', text: 'FriendRequest5',  friendReq: true},
       // {id: '6', text: 'FriendRequest6',  friendReq: true},
       // {id: '7', text: 'FriendRequest7',  friendReq: true},
     ]
-    this.extractKey = ({id}) => id
+    this.extractKey1 = ({VoteID}) => VoteID
+    this.extractKey2 = ({VoteID}) => VoteID
     this.state = {
-      rows: rows,
+      // rows: rows,
       friendReq: [],
+      voteReq: [],
     }
     this.getFriendReq()
+    this.getVoteReq()
   }
 
   static navigationOptions = ({ navigation }) => {
@@ -60,14 +64,24 @@ export default class OngoingVoteScreen extends React.Component {
     };
 
     voteRequests = ({item, index}) => {
-      if(item.voteReq == true ) {
         return (
+          <ImageBackground source={{uri: item.CatImg}} style={{width: '100%', height: 100}}>
           <ListItem
-          containerStyle={{ backgroundColor: this.colors[index % this.colors.length]}}
-          titleStyle={{color: '#FFFFFF', textAlign:'center', fontSize: 20,}}
-          title={item.text}/>
+          containerStyle={{ backgroundColor: 'transparent'}}
+        //  containerStyle={{ backgroundColor: this.colors[index % this.colors.length]}}
+          titleStyle={{color: '#FFFFFF', fontSize: 30}}
+          title={item.CatName}
+          roundAvatar
+          rightAvatar= {{source: {uri: item.profilePic}}}
+          rightTitle={data.sentFrom}
+          rightSubtitle={item.username}
+          />
+          </ImageBackground>
+          // <ListItem
+          // containerStyle={{ backgroundColor: this.colors[index % this.colors.length]}}
+          // titleStyle={{color: '#FFFFFF', textAlign:'center', fontSize: 20,}}
+          // title={item.text}/>
         )}
-      }
 
       friendRequests = ({item, index}) => {
         //if(item.friendReq == true ) {
@@ -159,6 +173,37 @@ export default class OngoingVoteScreen extends React.Component {
           });
         }
 
+        getVoteReq() {
+          var that = this
+          var user = firebase.auth().currentUser;
+          var userID = user.uid;
+          var db = firebase.firestore();
+          db.collection("Users").doc(userID).collection("VoteRequests").get().then(function(querySnapshot) {
+              querySnapshot.forEach(function(doc) {
+                  // doc.data() is never undefined for query doc snapshots
+                  var voteID = doc.id;
+                  var sentFromID = doc.get("SentFrom")
+                  var docRef = db.collection('Users').doc(sentFromID);
+
+                  docRef.get().then(function(doc) {
+                    if (doc.exists) {
+                      const username = doc.data().Username
+                      const profilePic = doc.data().ProfilePic
+
+                      var docRef2 = db.collection('Users').doc(sentFromID).collection("PendingVotes").doc(voteID);
+                      docRef2.get().then(function(doc) {
+                        if (doc.exists) {
+                          const catName = doc.get('CatName');
+                          const catImg = doc.get('CatImg');
+                      that.setState(prevState => ({
+                        voteReq: [...prevState.voteReq, {VoteID: voteID, username: username, profilePic: profilePic, CatName: catName, CatImg: catImg}]
+                      }))
+                  }})
+              }});
+        });
+      });
+    }
+
         render() {
           return (
             <View style={styles.container}>
@@ -175,9 +220,9 @@ export default class OngoingVoteScreen extends React.Component {
               size={30}/></Text>
             </View>
             <FlatList
-            data={this.state.rows}
+            data={this.state.voteReq}
             renderItem={this.voteRequests}
-            keyExtractor={this.extractKey}
+            keyExtractor={this.extractKey2}
             />
             </View>
 
@@ -195,7 +240,7 @@ export default class OngoingVoteScreen extends React.Component {
             <FlatList
             data={this.state.friendReq}
             renderItem={this.friendRequests}
-            keyExtractor={this.extractKey}
+            keyExtractor={this.extractKey1}
             />
             </View>
             </View>
