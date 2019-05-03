@@ -7,7 +7,8 @@ import { ScrollView,
   View,
   FlatList,
   Text,
-  ImageBackground
+  Modal,
+  ImageBackground,
 } from 'react-native';
 import { DrawerActions } from 'react-navigation';
 import Icon from "react-native-vector-icons/Ionicons";
@@ -15,6 +16,7 @@ import Icon2 from "react-native-vector-icons/MaterialCommunityIcons";
 import { ListItem } from 'react-native-elements';
 import data from '../data/engWord.json';
 import * as firebase from 'firebase';
+import { SwipeListView } from 'react-native-swipe-list-view';
 
 export default class OngoingVoteScreen extends React.Component {
   constructor(props){
@@ -31,11 +33,13 @@ export default class OngoingVoteScreen extends React.Component {
       // {id: '7', text: 'FriendRequest7',  friendReq: true},
     ]
     this.extractKey1 = ({VoteID}) => VoteID
-    this.extractKey2 = ({VoteID}) => VoteID
+    this.extractKey2 = ({id}) => id
     this.state = {
       // rows: rows,
       friendReq: [],
+      showMe: false,
       voteReq: [],
+      participants: [],
     }
     this.getFriendReq()
     this.getVoteReq()
@@ -65,6 +69,12 @@ export default class OngoingVoteScreen extends React.Component {
 
     voteRequests = ({item, index}) => {
         return (
+          <TouchableOpacity
+          onPress={()=>{
+            this.setState({
+              showMe: true,
+              currentVote: item,
+            })}}>
           <ImageBackground source={{uri: item.CatImg}} style={{width: '100%', height: 100}}>
           <ListItem
           containerStyle={{ backgroundColor: 'transparent'}}
@@ -77,6 +87,7 @@ export default class OngoingVoteScreen extends React.Component {
           rightSubtitle={item.username}
           />
           </ImageBackground>
+          </TouchableOpacity>
           // <ListItem
           // containerStyle={{ backgroundColor: this.colors[index % this.colors.length]}}
           // titleStyle={{color: '#FFFFFF', textAlign:'center', fontSize: 20,}}
@@ -85,30 +96,30 @@ export default class OngoingVoteScreen extends React.Component {
 
       friendRequests = ({item, index}) => {
         //if(item.friendReq == true ) {
-          return (
-            <ListItem
-            containerStyle={{ backgroundColor: this.colors[index % this.colors.length]}}
-            titleStyle={{color: '#FFFFFF', textAlign:'center', fontSize: 20,}}
-            title={item.username}
-            leftAvatar = {{source: {uri: item.profilePic}}}
-            rightIcon = {<Icon2
+        return (
+          <ListItem
+          containerStyle={{ backgroundColor: this.colors[index % this.colors.length]}}
+          titleStyle={{color: '#FFFFFF', textAlign:'center', fontSize: 20,}}
+          title={item.username}
+          leftAvatar = {{source: {uri: item.profilePic}}}
+          rightIcon = {<Icon2
             onPress={() => this.acceptFriend(item)}
-              name={'gesture-swipe-right'}
-              size={30}/>}
+            name={'gesture-swipe-right'}
+            size={30}/>}
             leftIcon = {<Icon2
               onPress={() => this.declineFriend(item)}
-                name={'gesture-swipe-left'}
-                size={30}/>}/>
-          )}
-        //}
+              name={'gesture-swipe-left'}
+              size={30}/>}/>
+            )}
+            //}
 
-        getFriendReq() {
-          var that = this
-          var user = firebase.auth().currentUser;
-          var userID = user.uid;
-          var db = firebase.firestore();
-          db.collection("Users").doc(userID).collection("FriendRequests").get().then(function(querySnapshot) {
-              querySnapshot.forEach(function(doc) {
+            getFriendReq() {
+              var that = this
+              var user = firebase.auth().currentUser;
+              var userID = user.uid;
+              var db = firebase.firestore();
+              db.collection("Users").doc(userID).collection("FriendRequests").get().then(function(querySnapshot) {
+                querySnapshot.forEach(function(doc) {
                   // doc.data() is never undefined for query doc snapshots
                   const id = doc.id;
                   var docRef = db.collection('Users').doc(id);
@@ -124,12 +135,12 @@ export default class OngoingVoteScreen extends React.Component {
                       // doc.data() will be undefined in this case
                       console.log("No such document!");
                     }
-                    }).catch(function(error) {
-                        console.log("Error getting document:", error);
-                    });
-                  })
+                  }).catch(function(error) {
+                    console.log("Error getting document:", error);
+                  });
+                })
               });
-        }
+            }
 
         acceptFriend(friendItem) {
           var that = this
@@ -196,7 +207,7 @@ export default class OngoingVoteScreen extends React.Component {
                           const catName = doc.get('CatName');
                           const catImg = doc.get('CatImg');
                       that.setState(prevState => ({
-                        voteReq: [...prevState.voteReq, {VoteID: voteID, friendID: sentFrom, username: username, profilePic: profilePic, CatName: catName, CatImg: catImg}]
+                        voteReq: [...prevState.voteReq, {VoteID: voteID, friendID: sentFromID, username: username, profilePic: profilePic, CatName: catName, CatImg: catImg}]
                       }))
                   }})
               }});
@@ -209,112 +220,270 @@ export default class OngoingVoteScreen extends React.Component {
       var user = firebase.auth().currentUser;
       var userID = user.uid;
       var db = firebase.firestore();
-      db.collection("Users").doc(userID).collection("Votes").doc(voteItem.id).set({
-        CatName: "",
-        CatImg: "",
+      var vote = this.state.currentVote
+      db.collection("Users").doc(userID).collection("Votes").doc(vote.VoteID).set({
+        CatName: vote.CatName,
+        CatImg: vote.CatImg,
       })
-      db.collection("Users").doc(userID).collection("VoteRequests").doc(voteItem.id).delete().then(function() {
-        console.log("FriendReq successfully deleted!" + voteItem.id);
+      db.collection("Users").doc(userID).collection("VoteRequests").doc(vote.VoteID).delete().then(function() {
+        console.log("VoteReq successfully deleted!" + voteItem.id);
       }).catch(function(error) {
         console.error("Error removing document: ", error);
       });
-      this.setState(prevState => ({voteReq: prevState.voteReq.filter(item => item !== voteItem) }));
-
-
-      db.collection("Users").doc(friendItem.id).collection("Friends").doc(userID).set({
-      })
-      db.collection("Users").doc(friendItem.id).collection("PendingFriendRequests").doc(userID).delete().then(function() {
-        console.log("FriendReq successfully deleted!" + friendItem.id);
-      }).catch(function(error) {
-        console.error("Error removing document: ", error);
-      });
+      this.setState(prevState => ({voteReq: prevState.voteReq.filter(item => item !== vote) }));
 
     }
 
 declineVote() {
+  var that = this
+  var user = firebase.auth().currentUser;
+  var userID = user.uid;
+  var db = firebase.firestore();
+  var vote = this.state.currentVote
 
+  db.collection("Users").doc(userID).collection("VoteRequests").doc(vote.VoteID).delete().then(function() {
+    console.log("FriendReq successfully deleted!" + vote.VoteID);
+  }).catch(function(error) {
+    console.error("Error removing document: ", error);
+  });
+  this.setState(prevState => ({voteReq: prevState.voteReq.filter(item => item !== vote) }));
+
+  db.collection("Users").doc(vote.friendID).collection("PendingVotes").doc(vote.VoteID).delete().then(function() {
+    console.log("FriendReq successfully deleted!" + vote.VoteID);
+  }).catch(function(error) {
+    console.error("Error removing document: ", error);
+  });
+  this.setState({
+    showMe: false
+  })
 }
 
-        render() {
-          return (
-            <View style={styles.container}>
-            <Text style={styles.requestLabel}> {data.requests} </Text>
-
-            <View style={styles.voteReq}>
-            <Text style={styles.textLabel}> Votes </Text>
-            <View style={styles.miniTextview}>
-            <Text> <Icon2
-              name={'gesture-swipe-left'}
-              size={30}/>  Decline  </Text>
-            <Text> Accept <Icon2
-              name={'gesture-swipe-right'}
-              size={30}/></Text>
-            </View>
-            <FlatList
-            data={this.state.voteReq}
-            renderItem={this.voteRequests}
-            keyExtractor={this.extractKey2}
-            />
-            </View>
+            render() {
+              return (
+                <View style={styles.container}>
+                <Text style={styles.requestLabel}> {data.requests} </Text>
+                <View style={styles.voteReq}>
+                <Text style={styles.textLabel}> Votes </Text>
 
 
-            <View style={styles.friendReq}>
-            <Text style={styles.textLabel}> Friends </Text>
-            <View style={styles.miniTextview}>
-            <Text> <Icon2
-              name={'gesture-swipe-left'}
-              size={30}/>  Decline  </Text>
-            <Text> Accept <Icon2
-              name={'gesture-swipe-right'}
-              size={30}/></Text>
-            </View>
-            <FlatList
-            data={this.state.friendReq}
-            renderItem={this.friendRequests}
-            keyExtractor={this.extractKey1}
-            />
-            </View>
-            </View>
-          );
-        }
-      }
+                <Modal visible={this.state.showMe}>
+                <View style={styles.modalView}>
+                <Text style={styles.modalText}> Hej hej hej </Text>
 
-      const styles = StyleSheet.create({
-        container: {
-          flex: 1,
-          backgroundColor: '#FFFFFF',
-        },
-        requestLabel: {
-          fontSize: 40,
-          color: '#000000',
-          textAlign: 'center',
-          fontFamily: "Roboto-Light",
-          marginTop: 15,
-        },
-        textLabel: {
-          marginTop: 10,
-          fontSize: 30,
-          color: '#000000',
-          textAlign: 'center',
-          fontFamily: "Roboto-Light",
-        },
-        miniTextview: {
-          marginLeft: 10,
-          width: 340,
-          flexDirection:'row',
-          justifyContent: 'space-between',
-          color: '#000000',
-          fontFamily: "Roboto-Light",
-        },
-        voteReq: {
-          height: 260,
-        },
-        friendReq: {
-          height: 260,
-        },
-        arrowBack: {
-          marginLeft: 10,
-          flexDirection:'row',
-          justifyContent: 'space-between',
-        }
-      });
+                <Text style={styles.textLabel}> You are invited by: </Text>
+                <Text style={styles.miniTextview}> Participants: </Text>
+
+                <FlatList
+                data={this.state.participants}
+
+                keyExtractor={this.extractKey2}
+                />
+
+                <View style={styles.buttonBottomContainer}>
+                <TouchableOpacity
+                style={styles.declineButt}
+                onPress={() => this.declineVote()}              >
+                <Text> DECLINE </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                onPress={() => this.acceptVote()}
+                style={styles.acceptButt}>
+                <Text> ACCEPT </Text>
+                </TouchableOpacity>
+                </View>
+
+
+
+
+
+                <TouchableOpacity style={styles.closeContainer}onPress={()=>{
+                  this.setState({
+                    showMe: false
+                  })}}>
+
+
+                  <Text style={styles.closeText}> Close Window </Text>
+                  </TouchableOpacity>
+
+                  </View>
+                  </Modal>
+
+
+                    <View style={styles.miniTextview}>
+                    <Text> <Icon2
+                    name={'gesture-swipe-left'}
+                    size={30}/>  Decline  </Text>
+                    <Text> Accept <Icon2
+                    name={'gesture-swipe-right'}
+                    size={30}/></Text>
+                    </View>
+
+                    <View>
+                    <FlatList
+                    data={this.state.voteReq}
+                    renderItem={this.voteRequests}
+                    keyExtractor={this.extractKey1}
+                    />
+                    </View>
+                    </View>
+
+
+                    <View style={styles.friendReq}>
+                    <Text style={styles.textLabel}> Friends </Text>
+                    <View style={styles.miniTextview}>
+                    <Text> <Icon2
+                    name={'gesture-swipe-left'}
+                    size={30}/>  Decline  </Text>
+                    <Text> Accept <Icon2
+                    name={'gesture-swipe-right'}
+                    size={30}/></Text>
+                    </View>
+                    <FlatList
+                    data={this.state.friendReq}
+                    renderItem={this.friendRequests}
+                    keyExtractor={this.extractKey2}
+                    />
+                    </View>
+                    </View>
+                  );
+                }
+              }
+
+              const styles = StyleSheet.create({
+                container: {
+                  flex: 1,
+                  backgroundColor: '#FFFFFF',
+                },
+                requestLabel: {
+                  fontSize: 40,
+                  color: '#000000',
+                  textAlign: 'center',
+                  fontFamily: "Roboto-Light",
+                  marginTop: 15,
+                },
+                textLabel: {
+                  marginTop: 10,
+                  fontSize: 30,
+                  color: '#000000',
+                  textAlign: 'center',
+                  fontFamily: "Roboto-Light",
+                },
+                miniTextview: {
+                  marginLeft: 10,
+                  width: 340,
+                  flexDirection:'row',
+                  justifyContent: 'space-between',
+                  color: '#000000',
+                  fontFamily: "Roboto-Light",
+                },
+                voteReq: {
+                  height: 260,
+                },
+                friendReq: {
+                  height: 260,
+                },
+                arrowBack: {
+                  marginLeft: 10,
+                  flexDirection:'row',
+                  justifyContent: 'space-between',
+                },
+                modalView:{
+                  flex: 1,
+                  width: '100%',
+                  marginTop: 10,
+                  backgroundColor: '#FFFFFF',
+                  alignItems: 'center',
+                },
+                modalText: {
+                  paddingTop: 50,
+                  fontFamily: 'Roboto-Light',
+                  fontSize: 25,
+                  paddingBottom: 10,
+                },
+                closeText: {
+                  marginBottom: 10,
+                  marginTop: 10,
+                  alignItems: 'center',
+                  fontSize: 15,
+                  color: 'white',
+                  justifyContent:'center',
+
+                },
+
+                closeContainer: {
+                  marginBottom: 30,
+                  marginTop: 10,
+                  backgroundColor: '#CBA3D5',
+                  alignItems: 'center',
+                  borderRadius: 20,
+                  width:150,
+                  height: 50,
+                  alignItems:'center',
+                  justifyContent:'center',
+                },
+                declineButt: {
+                  height: 50,
+                  width: 150,
+                  color: '#000',
+                  backgroundColor: '#FF0000',
+                },
+                acceptButt: {
+                  height: 50,
+                  width: 150,
+                  color: '#000',
+                  backgroundColor: '#008000',
+                },
+
+                buttonBottomContainer: {
+                  flexDirection:'row',
+                  justifyContent: 'space-between',
+                  width: 340,
+                  marginTop: 50,
+
+                },
+              });
+
+              //   render() {
+              //     return (
+              //       <View style={styles.container}>
+              //       <Text style={styles.requestLabel}> {data.requests} </Text>
+              //
+              //       <View style={styles.voteReq}>
+              //       <Text style={styles.textLabel}> Votes </Text>
+              //       <View style={styles.miniTextview}>
+              //       <Text> <Icon2
+              //         name={'gesture-swipe-left'}
+              //         size={30}/>  Decline  </Text>
+              //       <Text> Accept <Icon2
+              //         name={'gesture-swipe-right'}
+              //         size={30}/></Text>
+              //       </View>
+              //       <FlatList
+              //       data={this.state.voteReq}
+              //       renderItem={this.voteRequests}
+              //       keyExtractor={this.extractKey2}
+              //       />
+              //       </View>
+              //
+              //
+              //       <View style={styles.friendReq}>
+              //       <Text style={styles.textLabel}> Friends </Text>
+              //       <View style={styles.miniTextview}>
+              //       <Text> <Icon2
+              //         name={'gesture-swipe-left'}
+              //         size={30}/>  Decline  </Text>
+              //       <Text> Accept <Icon2
+              //         name={'gesture-swipe-right'}
+              //         size={30}/></Text>
+              //       </View>
+              //       <FlatList
+              //       data={this.state.friendReq}
+              //       renderItem={this.friendRequests}
+              //       keyExtractor={this.extractKey1}
+              //       />
+              //       </View>
+              //       </View>
+              //     );
+              //   }
+              // }

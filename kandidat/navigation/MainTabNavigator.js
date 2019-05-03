@@ -1,8 +1,9 @@
 import React from 'react';
-import { Platform, Button, Text, TouchableOpacity, } from 'react-native';
+import { Platform, Button, Text, TouchableOpacity, Alert} from 'react-native';
 import {SwitchNavigator,createAppContainer, createStackNavigator,
    createBottomTabNavigator, createDrawerNavigator, createSwitchNavigator} from 'react-navigation';
 import Icon from "react-native-vector-icons/Ionicons";
+import * as firebase from 'firebase';
 
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
@@ -161,12 +162,14 @@ LogOutStack.navigationOptions = {
     <TabBarIcon
       focused={focused}
       name={Platform.OS === 'ios' ? 'ios-log-out' : 'md-log-out'}
+      onPress={() => alert('Log Out?')}
     />
   ),
   drawerIcon: ({ focused }) => (
     <Icon
       name={Platform.OS === "ios" ? "ios-log-out" : "md-log-out"}
       size={25}
+      onPress={() => alert('Log Out?')}
     />),
 };
 
