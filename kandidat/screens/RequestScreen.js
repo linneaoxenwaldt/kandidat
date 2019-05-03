@@ -196,13 +196,44 @@ export default class OngoingVoteScreen extends React.Component {
                           const catName = doc.get('CatName');
                           const catImg = doc.get('CatImg');
                       that.setState(prevState => ({
-                        voteReq: [...prevState.voteReq, {VoteID: voteID, username: username, profilePic: profilePic, CatName: catName, CatImg: catImg}]
+                        voteReq: [...prevState.voteReq, {VoteID: voteID, friendID: sentFrom, username: username, profilePic: profilePic, CatName: catName, CatImg: catImg}]
                       }))
                   }})
               }});
         });
       });
     }
+
+    acceptVote() {
+      var that = this
+      var user = firebase.auth().currentUser;
+      var userID = user.uid;
+      var db = firebase.firestore();
+      db.collection("Users").doc(userID).collection("Votes").doc(voteItem.id).set({
+        CatName: "",
+        CatImg: "",
+      })
+      db.collection("Users").doc(userID).collection("VoteRequests").doc(voteItem.id).delete().then(function() {
+        console.log("FriendReq successfully deleted!" + voteItem.id);
+      }).catch(function(error) {
+        console.error("Error removing document: ", error);
+      });
+      this.setState(prevState => ({voteReq: prevState.voteReq.filter(item => item !== voteItem) }));
+
+
+      db.collection("Users").doc(friendItem.id).collection("Friends").doc(userID).set({
+      })
+      db.collection("Users").doc(friendItem.id).collection("PendingFriendRequests").doc(userID).delete().then(function() {
+        console.log("FriendReq successfully deleted!" + friendItem.id);
+      }).catch(function(error) {
+        console.error("Error removing document: ", error);
+      });
+
+    }
+
+declineVote() {
+
+}
 
         render() {
           return (

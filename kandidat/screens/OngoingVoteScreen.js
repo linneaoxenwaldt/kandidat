@@ -19,25 +19,26 @@ export default class OngoingVoteScreen extends React.Component {
   constructor(props){
     super(props);
     this.colors = ['#6ACCCB', '#94B4C1', '#8FBC8F', '#CBA3D5', '#689999']
-    const rows = [
-    {id: '0', text: 'Test0', expdate: '12h', turn: true},
-    {id: '1', text: 'Test1', expdate: '4h 2m', turn: false},
-    {id: '2', text: 'Test2', expdate: '56m', turn: true},
-    {id: '3', text: 'Test3', expdate: '33s', turn: true},
-    {id: '4', text: 'Test4', expdate: '4m', turn: false},
-    {id: '5', text: 'Test5', expdate: '14h 57m', turn: true},
-    {id: '6', text: 'Test6', expdate: '3v', turn: false},
-    {id: '7', text: 'Test7', expdate: '57m', turn: true},
-    {id: '8', text: 'Test8', expdate: '33v', turn: true},
-  ]
+  //   const rows = [
+  //   {id: '0', text: 'Test0', expdate: '12h', turn: true},
+  //   {id: '1', text: 'Test1', expdate: '4h 2m', turn: false},
+  //   {id: '2', text: 'Test2', expdate: '56m', turn: true},
+  //   {id: '3', text: 'Test3', expdate: '33s', turn: true},
+  //   {id: '4', text: 'Test4', expdate: '4m', turn: false},
+  //   {id: '5', text: 'Test5', expdate: '14h 57m', turn: true},
+  //   {id: '6', text: 'Test6', expdate: '3v', turn: false},
+  //   {id: '7', text: 'Test7', expdate: '57m', turn: true},
+  //   {id: '8', text: 'Test8', expdate: '33v', turn: true},
+  // ]
   this.extractKey1 = ({id}) => id
   this.extractKey2 = ({VoteID}) => VoteID
   this.state = {
-    rows: rows,
+    // rows: rows,
     yourTurn: [],
     yourFriendsTurn: []
   }
   this.getYourFriendsTurn()
+  this.getYourTurn()
   }
 
   static navigationOptions = ({ navigation }) => {
@@ -63,7 +64,21 @@ export default class OngoingVoteScreen extends React.Component {
     };
 
     getYourTurn() {
-
+      var that = this
+      var user = firebase.auth().currentUser;
+      var userID = user.uid;
+      var db = firebase.firestore();
+      db.collection("Users").doc(userID).collection("Votes").get().then(function(querySnapshot) {
+            querySnapshot.forEach(function(doc) {
+                // doc.data() is never undefined for query doc snapshots
+                console.log(doc.id)
+                const name = doc.get('CatName');
+                const img = doc.get('CatImg');
+                that.setState(prevState => ({
+                  yourTurn: [...prevState.yourFriendsTurn, {VoteID: doc.id, CatName: name, CatImg: img}]
+                }))
+            });
+        });
     }
 
     getYourFriendsTurn() {
@@ -85,14 +100,17 @@ export default class OngoingVoteScreen extends React.Component {
       }
 
     renderItem1 = ({item, index}) => {
-      if(item.turn == true ) {
       return (
+        <ImageBackground source={{uri: item.CatImg}} style={{width: '100%', height: 100}}>
         <ListItem
-        containerStyle={{ backgroundColor: this.colors[index % this.colors.length]}}
-        titleStyle={{color: '#FFFFFF', fontSize: 20}}
-        title={item.text}
-        rightSubtitle={item.expdate}/>
-      )}
+        containerStyle={{ backgroundColor: 'transparent'}}
+      //  containerStyle={{ backgroundColor: this.colors[index % this.colors.length]}}
+        titleStyle={{color: '#FFFFFF', fontSize: 30}}
+        title={item.CatName}
+        //rightSubtitle={item.expdate}
+        />
+        </ImageBackground>
+      )
     }
 
     renderItem2 = ({item, index}) => {
