@@ -7,10 +7,12 @@ import { ScrollView,
   View,
   Text,
   TextInput,
+  Alert,
 } from 'react-native';
 import { DrawerActions } from 'react-navigation';
 import Icon from "react-native-vector-icons/Ionicons";
 import data from '../data/engWord.json';
+import * as firebase from 'firebase';
 
 export default class ChangeEmailScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -35,34 +37,107 @@ export default class ChangeEmailScreen extends React.Component {
       };
     };
 
+    constructor(props){
+      super(props);
+      this.state ={
+        currentEmail : '',
+        newEmail : '',
+        confirmNewEmail : '',
+        currentPassword : '',
+        //newPasswordConfirm : '',
+      }
+    }
+
+    reauthenticate = (currentPassword) => {
+      var user = firebase.auth().currentUser;
+      var cred = firebase.auth.EmailAuthProvider.credential(user.email, this.state.currentPassword)
+      return user.reauthenticateAndRetrieveDataWithCredential(cred);
+    }
+
+updateNewEmail(){
+  var user = firebase.auth().currentUser;
+  var userID = user.uid;
+  var that = this
+  var db = firebase.firestore();
+  db.collection("Users").doc(userID).update({
+Email: this.state.newEmail,
+
+})
+.then(function() {
+console.log("mail updated in db ");
+})
+.catch(function(error) {
+//console.error("Error adding user: ", error);
+});
+}
+    newEmailFunc = () => {
+      this.reauthenticate(this.state.currentPassword).then(() => {
+        if (this.state.newEmail !== this.state.confirmNewEmail){
+          Alert.alert('email do not match')
+          console.log('no match alert')
+          return;
+        } else{
+          this.updateNewEmail()
+          user.updateEmail(this.state.newEmail).then(function() {
+            // Update successful.
+            Alert.alert('Email changed')
+            console.log('changedemail')
+          }).catch(function(error) {
+            // An error happened.
+            Alert.alert('mail epic fail happened')
+            console.log('email change fail')
+          });
+          //console.log('should change')
+        } (error) =>{
+          //Alert.alert(error.message);
+        };
+      }).catch((error)=>{
+        Alert.alert('Your old pw is wroong')
+      })
+      var user = firebase.auth().currentUser;
+    }
+
   render() {
     return (
       <View style={styles.container}>
       <View style={styles.emailInfoContainer}>
+
       <Text style={styles.descriptionText}>{data.currentEmail}</Text>
       <TextInput
       style={styles.textInfo}
       borderColor='#758e99'
-      borderWidth= '4'
-      backgroundColor='#94B4C1'
-      placeholder="Email"/>
+      //borderWidth= '4'
+      //backgroundColor='#94B4C1'
+      placeholder="Password"
+      value = {this.state.currentPassword}
+      onChangeText = {(text) => {this.setState({ currentPassword : text}) }}
+      />
+
       <Text style={styles.descriptionText}>{data.newEmail}</Text>
       <TextInput
       style={styles.textInfo}
-      backgroundColor='#8FBC8F'
+      //backgroundColor='#8FBC8F'
       borderColor='#6f936f'
-      borderWidth= '4'
-      placeholder="New email"/>
+      //borderWidth= '4'
+      placeholder="New email"
+      value = {this.state.newEmail}
+      onChangeText = {(text) => {this.setState({ newEmail : text}) }}
+      />
+
       <Text style={styles.descriptionText}>{data.confirmEmail}</Text>
       <TextInput
       style={styles.textInfo}
-      backgroundColor='#6ACCCB'
+      //backgroundColor='#6ACCCB'
       borderColor='#5db3b2'
-      borderWidth= '4'
-      placeholder="New email"/>
+      //borderWidth= '4'
+      placeholder="New email"
+      value = {this.state.confirmNewEmail}
+      onChangeText = {(text) => {this.setState({ confirmNewEmail : text}) }}
+      />
+
       <TouchableOpacity
       style = {styles.saveButton}
-        onPress={() => this.props.navigation.navigate('ChangeEmail')}
+        onPress={this.newEmailFunc}
         >
         <Text style={styles.saveText}>{data.save}</Text>
        </TouchableOpacity>
@@ -90,7 +165,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: 350,
     height: 70,
-    //backgroundColor: '#8FBC8F',
+    backgroundColor: '#8FBC8F',
     borderRadius: 30,
     marginBottom: 10,
     padding: 10,
