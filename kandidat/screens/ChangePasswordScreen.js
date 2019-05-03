@@ -75,14 +75,10 @@ export default class ChangePasswordScreen extends React.Component {
         } (error) =>{
           //Alert.alert(error.message);
         };
-
       }).catch((error)=>{
-
+        Alert.alert('Your old pw is wroong')
       })
-
       var user = firebase.auth().currentUser;
-
-
     }
 
 
