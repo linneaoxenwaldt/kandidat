@@ -31,7 +31,7 @@ export default class OngoingVoteScreen extends React.Component {
     {id: '8', text: 'Test8', expdate: '33v', turn: true},
   ]
   this.extractKey1 = ({id}) => id
-  this.extractKey2 = ({id}) => id
+  this.extractKey2 = ({VoteID}) => VoteID
   this.state = {
     rows: rows,
     yourTurn: [],
