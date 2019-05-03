@@ -7,7 +7,11 @@ import { ScrollView,
   View,
   FlatList,
   Text,
+<<<<<<< HEAD
   Modal
+=======
+  ImageBackground
+>>>>>>> 872145d67c418a9b32a0481cbc70431212767069
 } from 'react-native';
 import { DrawerActions } from 'react-navigation';
 import Icon from "react-native-vector-icons/Ionicons";
@@ -22,22 +26,28 @@ export default class OngoingVoteScreen extends React.Component {
     super(props);
     this.colors = ['#6ACCCB', '#94B4C1', '#8FBC8F', '#CBA3D5', '#689999']
     const rows = [
-      {id: '0', text: 'Request 0', voteReq: true},
-      {id: '1', text: 'Request1',  voteReq: true},
-      {id: '2', text: 'Request2',  voteReq: true},
-      {id: '3', text: 'Request3',  voteReq: true},
+      // {id: '0', text: 'Request 0', voteReq: true},
+      // {id: '1', text: 'Request1',  voteReq: true},
+      // {id: '2', text: 'Request2',  voteReq: true},
+      // {id: '3', text: 'Request3',  voteReq: true},
       // {id: '4', text: 'FriendRequest4',  friendReq: true},
       // {id: '5', text: 'FriendRequest5',  friendReq: true},
       // {id: '6', text: 'FriendRequest6',  friendReq: true},
       // {id: '7', text: 'FriendRequest7',  friendReq: true},
     ]
-    this.extractKey = ({id}) => id
+    this.extractKey1 = ({VoteID}) => VoteID
+    this.extractKey2 = ({VoteID}) => VoteID
     this.state = {
-      rows: rows,
+      // rows: rows,
       friendReq: [],
+<<<<<<< HEAD
       showMe: false,
+=======
+      voteReq: [],
+>>>>>>> 872145d67c418a9b32a0481cbc70431212767069
     }
     this.getFriendReq()
+    this.getVoteReq()
   }
 
   static navigationOptions = ({ navigation }) => {
@@ -63,14 +73,24 @@ export default class OngoingVoteScreen extends React.Component {
     };
 
     voteRequests = ({item, index}) => {
-      if(item.voteReq == true ) {
         return (
+          <ImageBackground source={{uri: item.CatImg}} style={{width: '100%', height: 100}}>
           <ListItem
-          containerStyle={{ backgroundColor: this.colors[index % this.colors.length]}}
-          titleStyle={{color: '#FFFFFF', textAlign:'center', fontSize: 20,}}
-          title={item.text}/>
+          containerStyle={{ backgroundColor: 'transparent'}}
+        //  containerStyle={{ backgroundColor: this.colors[index % this.colors.length]}}
+          titleStyle={{color: '#FFFFFF', fontSize: 30}}
+          title={item.CatName}
+          roundAvatar
+          rightAvatar= {{source: {uri: item.profilePic}}}
+          rightTitle={data.sentFrom}
+          rightSubtitle={item.username}
+          />
+          </ImageBackground>
+          // <ListItem
+          // containerStyle={{ backgroundColor: this.colors[index % this.colors.length]}}
+          // titleStyle={{color: '#FFFFFF', textAlign:'center', fontSize: 20,}}
+          // title={item.text}/>
         )}
-      }
 
       friendRequests = ({item, index}) => {
         //if(item.friendReq == true ) {
@@ -118,7 +138,128 @@ export default class OngoingVoteScreen extends React.Component {
                   });
                 })
               });
+<<<<<<< HEAD
             }
+=======
+        }
+
+        acceptFriend(friendItem) {
+          var that = this
+          var user = firebase.auth().currentUser;
+          var userID = user.uid;
+          var db = firebase.firestore();
+          db.collection("Users").doc(userID).collection("Friends").doc(friendItem.id).set({
+          })
+          db.collection("Users").doc(userID).collection("FriendRequests").doc(friendItem.id).delete().then(function() {
+            console.log("FriendReq successfully deleted!" + friendItem.id);
+          }).catch(function(error) {
+            console.error("Error removing document: ", error);
+          });
+          this.setState(prevState => ({friendReq: prevState.friendReq.filter(item => item !== friendItem) }));
+
+          db.collection("Users").doc(friendItem.id).collection("Friends").doc(userID).set({
+          })
+          db.collection("Users").doc(friendItem.id).collection("PendingFriendRequests").doc(userID).delete().then(function() {
+            console.log("FriendReq successfully deleted!" + friendItem.id);
+          }).catch(function(error) {
+            console.error("Error removing document: ", error);
+          });
+        }
+
+        declineFriend(friendItem) {
+          var that = this
+          var user = firebase.auth().currentUser;
+          var userID = user.uid;
+          var db = firebase.firestore();
+          db.collection("Users").doc(userID).collection("FriendRequests").doc(friendItem.id).delete().then(function() {
+            console.log("FriendReq successfully deleted!" + friendItem.id);
+          }).catch(function(error) {
+            console.error("Error removing document: ", error);
+          });
+          this.setState(prevState => ({friendReq: prevState.friendReq.filter(item => item !== friendItem) }));
+
+          db.collection("Users").doc(friendItem.id).collection("PendingFriendRequests").doc(userID).delete().then(function() {
+            console.log("FriendReq successfully deleted!" + friendItem.id);
+          }).catch(function(error) {
+            console.error("Error removing document: ", error);
+          });
+        }
+
+        getVoteReq() {
+          var that = this
+          var user = firebase.auth().currentUser;
+          var userID = user.uid;
+          var db = firebase.firestore();
+          db.collection("Users").doc(userID).collection("VoteRequests").get().then(function(querySnapshot) {
+              querySnapshot.forEach(function(doc) {
+                  // doc.data() is never undefined for query doc snapshots
+                  var voteID = doc.id;
+                  var sentFromID = doc.get("SentFrom")
+                  var docRef = db.collection('Users').doc(sentFromID);
+
+                  docRef.get().then(function(doc) {
+                    if (doc.exists) {
+                      const username = doc.data().Username
+                      const profilePic = doc.data().ProfilePic
+
+                      var docRef2 = db.collection('Users').doc(sentFromID).collection("PendingVotes").doc(voteID);
+                      docRef2.get().then(function(doc) {
+                        if (doc.exists) {
+                          const catName = doc.get('CatName');
+                          const catImg = doc.get('CatImg');
+                      that.setState(prevState => ({
+                        voteReq: [...prevState.voteReq, {VoteID: voteID, username: username, profilePic: profilePic, CatName: catName, CatImg: catImg}]
+                      }))
+                  }})
+              }});
+        });
+      });
+    }
+
+        render() {
+          return (
+            <View style={styles.container}>
+            <Text style={styles.requestLabel}> {data.requests} </Text>
+
+            <View style={styles.voteReq}>
+            <Text style={styles.textLabel}> Votes </Text>
+            <View style={styles.miniTextview}>
+            <Text> <Icon2
+              name={'gesture-swipe-left'}
+              size={30}/>  Decline  </Text>
+            <Text> Accept <Icon2
+              name={'gesture-swipe-right'}
+              size={30}/></Text>
+            </View>
+            <FlatList
+            data={this.state.voteReq}
+            renderItem={this.voteRequests}
+            keyExtractor={this.extractKey2}
+            />
+            </View>
+
+
+            <View style={styles.friendReq}>
+            <Text style={styles.textLabel}> Friends </Text>
+            <View style={styles.miniTextview}>
+            <Text> <Icon2
+              name={'gesture-swipe-left'}
+              size={30}/>  Decline  </Text>
+            <Text> Accept <Icon2
+              name={'gesture-swipe-right'}
+              size={30}/></Text>
+            </View>
+            <FlatList
+            data={this.state.friendReq}
+            renderItem={this.friendRequests}
+            keyExtractor={this.extractKey1}
+            />
+            </View>
+            </View>
+          );
+        }
+      }
+>>>>>>> 872145d67c418a9b32a0481cbc70431212767069
 
             acceptFriend(friendItem) {
               var that = this

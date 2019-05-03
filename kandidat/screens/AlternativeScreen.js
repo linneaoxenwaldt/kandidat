@@ -37,8 +37,10 @@ export default class AlternativeScreen extends React.Component {
   this.extractKey = ({id}) => id
   this.state = {
     rows: [],
-    text: ''
+    text: '',
+    category: [],
   }
+  this.getCategory()
   this.getReadyMadeAlt()
   }
 
@@ -53,6 +55,29 @@ export default class AlternativeScreen extends React.Component {
         },
       };
     };
+
+    getCategory() {
+      var that = this
+      var catID = this.props.navigation.state.params.CatID
+      var user = firebase.auth().currentUser;
+      var userID = user.uid;
+      var db = firebase.firestore();
+      var docRef = db.collection('Users').doc(userID).collection('Category').doc(catID);
+      docRef.get().then(function(doc) {
+      if (doc.exists) {
+        const value = doc.get('CatName');
+        const img = doc.get('CatImg');
+        that.setState(prevState => ({
+          category: [...prevState.category, {catID: catID, catName: value, catImg: img}]
+        }))
+    } else {
+        // doc.data() will be undefined in this case
+        console.log("No such document!");
+    }
+}).catch(function(error) {
+    console.log("Error getting document:", error);
+});
+    }
 
     getReadyMadeAlt() {
       var that = this
@@ -85,7 +110,7 @@ export default class AlternativeScreen extends React.Component {
      // var newAlternative = {id: newID, text: this.state.text}
      // this.state.rows.push(newAlternative)
 
-     console.log(this.state.text)
+    // console.log(this.state.text)
      var that = this
      var catID = this.props.navigation.state.params.CatID
      if(this.state.text == "") {
@@ -202,7 +227,7 @@ keyExtractor={this.extractKey}
   color="#A9A9A9"/>
 </TouchableOpacity>
 <TouchableOpacity
-onPress={() => this.props.navigation.navigate('VoteAddFriends')}
+onPress={() => this.props.navigation.navigate('VoteAddFriends', {category: this.state.category, alternatives: this.state.rows})}
 >
 <Icon
 name={Platform.OS === "ios" ? "ios-arrow-forward" : "md-arrow-forward"}

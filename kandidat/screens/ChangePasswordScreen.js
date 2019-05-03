@@ -7,11 +7,14 @@ import { ScrollView,
   View,
   Text,
   TextInput,
+  Alert,
+  Modal
 } from 'react-native';
 import { DrawerActions } from 'react-navigation';
 import Icon from "react-native-vector-icons/Ionicons";
 import { ExpoLinksView } from '@expo/samples';
 import data from '../data/engWord.json';
+import * as firebase from 'firebase';
 
 export default class ChangePasswordScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -36,34 +39,90 @@ export default class ChangePasswordScreen extends React.Component {
       };
     };
 
+    constructor(props){
+      super(props);
+      this.state ={
+        currentPassword : '',
+        email : '',
+        newPassword : '',
+        newPasswordConfirm : '',
+      }
+    }
+
+    reauthenticate = (currentPassword) => {
+      var user = firebase.auth().currentUser;
+      var cred = firebase.auth.EmailAuthProvider.credential(user.email, this.state.currentPassword)
+      return user.reauthenticateAndRetrieveDataWithCredential(cred);
+    }
+
+    newPasswordFunc = () => {
+      this.reauthenticate(this.state.currentPassword).then(() => {
+        if (this.state.newPassword !== this.state.newPasswordConfirm){
+          Alert.alert('Passwords do not match')
+          console.log('no match alert')
+          return;
+        } else{
+          user.updatePassword(this.state.newPassword).then(function() {
+            // Update successful.
+            Alert.alert('Password changed')
+            console.log('changedPW')
+          }).catch(function(error) {
+            // An error happened.
+            Alert.alert('Password epic fail happened')
+            console.log('pw change fail')
+          });
+          //console.log('should change')
+        } (error) =>{
+          //Alert.alert(error.message);
+        };
+      }).catch((error)=>{
+        Alert.alert('Your old pw is wroong')
+      })
+      var user = firebase.auth().currentUser;
+    }
+
+
   render() {
     return (
       <View style={styles.container}>
       <View style={styles.passwordInfoContainer}>
+
       <Text style={styles.descriptionText}>{data.currentPassword}</Text>
       <TextInput
       style={styles.textInfo}
-      backgroundColor='#94B4C1'
+      //backgroundColor='#94B4C1'
       borderColor='#758e99'
-      borderWidth= '4'
-      placeholder="Password"/>
+      //borderWidth= '4'
+      placeholder="Password"
+      value = {this.state.currentPassword}
+      onChangeText = {(text) => {this.setState({ currentPassword : text}) }}
+      />
+
       <Text style={styles.descriptionText}>{data.newPassword}</Text>
       <TextInput
       style={styles.textInfo}
-      backgroundColor='#8FBC8F'
+      //backgroundColor='#8FBC8F'
       borderColor='#6f936f'
-      borderWidth= '4'
-      placeholder="New password"/>
-      <Text style={styles.descriptionText}>{data.confirmPassword}</Text>
+      //borderWidth= '4'
+      placeholder="New password"
+      value = {this.state.newPassword}
+      onChangeText = {(text) => {this.setState({ newPassword : text}) }}
+      />
+
+      <Text style={styles.descriptionText}>{data.confirmNewPassword}</Text>
       <TextInput
       style={styles.textInfo}
-      backgroundColor='#6ACCCB'
+      //backgroundColor='#6ACCCB'
       borderColor='#5db3b2'
-      borderWidth= '4'
-      placeholder="New password"/>
+      //borderWidth= '4'
+      placeholder="New password"
+      value = {this.state.newPasswordConfirm}
+      onChangeText = {(text) => {this.setState({ newPasswordConfirm : text}) }}
+      />
+
 <TouchableOpacity
 style = {styles.saveButton}
-  onPress={() => this.props.navigation.navigate('ChangePassword')}
+  onPress={this.newPasswordFunc}
   >
   <Text style={styles.saveText}>{data.save}</Text>
  </TouchableOpacity>
@@ -91,8 +150,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: 350,
     height: 70,
-    //backgroundColor: '#8FBC8F',
+    backgroundColor: '#8FBC8F',
     borderRadius: 30,
+    borderWidth: 4,
     marginBottom: 10,
     padding: 10,
     color: '#FFFFFF',

@@ -6,12 +6,14 @@ import { ScrollView,
   Platform,
   View,
   FlatList,
-  Text
+  Text,
+  ImageBackground,
 } from 'react-native';
 import { DrawerActions } from 'react-navigation';
 import Icon from "react-native-vector-icons/Ionicons";
 import { ListItem } from 'react-native-elements';
 import data from '../data/engWord.json';
+import * as firebase from 'firebase';
 
 export default class OngoingVoteScreen extends React.Component {
   constructor(props){
@@ -28,10 +30,14 @@ export default class OngoingVoteScreen extends React.Component {
     {id: '7', text: 'Test7', expdate: '57m', turn: true},
     {id: '8', text: 'Test8', expdate: '33v', turn: true},
   ]
-  this.extractKey = ({id}) => id
+  this.extractKey1 = ({id}) => id
+  this.extractKey2 = ({VoteID}) => VoteID
   this.state = {
     rows: rows,
+    yourTurn: [],
+    yourFriendsTurn: []
   }
+  this.getYourFriendsTurn()
   }
 
   static navigationOptions = ({ navigation }) => {
@@ -56,6 +62,28 @@ export default class OngoingVoteScreen extends React.Component {
       };
     };
 
+    getYourTurn() {
+
+    }
+
+    getYourFriendsTurn() {
+      var that = this
+      var user = firebase.auth().currentUser;
+      var userID = user.uid;
+      var db = firebase.firestore();
+      db.collection("Users").doc(userID).collection("PendingVotes").get().then(function(querySnapshot) {
+            querySnapshot.forEach(function(doc) {
+                // doc.data() is never undefined for query doc snapshots
+                console.log(doc.id)
+                const name = doc.get('CatName');
+                const img = doc.get('CatImg');
+                that.setState(prevState => ({
+                  yourFriendsTurn: [...prevState.yourFriendsTurn, {VoteID: doc.id, CatName: name, CatImg: img}]
+                }))
+            });
+        });
+      }
+
     renderItem1 = ({item, index}) => {
       if(item.turn == true ) {
       return (
@@ -68,14 +96,17 @@ export default class OngoingVoteScreen extends React.Component {
     }
 
     renderItem2 = ({item, index}) => {
-      if(item.turn == false ) {
       return (
+        <ImageBackground source={{uri: item.CatImg}} style={{width: '100%', height: 100}}>
         <ListItem
-        containerStyle={{ backgroundColor: this.colors[index % this.colors.length]}}
-        titleStyle={{color: '#FFFFFF', fontSize: 20}}
-        title={item.text}
-        rightSubtitle={item.expdate}/>
-      )}
+        containerStyle={{ backgroundColor: 'transparent'}}
+      //  containerStyle={{ backgroundColor: this.colors[index % this.colors.length]}}
+        titleStyle={{color: '#FFFFFF', fontSize: 30}}
+        title={item.CatName}
+        //rightSubtitle={item.expdate}
+        />
+        </ImageBackground>
+      )
     }
 
   render() {
@@ -88,7 +119,7 @@ export default class OngoingVoteScreen extends React.Component {
       <FlatList
  data={this.state.rows}
  renderItem={this.renderItem1}
- keyExtractor={this.extractKey}
+ keyExtractor={this.extractKey1}
  />
       </View>
       <View style={styles.votePenContainer}>
@@ -96,9 +127,9 @@ export default class OngoingVoteScreen extends React.Component {
       {data.yourFriensTurn}
       </Text>
       <FlatList
- data={this.state.rows}
+ data={this.state.yourFriendsTurn}
  renderItem={this.renderItem2}
- keyExtractor={this.extractKey}
+ keyExtractor={this.extractKey2}
  />
       </View>
       </View>
