@@ -66,22 +66,19 @@ export default class ProfileScreen extends React.Component {
 
       getUser() {
         var that = this
-      var db = firebase.firestore();
-      var user = firebase.auth().currentUser;
-      var userID = user.uid;
-      var docRef = db.collection('Users').doc(userID);
-docRef.get().then(function(doc) {
-    if (doc.exists) {
-        that.setState({username: doc.data().Username, email : doc.data().Email, profilePic: doc.data().ProfilePic})
-        console.log("Document data:", that.state.username);
-    } else {
-        // doc.data() will be undefined in this case
-        console.log("No such document!");
-    }
-}).catch(function(error) {
-    console.log("Error getting document:", error);
-});
-    }
+        var db = firebase.firestore();
+        var user = firebase.auth().currentUser;
+        var userID = user.uid;
+        var docRef = db.collection('Users').doc(userID);
+        docRef.onSnapshot(function(doc) {
+          if (doc.exists) {
+            that.setState({username: doc.data().Username, email : doc.data().Email, profilePic: doc.data().ProfilePic})
+            console.log("Document data:", that.state.username);
+          } else {
+            console.log("No such document!");
+          }
+        });
+      }
 
     changeProfilePic(item){
       this.state.profilePic = item.img

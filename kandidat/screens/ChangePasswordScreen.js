@@ -75,14 +75,10 @@ export default class ChangePasswordScreen extends React.Component {
         } (error) =>{
           //Alert.alert(error.message);
         };
-
       }).catch((error)=>{
-
+        Alert.alert('Your old pw is wroong')
       })
-
       var user = firebase.auth().currentUser;
-
-
     }
 
 
@@ -97,6 +93,7 @@ export default class ChangePasswordScreen extends React.Component {
       //backgroundColor='#94B4C1'
       borderColor='#758e99'
       //borderWidth= '4'
+      secureTextEntry={true}
       placeholder="Password"
       value = {this.state.currentPassword}
       onChangeText = {(text) => {this.setState({ currentPassword : text}) }}
@@ -108,6 +105,7 @@ export default class ChangePasswordScreen extends React.Component {
       //backgroundColor='#8FBC8F'
       borderColor='#6f936f'
       //borderWidth= '4'
+      secureTextEntry={true}
       placeholder="New password"
       value = {this.state.newPassword}
       onChangeText = {(text) => {this.setState({ newPassword : text}) }}
@@ -119,6 +117,7 @@ export default class ChangePasswordScreen extends React.Component {
       //backgroundColor='#6ACCCB'
       borderColor='#5db3b2'
       //borderWidth= '4'
+      secureTextEntry={true}
       placeholder="New password"
       value = {this.state.newPasswordConfirm}
       onChangeText = {(text) => {this.setState({ newPasswordConfirm : text}) }}
