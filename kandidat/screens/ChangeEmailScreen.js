@@ -101,13 +101,13 @@ console.log("mail updated in db ");
     return (
       <View style={styles.container}>
       <View style={styles.emailInfoContainer}>
-
       <Text style={styles.descriptionText}>{data.currentEmail}</Text>
       <TextInput
       style={styles.textInfo}
       borderColor='#758e99'
       //borderWidth= '4'
       //backgroundColor='#94B4C1'
+      secureTextEntry={true}
       placeholder="Password"
       value = {this.state.currentPassword}
       onChangeText = {(text) => {this.setState({ currentPassword : text}) }}
