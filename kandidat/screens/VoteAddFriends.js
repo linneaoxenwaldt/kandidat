@@ -170,6 +170,8 @@ renderItem = ({item, index}) => {
                   isVisible={this.state.isDateTimePickerVisible}
                   onConfirm={this.handleDatePicked}
                   onCancel={this.hideDateTimePicker}
+                  mode={'time'}
+                  titleIOS={'Pick a time'}
 
                 />
                 <Text style={styles.addFriendsText}>Expire date <Icon
