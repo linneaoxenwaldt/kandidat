@@ -11,7 +11,7 @@ import { ScrollView,
   TextInput,
 
 } from 'react-native';
-import { ListItem } from 'react-native-elements';
+import { ListItem, CheckBox } from 'react-native-elements';
 import { DrawerActions } from 'react-navigation';
 import Icon from "react-native-vector-icons/Ionicons";
 import data from '../data/engWord.json';
@@ -56,8 +56,11 @@ export default class VoteAddFriends extends React.Component {
     friends: [],
     isDateTimePickerVisible: false,
     date: [] ,
+    choosenFriends: [],
+    checked: [],
   }
   this.getYourFriends()
+  //this.createVote()
   }
 
   static navigationOptions = ({ navigation }) => {
@@ -90,7 +93,7 @@ export default class VoteAddFriends extends React.Component {
   this.setState({ isDateTimePickerVisible: true });
 };
 
-hideDateTimePicker = () => {
+  hideDateTimePicker = () => {
     this.setState({ isDateTimePickerVisible: false });
   };
 
@@ -103,6 +106,7 @@ hideDateTimePicker = () => {
  };
 
  getYourFriends() {
+   var localID = -1
    var that = this
    var user = firebase.auth().currentUser;
    var userID = user.uid;
@@ -114,11 +118,17 @@ hideDateTimePicker = () => {
            var docRef = db.collection('Users').doc(id);
            docRef.get().then(function(doc) {
              if (doc.exists) {
+               localID++
+               // console.log("local" + localID)
                const username = doc.data().Username
                const profilePic = doc.data().ProfilePic
                that.setState(prevState => ({
-                 friends: [...prevState.friends, {id: id, username: username, profilePic: profilePic}]
+                 friends: [...prevState.friends, {localID: localID, id: id, username: username, profilePic: profilePic}]
                }))
+               that.setState(prevState => ({
+                 checked: [...prevState.checked, false]
+               }))
+               // console.log(that.state.checked)
                //console.log("Document data: 2");
              } else {
                // doc.data() will be undefined in this case
@@ -129,10 +139,94 @@ hideDateTimePicker = () => {
              });
            })
        });
+ }
+
+   createVote() {
+     if (this.state.choosenFriends === []) {
+       Alert.alert(
+         data.missingFriends,
+       )
+     }
+     var alternatives = this.props.navigation.state.params.alternatives
+     var category = this.props.navigation.state.params.category
+     var catName = category[0].catName
+     var catImg = category[0].catImg
+     var that = this
+     var user = firebase.auth().currentUser;
+     var userID = user.uid;
+     var db = firebase.firestore();
+     console.log(this.state.choosenFriends)
+db.collection("Users").doc(userID).collection("PendingVotes").add({
+       CatName: catName,
+       CatImg: catImg
+     })
+.then(function(docRef) {
+   console.log("Document written with ID: ", docRef.id);
+   that.createAlternatives(docRef.id, alternatives, userID)
+})
+.catch(function(error) {
+   console.error("Error adding document: ", error);
+});
    }
+
+   createAlternatives(voteID, alternatives, userID) {
+     var that = this
+     var db = firebase.firestore();
+     for(let i=0; i < alternatives.length; i++) {
+       db.collection("Users").doc(userID).collection("PendingVotes").doc(voteID).collection("Alternatives").add({
+         Name: alternatives[i].text,
+         Votes: 0,
+            })
+       .then(function(docRef) {
+          console.log("Document written with ID: ", docRef.id);
+          that.sendVoteRequest(voteID, userID)
+          that.props.navigation.navigate('OngoingVote')
+       })
+       .catch(function(error) {
+          console.error("Error adding document: ", error);
+       });
+     }
+   }
+
+   sendVoteRequest(voteID, userID) {
+     var db = firebase.firestore();
+     for (let i=0; i<this.state.choosenFriends.length; i++) {
+       var friendID = this.state.choosenFriends[i].id
+       db.collection("Users").doc(friendID).collection("VoteRequests").doc(voteID).set({
+       SentFrom: userID,
+   })
+ }
+   }
+
+   putInFriendsArray(changeItem) {
+     var status = this.state.checked[changeItem.localID]
+     if (status === true){
+       this.setState(prevState => ({choosenFriends: prevState.choosenFriends.filter(item => item.localID !== changeItem.localID) }));
+     } else if (status === false) {
+       this.setState(prevState => ({
+         choosenFriends: [...prevState.choosenFriends, {localID: changeItem.localID, id: changeItem.id, username: changeItem.username, profilePic: changeItem.profilePic}]
+       }))
+     }
+     // console.log(localID)
+     // console.log(this.state.checked)
+  this.setState(state => {
+    const checked = state.checked.map((item, j) => {
+      if (j === changeItem.localID) {
+        return !status;
+      } else {
+        return item;
+      }
+    });
+    return {
+      checked,
+    };
+  });
+};
+
 
 renderItem = ({item, index}) => {
   var msg = `${data.sureMsg} ${item.username}?`
+  // console.log(this.state.checked)
   return (
     <ListItem
     containerStyle={{ backgroundColor: this.colors[index % this.colors.length]}}
@@ -140,18 +234,31 @@ renderItem = ({item, index}) => {
     roundAvatar
     title={item.username}
     leftAvatar = {{source: {uri: item.profilePic}}}
-    rightIcon = { <RoundCheckbox
-      checked={this.state.isSelected}
-      onPress={() => this.setState({checked: !this.state.checked})}
-      onValueChange={(newValue) => {console.log(newValue)}}
-      size={30}
+    rightIcon = {<CheckBox
+    style = {styles.checkbox}
+      //title='Click Here'
+    checkedIcon='check-circle'
+    uncheckedIcon='circle-o'
+    checkedColor='white'
+    uncheckedColor='white'
+    size = '35%'
 
 
+    // checked = {true}
+    checked={this.state.checked[item.localID]}
+    onPress={() => this.putInFriendsArray(item)}
+    />}
 
 
-/>
-
-      }
+//     rightIcon = { <RoundCheckbox
+//       checked={this.state.isSelected}
+//       onPress={() => this.setState({checked: !this.state.checked})}
+//       onPress={() => this.setState(prevState => ({
+//         choosenFriends: [...prevState.choosenFriends, {id: item.id, username: item.username, profilePic: item.profilePic}]
+//       }))}
+//       onValueChange={(newValue) => {console.log(newValue)}}
+//       size={30}
+// />  }
     />)
 }
 
@@ -187,6 +294,7 @@ renderItem = ({item, index}) => {
      <Text style={styles.myFriendsText}>{data.myFriends}</Text>
      </View>
      <FlatList
+     extraData={this.state}
 data={this.state.friends}
 renderItem={this.renderItem}
 keyExtractor={this.extractKey}
@@ -202,12 +310,11 @@ keyExtractor={this.extractKey}
   color="#A9A9A9"/>
 </TouchableOpacity>
 <TouchableOpacity
-onPress={() => this.props.navigation.navigate('RequestScreen')}
->
-<Icon
-name={Platform.OS === "ios" ? "ios-arrow-forward" : "md-arrow-forward"}
-size={55}
-color="#A9A9A9"/>
+style = {styles.sendButton}
+onPress={() => this.createVote()}>
+<Text style={styles.sendText}>Start Vote</Text>
+
+
 </TouchableOpacity>
 </View>
       </View>
@@ -279,4 +386,25 @@ justifyContent: 'space-between',
 marginLeft: 10,
 marginRight: 10,
 },
+sendButton:{
+    backgroundColor: "#6BCDFD",
+    width: 150,
+    height: 55,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 20,
+    marginBottom:10,
+  },
+  sendText:{
+    fontSize:20,
+    color:'white',
+    fontFamily: "Roboto-Light",
+  },
+  checkbox:{
+    margin: 10,
+
+  }
+
+
+
 });
