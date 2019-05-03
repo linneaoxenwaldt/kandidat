@@ -80,7 +80,11 @@ export default class OngoingVoteScreen extends React.Component {
             rightIcon = {<Icon2
             onPress={() => this.acceptFriend(item)}
               name={'gesture-swipe-right'}
-              size={30}/>}/>
+              size={30}/>}
+            leftIcon = {<Icon2
+              onPress={() => this.declineFriend(item)}
+                name={'gesture-swipe-left'}
+                size={30}/>}/>
           )}
         //}
 
@@ -126,6 +130,33 @@ export default class OngoingVoteScreen extends React.Component {
             console.error("Error removing document: ", error);
           });
           this.setState(prevState => ({friendReq: prevState.friendReq.filter(item => item !== friendItem) }));
+
+          db.collection("Users").doc(friendItem.id).collection("Friends").doc(userID).set({
+          })
+          db.collection("Users").doc(friendItem.id).collection("PendingFriendRequests").doc(userID).delete().then(function() {
+            console.log("FriendReq successfully deleted!" + friendItem.id);
+          }).catch(function(error) {
+            console.error("Error removing document: ", error);
+          });
+        }
+
+        declineFriend(friendItem) {
+          var that = this
+          var user = firebase.auth().currentUser;
+          var userID = user.uid;
+          var db = firebase.firestore();
+          db.collection("Users").doc(userID).collection("FriendRequests").doc(friendItem.id).delete().then(function() {
+            console.log("FriendReq successfully deleted!" + friendItem.id);
+          }).catch(function(error) {
+            console.error("Error removing document: ", error);
+          });
+          this.setState(prevState => ({friendReq: prevState.friendReq.filter(item => item !== friendItem) }));
+
+          db.collection("Users").doc(friendItem.id).collection("PendingFriendRequests").doc(userID).delete().then(function() {
+            console.log("FriendReq successfully deleted!" + friendItem.id);
+          }).catch(function(error) {
+            console.error("Error removing document: ", error);
+          });
         }
 
         render() {

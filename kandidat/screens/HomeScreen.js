@@ -17,7 +17,6 @@ import Icon from "react-native-vector-icons/Ionicons";
 import data from '../data/engWord.json';
 import { LinearGradient } from 'expo';
 
-
 export default class HomeScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
@@ -84,7 +83,6 @@ export default class HomeScreen extends React.Component {
     }
   }
 
-
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -132,6 +130,6 @@ export default class HomeScreen extends React.Component {
     },
     notification: {
       paddingLeft: 180,
-
     }
+    
   });

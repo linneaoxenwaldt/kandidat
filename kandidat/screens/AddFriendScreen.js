@@ -26,7 +26,7 @@ export default class AddFriendsScreen extends React.Component {
     }
     this.getAllUsers()
     this.getYourFriends()
-  //  this.getPendingFriends()
+    this.getPendingFriends()
   }
   static navigationOptions = ({ navigation }) => {
       return {
@@ -82,6 +82,23 @@ getAllUsers() {
            const id = doc.id;
            that.setState(prevState => ({
              friends: [...prevState.friends, {id: id, userName: name}]
+           }))
+       });
+   });
+ }
+
+ getPendingFriends() {
+   var that = this
+   var user = firebase.auth().currentUser;
+   var userID = user.uid;
+   var db = firebase.firestore();
+   db.collection("Users").doc(userID).collection("PendingFriendRequests").get().then(function(querySnapshot) {
+       querySnapshot.forEach(function(doc) {
+           // doc.data() is never undefined for query doc snapshots
+           const name = doc.get('Username');
+           const id = doc.id;
+           that.setState(prevState => ({
+             pendingFriends: [...prevState.pendingFriends, {id: id, userName: name}]
            }))
        });
    });
@@ -162,7 +179,7 @@ getAllUsers() {
      )
    }
 else {
-   db.collection("Users").doc(userID).collection("Friends").doc(friendID).set({
+   db.collection("Users").doc(userID).collection("PendingFriendRequests").doc(friendID).set({
 })
 .then(function() {
 console.log("Document written with ID: ");
@@ -174,7 +191,6 @@ docRef.get().then(function(doc) {
     const profilePic = doc.data().ProfilePic
     var newFriend = {id: friendID, username: username, profilePic: profilePic}
     that.sendFriendRequest(friendID, userID)
-    that.props.navigation.state.params.updateFriends(newFriend);
     that.props.navigation.navigate('Friends')
 }})
 .catch(function(error) {
