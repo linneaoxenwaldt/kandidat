@@ -30,7 +30,7 @@ export default class OngoingVoteScreen extends React.Component {
   //   {id: '7', text: 'Test7', expdate: '57m', turn: true},
   //   {id: '8', text: 'Test8', expdate: '33v', turn: true},
   // ]
-  this.extractKey1 = ({id}) => id
+  this.extractKey1 = ({VoteID}) => VoteID
   this.extractKey2 = ({VoteID}) => VoteID
   this.state = {
     // rows: rows,
@@ -71,11 +71,11 @@ export default class OngoingVoteScreen extends React.Component {
       db.collection("Users").doc(userID).collection("Votes").get().then(function(querySnapshot) {
             querySnapshot.forEach(function(doc) {
                 // doc.data() is never undefined for query doc snapshots
-                console.log(doc.id)
+                //console.log(doc.id)
                 const name = doc.get('CatName');
                 const img = doc.get('CatImg');
                 that.setState(prevState => ({
-                  yourTurn: [...prevState.yourFriendsTurn, {VoteID: doc.id, CatName: name, CatImg: img}]
+                  yourTurn: [...prevState.yourTurn, {VoteID: doc.id, CatName: name, CatImg: img}]
                 }))
             });
         });
@@ -135,7 +135,8 @@ export default class OngoingVoteScreen extends React.Component {
       {data.yourTurn}
       </Text>
       <FlatList
- data={this.state.rows}
+      extraData={this.state}
+ data={this.state.yourTurn}
  renderItem={this.renderItem1}
  keyExtractor={this.extractKey1}
  />
@@ -145,6 +146,7 @@ export default class OngoingVoteScreen extends React.Component {
       {data.yourFriensTurn}
       </Text>
       <FlatList
+      extraData={this.state}
  data={this.state.yourFriendsTurn}
  renderItem={this.renderItem2}
  keyExtractor={this.extractKey2}
