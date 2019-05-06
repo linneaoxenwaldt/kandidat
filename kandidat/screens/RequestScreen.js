@@ -43,6 +43,8 @@ export default class OngoingVoteScreen extends React.Component {
       participants: [],
       alternatives: [],
       currentVote: [],
+      answers: [],
+      otherParticipants: [],
     }
     this.getFriendReq()
     this.getVoteReq()
@@ -93,30 +95,27 @@ export default class OngoingVoteScreen extends React.Component {
           />
           </ImageBackground>
           </TouchableOpacity>
-          // <ListItem
-          // containerStyle={{ backgroundColor: this.colors[index % this.colors.length]}}
-          // titleStyle={{color: '#FFFFFF', textAlign:'center', fontSize: 20,}}
-          // title={item.text}/>
+
         )}
 
         showRequest = ({item, index}) => {
-          //console.log("currentVote " + this.state.currentVote.VoteID)
-          //console.log("item " + item.VoteID)
-        //  for(let i=0; i < this.state.participants.length; i++)
         if(this.state.currentVote.VoteID === item.VoteID) {
+          // var user = firebase.auth().currentUser;
+          // var userID = user.uid;
+          // if(item.participantID !== userID) {
+          // this.setState(prevState => ({
+          //   otherParticipants: [...prevState.otherParticipants, {VoteID: item.VoteID, ParticipantID: item.participantID, username: item.username, profilePic: item.profilePic}]
+          // }))
+          // }
             return (
               <ListItem
-            //  containerStyle={{ backgroundColor: 'transparent'}}
             containerStyle={{ backgroundColor: this.colors[index % this.colors.length]}}
               titleStyle={{color: '#FFFFFF', fontSize: 30}}
               title={item.username}
               roundAvatar
               leftAvatar= {{source: {uri: item.profilePic}}}
-              //rightTitle={data.sentFrom}
-              //rightSubtitle={item.username}
               />
             )}}
-          // }}}
 
       friendRequests = ({item, index}) => {
         //if(item.friendReq == true ) {
@@ -135,7 +134,6 @@ export default class OngoingVoteScreen extends React.Component {
               name={'gesture-swipe-left'}
               size={30}/>}/>
             )}
-            //}
 
             getFriendReq() {
               var that = this
@@ -256,7 +254,7 @@ export default class OngoingVoteScreen extends React.Component {
                 const username = doc.data().Username
                 const profilePic = doc.data().ProfilePic
                 String(localID)
-                console.log(localID)
+                //console.log(localID)
                 that.setState(prevState => ({
                   participants: [...prevState.participants, {LocalID: localID, VoteID: voteID, ParticipantID: partcipantID, username: username, profilePic: profilePic}]
                 }))
@@ -274,7 +272,19 @@ export default class OngoingVoteScreen extends React.Component {
       var userID = user.uid;
       var db = firebase.firestore();
       var vote = this.state.currentVote
-      db.collection("Users").doc(userID).collection("Votes").doc(vote.VoteID).set({
+      this.setUpPendingVote()
+      //this.getAnswers()
+      //this.checkAnswers()
+      //this.deleteVoteReq()
+    }
+
+    setUpPendingVote(){
+      var that = this
+      var user = firebase.auth().currentUser;
+      var userID = user.uid;
+      var db = firebase.firestore();
+      var vote = this.state.currentVote
+      db.collection("Users").doc(userID).collection("PendingVotes").doc(vote.VoteID).set({
         CatName: vote.CatName,
         CatImg: vote.CatImg,
       })
@@ -283,7 +293,7 @@ export default class OngoingVoteScreen extends React.Component {
               // doc.data() is never undefined for query doc snapshots
               const name = doc.get('Name');
               const votes = doc.get('Votes')
-              db.collection("Users").doc(userID).collection("Votes").doc(vote.VoteID).collection('Alternatives').doc(doc.id).set({
+              db.collection("Users").doc(userID).collection("PendingVotes").doc(vote.VoteID).collection('Alternatives').doc(doc.id).set({
                 Name: name,
                 Votes: votes,
               })
@@ -292,18 +302,86 @@ export default class OngoingVoteScreen extends React.Component {
               }))
           });
       });
-
-      db.collection("Users").doc(userID).collection("VoteRequests").doc(vote.VoteID).delete().then(function() {
-        console.log("acceptVote - voteReq: Req successfully deleted!" + vote.VoteID);
-      }).catch(function(error) {
-        console.error("acceptVote - voteReq: Error removing document: ", error);
+      db.collection("Users").doc(vote.sentFromID).collection("PendingVotes").doc(vote.VoteID).collection('Participants').get().then(function(querySnapshot) {
+          querySnapshot.forEach(function(doc) {
+              const answer = doc.get('Answer');
+              db.collection("Users").doc(userID).collection("PendingVotes").doc(vote.VoteID).collection('Participants').doc(doc.id).set({
+                Answer: answer,
+              })
+          });
       });
-      this.setState(prevState => ({voteReq: prevState.voteReq.filter(item => item !== vote) }));
-      this.setState({
-        showMe: false
-      })
-      this.props.navigation.navigate('AddAlternative', {vote: this.state.currentVote})
+      this.giveAcceptAnswer()
     }
+
+giveAcceptAnswer() {
+  var that = this
+  var user = firebase.auth().currentUser;
+  var userID = user.uid;
+  var db = firebase.firestore();
+  var vote = this.state.currentVote
+  db.collection("Users").doc(userID).collection("PendingVotes").doc(vote.VoteID).collection('Participants').doc(userID).set({
+    Answer: "Yes",
+  })
+  db.collection("Users").doc(vote.sentFromID).collection("PendingVotes").doc(vote.VoteID).collection('Participants').doc(userID).update({
+    Answer: "Yes",
+  })
+  console.log("längd " + this.state.otherParticipants.length)
+  for(let i=0; i < this.state.otherParticipants.length; i++){
+    var participantID = this.state.otherParticipants[i].ParticipantID
+      var docRef = db.collection('Users').doc(participantID).collection('PendingVotes').doc(vote.VoteID).collection('Participants').doc(userID);
+      var getDoc = docRef.get()
+          .then(doc => {
+              if (!doc.exists) {
+                  db.collection('Users').doc(participantID).collection('VoteRequests').doc(vote.VoteID).collection('Participants').doc(userID).update({
+                    Answer: "Yes",
+                  })
+                  //console.log("sagt ja till Test")
+              } else {
+                docRef.update({
+                  Answer: "Yes",
+                })
+                  console.log('Document data:', doc.data());
+              }
+          })
+          .catch(err => {
+              console.log('Error getting document', err);
+          });
+}
+this.deleteVoteReq()
+}
+
+deleteVoteReq() {
+  var that = this
+  var user = firebase.auth().currentUser;
+  var userID = user.uid;
+  var db = firebase.firestore();
+  var vote = this.state.currentVote
+
+  db.collection("Users").doc(userID).collection("VoteRequests").doc(vote.VoteID).collection('Participants').get().then(function(querySnapshot) {
+      querySnapshot.forEach(function(doc) {
+          // doc.data() is never undefined for query doc snapshots
+          const id = doc.id
+          db.collection("Users").doc(userID).collection("VoteRequests").doc(vote.VoteID).collection('Participants').doc(id).delete().then(function() {
+            console.log("deleteVoteReq - participants: Alt successfully deleted!" + id);
+          }).catch(function(error) {
+            console.error("deleteVoteReq - participants: Alt Error removing document: ", error);
+          });
+      });
+  });
+
+db.collection("Users").doc(userID).collection("VoteRequests").doc(vote.VoteID).delete().then(function() {
+  console.log("deleteVoteReq - voteReq: Req successfully deleted!" + vote.VoteID);
+}).catch(function(error) {
+  console.error("deleteVoteReq - voteReq: Error removing document: ", error);
+});
+
+this.setState(prevState => ({voteReq: prevState.voteReq.filter(item => item !== vote) }));
+this.setState({
+  showMe: false
+})
+console.log(this.state.otherParticipants)
+this.props.navigation.navigate('AddAlternative', {vote: this.state.currentVote, participants: this.state.otherParticipants})
+}
 
 declineVote() {
   var that = this
