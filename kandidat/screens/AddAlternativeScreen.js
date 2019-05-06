@@ -140,6 +140,7 @@ export default class AddAlternativeScreen extends React.Component {
         });
 
 for(let i=0; i<participants.length; i++) {
+  if(voteID === participants[i].VoteID){
   var participantID = participants[i].ParticipantID
         var docRef = db.collection('Users').doc(participantID).collection('PendingVotes').doc(vote.VoteID);
         var getDoc = docRef.get()
@@ -157,7 +158,7 @@ for(let i=0; i<participants.length; i++) {
             .catch(err => {
                 console.log('Error getting document', err);
             });
-      }}
+      }}}
   this.checkAnswers()
    }
 
@@ -319,6 +320,7 @@ createVoteForParticipants(){
   var db = firebase.firestore();
   console.log("längd " + participants.length)
   for(let i=0; i< participants.length; i++) {
+    if(voteID === participants[i].VoteID) {
     var participantID = participants[i].ParticipantID
     console.log("id " + participantID)
   var docRef = db.collection("Users").doc(participantID).collection("Votes").doc(voteID)
@@ -363,6 +365,7 @@ console.log("pendingVotes - startVote: Document successfully deleted!" + voteID)
 }).catch(function(error) {
 console.error("pendingVotes - startVote: Error removing document: ", error);
 });
+}
 }
 }
 
