@@ -257,15 +257,15 @@ RequestStack.navigationOptions = {
 
 const DrawerComponent = createDrawerNavigator(
   {
-    'Home': HomeStack,
-    'My Profile': ProfileStack,
-    'My Friends': FriendsStack,
-    'Create new vote': NewVoteStack,
-    'Ongoing votes': OngoingVoteStack,
-    'Requests': RequestStack,
-    'Saved result': SavedResultStack,
-    'Settings': SettingsStack,
-    'Log out': LogOutStack,
+    'Home ': HomeStack,
+    'My Profile ': ProfileStack,
+    'My Friends ': FriendsStack,
+    'Create new vote  ': NewVoteStack,
+    'Ongoing votes ': OngoingVoteStack,
+    'Requests ': RequestStack,
+    'Saved result ': SavedResultStack,
+    'Settings ': SettingsStack,
+    'Log out ': LogOutStack,
   },
 );
 
