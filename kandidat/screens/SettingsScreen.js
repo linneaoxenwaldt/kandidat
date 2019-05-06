@@ -1,4 +1,5 @@
 import React from 'react';
+import * as firebase from 'firebase';
 import { ScrollView,
   StyleSheet,
   Image,
@@ -9,6 +10,7 @@ import { ScrollView,
   FlatList,
   Alert,
   TextInput,
+  Modal,
 } from 'react-native';
 import { ListItem } from 'react-native-elements';
 import { DrawerActions } from 'react-navigation';
@@ -39,7 +41,7 @@ export default class SettingsScreen extends React.Component {
       {id: '2', text: 'Sound'},
       {id: '3', text: 'Notificatios'},
       {id: '4', text: 'Account'},
-      {id: '5', text: 'Help'},
+      {id: '5', text: 'Logout'},
 
     ]
     this.extractKey = ({id}) => id
@@ -70,12 +72,29 @@ export default class SettingsScreen extends React.Component {
       };
     };
 
-
+onPressRouter(id){
+  for(let i = 0; i < this.state.rows.length; i++){
+  if ( id == 5 ){
+    firebase.auth().signOut();
+  }else if(id == 1){
+    Alert.alert('id 1')
+  }else if(id == 2){
+    Alert.alert('id 2')
+  }else if(id == 3){
+    Alert.alert('id 3')
+  }else if(id == 4){
+    Alert.alert('id 4')
+  }else if(id == 0){
+    Alert.alert('id 0')
+    }
+  }
+}
 
     renderItem = ({item, index}) => {
       var msg = `${data.sureMsg} ${item.text}?`
       return (
         <ListItem
+        onPress={() => this.onPressRouter(item.id)}
         containerStyle={{ backgroundColor: this.colors[index % this.colors.length]}}
         titleStyle={{color: '#FFFFFF', fontSize: 20}}
         roundAvatar
@@ -85,7 +104,7 @@ export default class SettingsScreen extends React.Component {
           name={Platform.OS === "ios" ? "ios-arrow-forward" : "md-trash"}
           size={40}
           color='#FFFFFF'
-          //onPress={}
+
           />}
           />)
         }
@@ -97,7 +116,6 @@ export default class SettingsScreen extends React.Component {
             <Icon name={Platform.OS === "ios" ? "ios-settings" : "md-settings"}
             size={40} color='grey'/>
             </Text>
-
 
             <FlatList
             data={this.state.rows}
