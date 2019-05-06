@@ -432,7 +432,8 @@ declineVote() {
                 <Text style={styles.textLabel}> Votes </Text>
 
 
-                <Modal visible={this.state.showMe}>
+                <Modal visible={this.state.showMe}
+                onRequestClose = {() => {this.setState({ showMe : false })}}>
                 <View style={styles.modalView}>
                 <Text style={styles.modalText}> Hej hej hej </Text>
 

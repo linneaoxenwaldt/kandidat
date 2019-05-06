@@ -74,9 +74,22 @@ export default class SettingsScreen extends React.Component {
     };
 
 onPressRouter(id){
-  for(let i = 0; i < this.state.rows.length; i++){
   if ( id == 5 ){
-    firebase.auth().signOut();
+    Alert.alert(
+      'Log out',
+      'Are you sure you want to log out?',
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log('Cancel Pressed'),
+        },
+        {
+          text: 'ok',
+          onPress: () => firebase.auth().signOut()
+        },
+      ]
+    )
+
   }else if(id == 1){
     Alert.alert('id 1')
   }else if(id == 2){
@@ -87,12 +100,10 @@ onPressRouter(id){
     Alert.alert('id 4')
   }else if(id == 0){
     //Alert.alert('id 0')
-    //this.showInfo()
     this.setState({
       showMe : true
     })
     }
-  }
 }
 
 showInfo() {
@@ -136,7 +147,7 @@ showInfo() {
             />
 
             <Modal visible = {this.state.showMe}
-            onRequestClose = {() => { console.log("Modal has been closed.") } }>
+            onRequestClose = {() => {this.setState({ showMe : false })}}>
             <View>
             <TouchableOpacity onPress = {() =>{
             this.setState({
