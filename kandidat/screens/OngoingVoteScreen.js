@@ -142,7 +142,7 @@ export default class OngoingVoteScreen extends React.Component {
  />
       </View>
       <View style={styles.votePenContainer}>
-      <Text style={styles.voteLabel}>
+      <Text style={styles.voteLabelFriend}>
       {data.yourFriensTurn}
       </Text>
       <FlatList
@@ -170,6 +170,14 @@ marginTop: 5,
 marginTop: 10,
   },
   voteLabel: {
+    fontSize: 30,
+    color: '#000000',
+    textAlign: 'center',
+    fontFamily: "Roboto-Light",
+  },
+  voteLabelFriend: {
+    marginTop: '50%',
+    position:'fixed',
     fontSize: 30,
     color: '#000000',
     textAlign: 'center',

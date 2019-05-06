@@ -193,7 +193,7 @@ db.collection("Users").doc(userID).collection("PendingVotes").add({
      var db = firebase.firestore();
      for (let i=0; i<this.state.choosenFriends.length; i++) {
          db.collection("Users").doc(userID).collection("PendingVotes").doc(voteID).collection('Participants').doc(this.state.choosenFriends[i].id).set({
-           Answer: ""
+           Answer: "noAnswer",
          })
      }
      this.sendVoteRequest(voteID, userID)
@@ -208,7 +208,7 @@ db.collection("Users").doc(userID).collection("PendingVotes").add({
        })
    for (let i=0; i<this.state.choosenFriends.length; i++) {
        db.collection("Users").doc(friendID).collection("VoteRequests").doc(voteID).collection('Participants').doc(this.state.choosenFriends[i].id).set({
-         Answer: ""
+         Answer: "noAnswer"
        })
    }
  }

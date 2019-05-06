@@ -43,6 +43,8 @@ export default class OngoingVoteScreen extends React.Component {
       participants: [],
       alternatives: [],
       currentVote: [],
+      answers: [],
+      otherParticipants: [],
     }
     this.getFriendReq()
     this.getVoteReq()
@@ -93,49 +95,53 @@ export default class OngoingVoteScreen extends React.Component {
           />
           </ImageBackground>
           </TouchableOpacity>
-          // <ListItem
-          // containerStyle={{ backgroundColor: this.colors[index % this.colors.length]}}
-          // titleStyle={{color: '#FFFFFF', textAlign:'center', fontSize: 20,}}
-          // title={item.text}/>
+
         )}
 
         showRequest = ({item, index}) => {
-          //console.log("currentVote " + this.state.currentVote.VoteID)
-          //console.log("item " + item.VoteID)
-        //  for(let i=0; i < this.state.participants.length; i++)
         if(this.state.currentVote.VoteID === item.VoteID) {
+          // var user = firebase.auth().currentUser;
+          // var userID = user.uid;
+          // if(item.participantID !== userID) {
+          // this.setState(prevState => ({
+          //   otherParticipants: [...prevState.otherParticipants, {VoteID: item.VoteID, ParticipantID: item.participantID, username: item.username, profilePic: item.profilePic}]
+          // }))
+          // }
             return (
               <ListItem
-            //  containerStyle={{ backgroundColor: 'transparent'}}
             containerStyle={{ backgroundColor: this.colors[index % this.colors.length]}}
               titleStyle={{color: '#FFFFFF', fontSize: 30}}
               title={item.username}
               roundAvatar
               leftAvatar= {{source: {uri: item.profilePic}}}
-              //rightTitle={data.sentFrom}
-              //rightSubtitle={item.username}
               />
             )}}
-          // }}}
 
       friendRequests = ({item, index}) => {
         //if(item.friendReq == true ) {
         return (
           <ListItem
           containerStyle={{ backgroundColor: this.colors[index % this.colors.length]}}
-          titleStyle={{color: '#FFFFFF', textAlign:'center', fontSize: 20,}}
+          titleStyle={{color: '#FFFFFF',  fontSize: 20,}}
           title={item.username}
           leftAvatar = {{source: {uri: item.profilePic}}}
-          rightIcon = {<Icon2
+          rightIcon = {
+            <View style = {styles.friendReqButton}>
+            {<Icon
             onPress={() => this.acceptFriend(item)}
-            name={'gesture-swipe-right'}
-            size={30}/>}
-            leftIcon = {<Icon2
+            name={Platform.OS === "ios" ? "ios-checkmark-circle-outline" : "md-checkmark-circle-outline"}
+
+            color={'white'}
+            size={40}/>}
+
+            {<Icon
               onPress={() => this.declineFriend(item)}
-              name={'gesture-swipe-left'}
-              size={30}/>}/>
+              name={Platform.OS === "ios" ? "ios-close-circle-outline" : "md-close-circle-outline"}
+              size={40}
+              color={'white'}/>}
+
+              </View>}/>
             )}
-            //}
 
             getFriendReq() {
               var that = this
@@ -256,7 +262,7 @@ export default class OngoingVoteScreen extends React.Component {
                 const username = doc.data().Username
                 const profilePic = doc.data().ProfilePic
                 String(localID)
-                console.log(localID)
+                //console.log(localID)
                 that.setState(prevState => ({
                   participants: [...prevState.participants, {LocalID: localID, VoteID: voteID, ParticipantID: partcipantID, username: username, profilePic: profilePic}]
                 }))
@@ -274,7 +280,19 @@ export default class OngoingVoteScreen extends React.Component {
       var userID = user.uid;
       var db = firebase.firestore();
       var vote = this.state.currentVote
-      db.collection("Users").doc(userID).collection("Votes").doc(vote.VoteID).set({
+      this.setUpPendingVote()
+      //this.getAnswers()
+      //this.checkAnswers()
+      //this.deleteVoteReq()
+    }
+
+    setUpPendingVote(){
+      var that = this
+      var user = firebase.auth().currentUser;
+      var userID = user.uid;
+      var db = firebase.firestore();
+      var vote = this.state.currentVote
+      db.collection("Users").doc(userID).collection("PendingVotes").doc(vote.VoteID).set({
         CatName: vote.CatName,
         CatImg: vote.CatImg,
       })
@@ -283,7 +301,7 @@ export default class OngoingVoteScreen extends React.Component {
               // doc.data() is never undefined for query doc snapshots
               const name = doc.get('Name');
               const votes = doc.get('Votes')
-              db.collection("Users").doc(userID).collection("Votes").doc(vote.VoteID).collection('Alternatives').doc(doc.id).set({
+              db.collection("Users").doc(userID).collection("PendingVotes").doc(vote.VoteID).collection('Alternatives').doc(doc.id).set({
                 Name: name,
                 Votes: votes,
               })
@@ -292,18 +310,86 @@ export default class OngoingVoteScreen extends React.Component {
               }))
           });
       });
-
-      db.collection("Users").doc(userID).collection("VoteRequests").doc(vote.VoteID).delete().then(function() {
-        console.log("acceptVote - voteReq: Req successfully deleted!" + vote.VoteID);
-      }).catch(function(error) {
-        console.error("acceptVote - voteReq: Error removing document: ", error);
+      db.collection("Users").doc(vote.sentFromID).collection("PendingVotes").doc(vote.VoteID).collection('Participants').get().then(function(querySnapshot) {
+          querySnapshot.forEach(function(doc) {
+              const answer = doc.get('Answer');
+              db.collection("Users").doc(userID).collection("PendingVotes").doc(vote.VoteID).collection('Participants').doc(doc.id).set({
+                Answer: answer,
+              })
+          });
       });
-      this.setState(prevState => ({voteReq: prevState.voteReq.filter(item => item !== vote) }));
-      this.setState({
-        showMe: false
-      })
-      this.props.navigation.navigate('AddAlternative', {vote: this.state.currentVote})
+      this.giveAcceptAnswer()
     }
+
+giveAcceptAnswer() {
+  var that = this
+  var user = firebase.auth().currentUser;
+  var userID = user.uid;
+  var db = firebase.firestore();
+  var vote = this.state.currentVote
+  db.collection("Users").doc(userID).collection("PendingVotes").doc(vote.VoteID).collection('Participants').doc(userID).set({
+    Answer: "Yes",
+  })
+  db.collection("Users").doc(vote.sentFromID).collection("PendingVotes").doc(vote.VoteID).collection('Participants').doc(userID).update({
+    Answer: "Yes",
+  })
+  console.log("längd " + this.state.otherParticipants.length)
+  for(let i=0; i < this.state.otherParticipants.length; i++){
+    var participantID = this.state.otherParticipants[i].ParticipantID
+      var docRef = db.collection('Users').doc(participantID).collection('PendingVotes').doc(vote.VoteID).collection('Participants').doc(userID);
+      var getDoc = docRef.get()
+          .then(doc => {
+              if (!doc.exists) {
+                  db.collection('Users').doc(participantID).collection('VoteRequests').doc(vote.VoteID).collection('Participants').doc(userID).update({
+                    Answer: "Yes",
+                  })
+                  //console.log("sagt ja till Test")
+              } else {
+                docRef.update({
+                  Answer: "Yes",
+                })
+                  console.log('Document data:', doc.data());
+              }
+          })
+          .catch(err => {
+              console.log('Error getting document', err);
+          });
+}
+this.deleteVoteReq()
+}
+
+deleteVoteReq() {
+  var that = this
+  var user = firebase.auth().currentUser;
+  var userID = user.uid;
+  var db = firebase.firestore();
+  var vote = this.state.currentVote
+
+  db.collection("Users").doc(userID).collection("VoteRequests").doc(vote.VoteID).collection('Participants').get().then(function(querySnapshot) {
+      querySnapshot.forEach(function(doc) {
+          // doc.data() is never undefined for query doc snapshots
+          const id = doc.id
+          db.collection("Users").doc(userID).collection("VoteRequests").doc(vote.VoteID).collection('Participants').doc(id).delete().then(function() {
+            console.log("deleteVoteReq - participants: Alt successfully deleted!" + id);
+          }).catch(function(error) {
+            console.error("deleteVoteReq - participants: Alt Error removing document: ", error);
+          });
+      });
+  });
+
+db.collection("Users").doc(userID).collection("VoteRequests").doc(vote.VoteID).delete().then(function() {
+  console.log("deleteVoteReq - voteReq: Req successfully deleted!" + vote.VoteID);
+}).catch(function(error) {
+  console.error("deleteVoteReq - voteReq: Error removing document: ", error);
+});
+
+this.setState(prevState => ({voteReq: prevState.voteReq.filter(item => item !== vote) }));
+this.setState({
+  showMe: false
+})
+console.log(this.state.otherParticipants)
+this.props.navigation.navigate('AddAlternative', {vote: this.state.currentVote, participants: this.state.otherParticipants})
+}
 
 declineVote() {
   var that = this
@@ -399,14 +485,7 @@ source={{uri: this.state.currentVote.sentFromProfilePic}}/>
                   </Modal>
 
 
-                    <View style={styles.miniTextview}>
-                    <Text> <Icon2
-                    name={'gesture-swipe-left'}
-                    size={30}/>  Decline  </Text>
-                    <Text> Accept <Icon2
-                    name={'gesture-swipe-right'}
-                    size={30}/></Text>
-                    </View>
+
 
                     <View>
                     <FlatList
@@ -420,14 +499,10 @@ source={{uri: this.state.currentVote.sentFromProfilePic}}/>
 
 
                     <View style={styles.friendReq}>
-                    <Text style={styles.textLabel}> Friends </Text>
+                    <Text style={styles.textLabelFriend}> {data.friends} </Text>
                     <View style={styles.miniTextview}>
-                    <Text> <Icon2
-                    name={'gesture-swipe-left'}
-                    size={30}/>  Decline  </Text>
-                    <Text> Accept <Icon2
-                    name={'gesture-swipe-right'}
-                    size={30}/></Text>
+
+
                     </View>
                     <FlatList
                     extraData={this.state}
@@ -454,7 +529,16 @@ source={{uri: this.state.currentVote.sentFromProfilePic}}/>
                   marginTop: 15,
                 },
                 textLabel: {
-                  marginTop: 10,
+                  margin: 20,
+                  fontSize: 30,
+                  color: '#000000',
+                  textAlign: 'center',
+                  fontFamily: "Roboto-Light",
+                },
+                textLabelFriend: {
+                  //marginTop: '0%',
+                  position:'fixed',
+                  margin: 20,
                   fontSize: 30,
                   color: '#000000',
                   textAlign: 'center',
@@ -503,9 +587,9 @@ source={{uri: this.state.currentVote.sentFromProfilePic}}/>
                 },
 
                 closeContainer: {
-                  marginBottom: 30,
-                  marginTop: 10,
-                  backgroundColor: '#CBA3D5',
+                  marginBottom: 10,
+                  marginTop: 50,
+                  backgroundColor: '#6BCDFD',
                   alignItems: 'center',
                   borderRadius: 20,
                   width:150,
@@ -514,16 +598,27 @@ source={{uri: this.state.currentVote.sentFromProfilePic}}/>
                   justifyContent:'center',
                 },
                 declineButt: {
-                  height: 50,
-                  width: 150,
-                  color: '#000',
-                  backgroundColor: '#FF0000',
+                  marginBottom: 30,
+                 marginTop: 10,
+                 backgroundColor: '#CBA3D5',
+                 alignItems: 'center',
+                 borderRadius: 20,
+                 width:150,
+                 height: 50,
+                 alignItems:'center',
+                 justifyContent:'center',
                 },
                 acceptButt: {
-                  height: 50,
-                  width: 150,
-                  color: '#000',
-                  backgroundColor: '#008000',
+                  marginBottom: 30,
+                 marginTop: 10,
+                 backgroundColor: '#8FBC8F',
+                 alignItems: 'center',
+                 borderRadius: 20,
+                 width:150,
+                 height: 50,
+                 alignItems:'center',
+                 justifyContent:'center',
+
                 },
 
                 buttonBottomContainer: {
@@ -535,6 +630,12 @@ source={{uri: this.state.currentVote.sentFromProfilePic}}/>
                 },
                 modalList: {
                   width: '100%'
+                },
+                friendReqButton:{
+                  flexDirection:'row',
+                  justifyContent: 'space-between',
+                  width: 90,
+                  //marginRight: 5
                 }
               });
 
