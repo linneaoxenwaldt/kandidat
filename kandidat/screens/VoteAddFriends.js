@@ -58,6 +58,7 @@ export default class VoteAddFriends extends React.Component {
     date: [] ,
     choosenFriends: [],
     checked: [],
+    //participants: [],
   }
   this.getYourFriends()
   //this.createVote()
@@ -155,7 +156,7 @@ export default class VoteAddFriends extends React.Component {
      var user = firebase.auth().currentUser;
      var userID = user.uid;
      var db = firebase.firestore();
-     console.log(this.state.choosenFriends)
+     //console.log(this.state.choosenFriends)
 db.collection("Users").doc(userID).collection("PendingVotes").add({
        CatName: catName,
        CatImg: catImg
@@ -179,7 +180,7 @@ db.collection("Users").doc(userID).collection("PendingVotes").add({
             })
        .then(function(docRef) {
           console.log("Document written with ID: ", docRef.id);
-          that.sendVoteRequest(voteID, userID)
+          that.getParticipants(voteID, userID)
           that.props.navigation.navigate('OngoingVote')
        })
        .catch(function(error) {
@@ -188,13 +189,28 @@ db.collection("Users").doc(userID).collection("PendingVotes").add({
      }
    }
 
+   getParticipants(voteID, userID) {
+     var db = firebase.firestore();
+     for (let i=0; i<this.state.choosenFriends.length; i++) {
+         db.collection("Users").doc(userID).collection("PendingVotes").doc(voteID).collection('Participants').doc(this.state.choosenFriends[i].id).set({
+           Answer: ""
+         })
+     }
+     this.sendVoteRequest(voteID, userID)
+   }
+
    sendVoteRequest(voteID, userID) {
      var db = firebase.firestore();
      for (let i=0; i<this.state.choosenFriends.length; i++) {
        var friendID = this.state.choosenFriends[i].id
        db.collection("Users").doc(friendID).collection("VoteRequests").doc(voteID).set({
        SentFrom: userID,
-   })
+       })
+   for (let i=0; i<this.state.choosenFriends.length; i++) {
+       db.collection("Users").doc(friendID).collection("VoteRequests").doc(voteID).collection('Participants').doc(this.state.choosenFriends[i].id).set({
+         Answer: ""
+       })
+   }
  }
    }
 
