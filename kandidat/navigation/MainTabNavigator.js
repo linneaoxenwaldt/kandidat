@@ -25,6 +25,7 @@ import AlternativeScreen from '../screens/AlternativeScreen';
 import AddFriendScreen from '../screens/AddFriendScreen';
 import VoteAddFriends from '../screens/VoteAddFriends';
 import RequestScreen from '../screens/RequestScreen';
+import AddAlternativeScreen from '../screens/AddAlternativeScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -225,6 +226,12 @@ const AlternativeScreenStack = createStackNavigator({
 AlternativeScreenStack.navigationOptions = {
 };
 
+const AddAlternativeScreenStack = createStackNavigator({
+  addAlternativeScreen: AddAlternativeScreen,
+});
+AddAlternativeScreenStack.navigationOptions = {
+};
+
 const VoteAddFriendsStack = createStackNavigator({
   VoteAddFriends: VoteAddFriends,
 });
@@ -272,7 +279,8 @@ const AppStack = createStackNavigator({
   AddFriendScreen: {screen: AddFriendStack},
   LoginScreen: {screen: LoginStack},
   //RequestScreen: {screen: RequestStack},
-  VoteAddFriends: {screen: VoteAddFriendsStack}
+  VoteAddFriends: {screen: VoteAddFriendsStack},
+  AddAlternative: {screen: AddAlternativeScreenStack},
 }, {
   headerMode: 'none',
 });
