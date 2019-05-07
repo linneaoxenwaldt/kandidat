@@ -143,11 +143,20 @@ hideDateTimePicker = () => {
  }
 
    createVote() {
-     if (this.state.choosenFriends === []) {
+     console.log(this.state.choosenFriends)
+     var check = []
+     if (this.state.choosenFriends.length === 0) {
        Alert.alert(
-         data.missingFriends,
-       )
+     data.missingFriends,
+     undefined,
+     [
+       {text: 'OK',
+       onPress: () => this.props.navigation.navigate('VoteAddFriends')
+     },
+     ],
+     { cancelable: false })
      }
+    else if (this.state.choosenFriends.length !== 0) {
      var alternatives = this.props.navigation.state.params.alternatives
      var category = this.props.navigation.state.params.category
      var catName = category[0].catName
@@ -168,6 +177,7 @@ db.collection("Users").doc(userID).collection("PendingVotes").add({
 .catch(function(error) {
    console.error("Error adding document: ", error);
 });
+}
    }
 
    createAlternatives(voteID, alternatives, userID) {

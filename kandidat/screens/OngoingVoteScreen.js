@@ -35,7 +35,8 @@ export default class OngoingVoteScreen extends React.Component {
   this.state = {
     // rows: rows,
     yourTurn: [],
-    yourFriendsTurn: []
+    yourFriendsTurn: [],
+    notification: false,
   }
   this.getYourFriendsTurn()
   this.getYourTurn()
@@ -98,6 +99,7 @@ export default class OngoingVoteScreen extends React.Component {
             });
         });
       }
+
 
     renderItem1 = ({item, index}) => {
       return (

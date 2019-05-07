@@ -27,10 +27,10 @@ export default class SettingsScreen extends React.Component {
     super(props);
 
     const info = (<Icon name={Platform.OS === "ios" ? "ios-information-circle" : "md-information-circle"} size={40} color='#FFFFFF'/>)
-    const sound = (<Icon name={Platform.OS === "ios" ? "ios-musical-notes" : " md-musical-notes"} size={40} color='#FFFFFF'/>)
+    const sound = (<Icon name={Platform.OS === "ios" ? "ios-musical-notes" : "md-musical-notes"} size={40} color='#FFFFFF'/>)
     const results = (<Icon name={Platform.OS === "ios" ? "ios-stats" : "md-stats"} size={40} color='#FFFFFF'/>)
-    const notifications = (<Icon name={Platform.OS === "ios" ? "ios-notifications" : " md-notifications"} size={40} color='#FFFFFF'/>)
-    const account = (<Icon name={Platform.OS === "ios" ? "ios-contact" : " md-contact"} size={40} color='#FFFFFF'/>)
+    const notifications = (<Icon name={Platform.OS === "ios" ? "ios-notifications" : "md-notifications"} size={40} color='#FFFFFF'/>)
+    const account = (<Icon name={Platform.OS === "ios" ? "ios-contact" : "md-contact"} size={40} color='#FFFFFF'/>)
     const help = (<Icon name={Platform.OS === "ios" ? "ios-help-circle" : "md-help-circle"} size={40} color='#FFFFFF'/>)
 
     this.icons = [info, results, sound, notifications, account, help]
@@ -47,6 +47,7 @@ export default class SettingsScreen extends React.Component {
     this.extractKey = ({id}) => id
     this.state = {
       rows: rows,
+      showMe : false,
     }
   }
 
@@ -73,9 +74,22 @@ export default class SettingsScreen extends React.Component {
     };
 
 onPressRouter(id){
-  for(let i = 0; i < this.state.rows.length; i++){
   if ( id == 5 ){
-    firebase.auth().signOut();
+    Alert.alert(
+      'Log out',
+      'Are you sure you want to log out?',
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log('Cancel Pressed'),
+        },
+        {
+          text: 'ok',
+          onPress: () => firebase.auth().signOut()
+        },
+      ]
+    )
+
   }else if(id == 1){
     Alert.alert('id 1')
   }else if(id == 2){
@@ -85,9 +99,17 @@ onPressRouter(id){
   }else if(id == 4){
     Alert.alert('id 4')
   }else if(id == 0){
-    Alert.alert('id 0')
+    //Alert.alert('id 0')
+    this.setState({
+      showMe : true
+    })
     }
-  }
+}
+
+showInfo() {
+  this.setState({
+    showMe : false
+  })
 }
 
     renderItem = ({item, index}) => {
@@ -123,6 +145,23 @@ onPressRouter(id){
             renderItem={this.renderItem}
             keyExtractor={this.extractKey}
             />
+
+            <Modal visible = {this.state.showMe}
+            onRequestClose = {() => {this.setState({ showMe : false })}}>
+            <View>
+            <TouchableOpacity onPress = {() =>{
+            this.setState({
+              showMe : false
+            })}}>
+            <Icon name={Platform.OS === "ios" ? "ios-settings" : "md-settings"}
+            size={40} color='grey'/>
+            <Text>
+            Close Modal
+            </Text>
+            </TouchableOpacity>
+            <Text>{data.infoText}</Text>
+            </View>
+            </Modal>
             </View>
 
           );

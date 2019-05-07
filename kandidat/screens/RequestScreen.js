@@ -100,13 +100,6 @@ export default class OngoingVoteScreen extends React.Component {
 
         showRequest = ({item, index}) => {
         if(this.state.currentVote.VoteID === item.VoteID) {
-          // var user = firebase.auth().currentUser;
-          // var userID = user.uid;
-          // if(item.participantID !== userID) {
-          // this.setState(prevState => ({
-          //   otherParticipants: [...prevState.otherParticipants, {VoteID: item.VoteID, ParticipantID: item.participantID, username: item.username, profilePic: item.profilePic}]
-          // }))
-          // }
             return (
               <ListItem
             containerStyle={{ backgroundColor: this.colors[index % this.colors.length]}}
@@ -211,14 +204,23 @@ export default class OngoingVoteScreen extends React.Component {
           var user = firebase.auth().currentUser;
           var userID = user.uid;
           var db = firebase.firestore();
-          db.collection("Users").doc(userID).collection("VoteRequests").get().then(function(querySnapshot) {
+          var docRef = db.collection("Users").doc(userID).collection("VoteRequests")
+          docRef.get().then(function(querySnapshot) {
               querySnapshot.forEach(function(doc) {
                   // doc.data() is never undefined for query doc snapshots
                   var voteID = doc.id;
+                  docRef.doc(voteID).collection('Participants').get().then(function(querySnapshot) {
+                      querySnapshot.forEach(function(doc) {
+                        var participantID = doc.id;
+                        if(participantID !== userID) {
+                          that.setState(prevState => ({
+                            otherParticipants: [...prevState.otherParticipants, {VoteID: voteID, ParticipantID: participantID}]
+                          }))
+                      }})})
                 //  that.getParticipants(userID, voteID)
                   var sentFromID = doc.get("SentFrom")
-                  var docRef = db.collection('Users').doc(sentFromID);
-                  docRef.get().then(function(doc) {
+                  var docRef2 = db.collection('Users').doc(sentFromID);
+                  docRef2.get().then(function(doc) {
                     if (doc.exists) {
                       const username = doc.data().Username
                       const profilePic = doc.data().ProfilePic
@@ -272,6 +274,8 @@ export default class OngoingVoteScreen extends React.Component {
       var userID = user.uid;
       var db = firebase.firestore();
       var vote = this.state.currentVote
+      var user = firebase.auth().currentUser;
+      var userID = user.uid;
       this.setUpPendingVote()
       //this.getAnswers()
       //this.checkAnswers()
@@ -325,8 +329,9 @@ giveAcceptAnswer() {
   db.collection("Users").doc(vote.sentFromID).collection("PendingVotes").doc(vote.VoteID).collection('Participants').doc(userID).update({
     Answer: "Yes",
   })
-  console.log("längd " + this.state.otherParticipants.length)
+  //console.log("längd " + this.state.otherParticipants.length)
   for(let i=0; i < this.state.otherParticipants.length; i++){
+    if(this.state.otherParticipants[i].VoteID === vote.VoteID) {
     var participantID = this.state.otherParticipants[i].ParticipantID
       var docRef = db.collection('Users').doc(participantID).collection('PendingVotes').doc(vote.VoteID).collection('Participants').doc(userID);
       var getDoc = docRef.get()
@@ -335,7 +340,7 @@ giveAcceptAnswer() {
                   db.collection('Users').doc(participantID).collection('VoteRequests').doc(vote.VoteID).collection('Participants').doc(userID).update({
                     Answer: "Yes",
                   })
-                  //console.log("sagt ja till Test")
+                  console.log("sagt ja till Test1")
               } else {
                 docRef.update({
                   Answer: "Yes",
@@ -346,7 +351,7 @@ giveAcceptAnswer() {
           .catch(err => {
               console.log('Error getting document', err);
           });
-}
+}}
 this.deleteVoteReq()
 }
 
@@ -389,30 +394,136 @@ declineVote() {
   var userID = user.uid;
   var db = firebase.firestore();
   var vote = this.state.currentVote
+  var docRef = db.collection("Users").doc(userID).collection("VoteRequests").doc(vote.VoteID)
 
-  db.collection("Users").doc(userID).collection("VoteRequests").doc(vote.VoteID).delete().then(function() {
+  docRef.collection('Participants').get().then(function(querySnapshot) {
+      querySnapshot.forEach(function(doc) {
+          // doc.data() is never undefined for query doc snapshots
+          const id = doc.id
+          docRef.collection('Participants').doc(id).delete().then(function() {
+            console.log("declineVote - Part: Alt successfully deleted!" + id);
+          }).catch(function(error) {
+            console.error("declineVote - Part: Alt Error removing document: ", error);
+          });
+      });
+  });
+
+  docRef.delete().then(function() {
     console.log("declineVote: FriendReq successfully deleted!" + vote.VoteID);
   }).catch(function(error) {
     console.error("declineVote: Error removing document: ", error);
   });
   this.setState(prevState => ({voteReq: prevState.voteReq.filter(item => item !== vote) }));
 
-  db.collection("Users").doc(vote.sentFromID).collection("PendingVotes").doc(vote.VoteID).collection('Alternatives').get().then(function(querySnapshot) {
+this.declineVoteCreator()
+}
+
+declineVoteCreator() {
+  var that = this
+  var user = firebase.auth().currentUser;
+  var userID = user.uid;
+  var db = firebase.firestore();
+  var vote = this.state.currentVote
+  var docRef = db.collection("Users").doc(vote.sentFromID).collection("PendingVotes").doc(vote.VoteID)
+  docRef.collection('Alternatives').get().then(function(querySnapshot) {
       querySnapshot.forEach(function(doc) {
           // doc.data() is never undefined for query doc snapshots
           const id = doc.id
-          db.collection("Users").doc(vote.sentFromID).collection("PendingVotes").doc(vote.VoteID).collection('Alternatives').doc(id).delete().then(function() {
+          docRef.collection('Alternatives').doc(id).delete().then(function() {
             console.log("declineVote: Alt successfully deleted!" + id);
           }).catch(function(error) {
             console.error("declineVote: Alt Error removing document: ", error);
           });
       });
   });
-  db.collection("Users").doc(vote.sentFromID).collection("PendingVotes").doc(vote.VoteID).delete().then(function() {
+
+  docRef.collection('Participants').get().then(function(querySnapshot) {
+      querySnapshot.forEach(function(doc) {
+          // doc.data() is never undefined for query doc snapshots
+          const id = doc.id
+          docRef.collection('Participants').doc(id).delete().then(function() {
+            console.log("declineVote - Part: Alt successfully deleted!" + id);
+          }).catch(function(error) {
+            console.error("declineVote - Part: Alt Error removing document: ", error);
+          });
+      });
+  });
+
+  docRef.delete().then(function() {
     console.log("declineVote - pendingVote: FriendReq successfully deleted!" + vote.VoteID);
   }).catch(function(error) {
     console.error("declineVote - pendingVote: Error removing document: ", error);
   });
+  this.declineVoteParticipants()
+}
+
+declineVoteParticipants() {
+  var that = this
+  var user = firebase.auth().currentUser;
+  var userID = user.uid;
+  var db = firebase.firestore();
+  var vote = this.state.currentVote
+  for(let i=0; i < this.state.otherParticipants.length; i++){
+  if(this.state.otherParticipants[i].VoteID === vote.VoteID) {
+      var participantID = this.state.otherParticipants[i].ParticipantID
+      var docRef = db.collection('Users').doc(participantID).collection('PendingVotes').doc(vote.VoteID);
+      var docRef2 = db.collection("Users").doc(participantID).collection("VoteRequests").doc(vote.VoteID)
+      var getDoc = docRef.get()
+          .then(doc => {
+              if (!doc.exists) {
+                docRef2.collection('Participants').get().then(function(querySnapshot) {
+                    querySnapshot.forEach(function(doc) {
+                        // doc.data() is never undefined for query doc snapshots
+                        const id = doc.id
+                        docRef2.collection('Participants').doc(id).delete().then(function() {
+                          console.log("declineVote - Part: Alt successfully deleted!" + id);
+                        }).catch(function(error) {
+                          console.error("declineVote - Part: Alt Error removing document: ", error);
+                        });
+                    });
+                });
+
+                docRef2.delete().then(function() {
+                  console.log("declineVote: FriendReq successfully deleted!" + vote.VoteID);
+                }).catch(function(error) {
+                  console.error("declineVote: Error removing document: ", error);
+                });
+              } else {
+                docRef.collection('Alternatives').get().then(function(querySnapshot) {
+                    querySnapshot.forEach(function(doc) {
+                        // doc.data() is never undefined for query doc snapshots
+                        const id = doc.id
+                        docRef.collection('Alternatives').doc(id).delete().then(function() {
+                          console.log("declineVote: Alt successfully deleted!" + id);
+                        }).catch(function(error) {
+                          console.error("declineVote: Alt Error removing document: ", error);
+                        });
+                    });
+                });
+
+                docRef.collection('Participants').get().then(function(querySnapshot) {
+                    querySnapshot.forEach(function(doc) {
+                        // doc.data() is never undefined for query doc snapshots
+                        const id = doc.id
+                        docRef.collection('Participants').doc(id).delete().then(function() {
+                          console.log("declineVote - Part: Alt successfully deleted!" + id);
+                        }).catch(function(error) {
+                          console.error("declineVote - Part: Alt Error removing document: ", error);
+                        });
+                    });
+                });
+
+                docRef.delete().then(function() {
+                  console.log("declineVote - pendingVote: FriendReq successfully deleted!" + vote.VoteID);
+                }).catch(function(error) {
+                  console.error("declineVote - pendingVote: Error removing document: ", error);
+                });
+                }
+          })
+          .catch(err => {
+              console.log('Error getting document', err);
+          });
+    }}
   this.setState({
     showMe: false
   })
@@ -427,7 +538,8 @@ declineVote() {
                 <Text style={styles.textLabel}> Votes </Text>
 
 
-                <Modal visible={this.state.showMe}>
+                <Modal visible={this.state.showMe}
+                onRequestClose = {() => {this.setState({ showMe : false })}}>
                 <View style={styles.modalView}>
                 <Text style={styles.modalText}> Hej hej hej </Text>
 
