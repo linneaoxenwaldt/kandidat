@@ -134,6 +134,11 @@ export default class OngoingVoteScreen extends React.Component {
       <Text style={styles.voteLabel}>
       {data.yourTurn}
       </Text>
+      <View
+      style={{
+        borderBottomColor: '#94B4C1',
+        borderBottomWidth: 3 }}
+        />
       <FlatList
       extraData={this.state}
  data={this.state.yourTurn}
@@ -141,10 +146,19 @@ export default class OngoingVoteScreen extends React.Component {
  keyExtractor={this.extractKey1}
  />
       </View>
+
+
       <View style={styles.votePenContainer}>
+
       <Text style={styles.voteLabelFriend}>
+
       {data.yourFriensTurn}
       </Text>
+      <View
+      style={{
+        borderBottomColor: '#94B4C1',
+        borderBottomWidth: 3 }}
+        />
       <FlatList
       extraData={this.state}
  data={this.state.yourFriendsTurn}
@@ -167,7 +181,7 @@ const styles = StyleSheet.create({
 marginTop: 5,
   },
   votePenContainer: {
-marginTop: 10,
+    marginTop: 10,
   },
   voteLabel: {
     fontSize: 30,
@@ -177,10 +191,10 @@ marginTop: 10,
   },
   voteLabelFriend: {
     marginTop: '50%',
-    position:'fixed',
+    //position:'absolute',
     fontSize: 30,
     color: '#000000',
     textAlign: 'center',
     fontFamily: "Roboto-Light",
-  }
+  },
 });

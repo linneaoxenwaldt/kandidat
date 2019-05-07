@@ -22,7 +22,7 @@
   "deleteCategory": "Delete category",
   "friendUsername": "Enter your friends user name",
   "save": "Save",
-  "yourTurn": "Your turn to vote!",
+  "yourTurn": "Your turn to vote",
   "yourFriensTurn": "Your friends turn",
   "missingCatName": "You have not entered a name for your category",
   "missingAltName": "You have not entered a name for your alternative",
@@ -37,5 +37,9 @@
   "alreadyFriendReq": "You have already sent a request!",
   "missingFriends": "You have not choosen any friends",
   "sentFrom": "Sent from",
+  "invited":"You are invited by:",
+  "participants":"Participants:",
+  "accept":"ACCEPT",
+  "decline":"DECLINE",
   "infoText":"To begin using the app you must first add friends so you have someone to vote with, if only one person can vote it’s a dictatorship! Go to the add friend screen and search for your friends username to add them. Once you have a friend you can go to the “Create new vote” screen in the sidebar. Once there you can create a new category to vote on or choose one of the premade ones. You can edit and customize all parts of the vote and once you are ready to proceed you simply invite your friends and begin the vote!"
 }

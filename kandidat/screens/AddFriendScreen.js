@@ -216,10 +216,10 @@ sendFriendRequest(friendID, userID) {
       onChangeText={(text) => this.setState({text})}
       />
       <TouchableOpacity
-      style = {styles.saveButton}
+      style = {styles.addButton}
         onPress={() => this.checkUsername()}
         >
-        <Text style={styles.saveText}>Save</Text>
+        <Text style={styles.addText}>Add</Text>
        </TouchableOpacity>
        </View>
     );
@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto-Light',
     color: '#000000',
   },
-  saveButton: {
+  addButton: {
     backgroundColor: "#BA55B3",
     width: 150,
     height: 70,
@@ -266,7 +266,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginTop: 20,
   },
-  saveText: {
+  addText: {
     color: "#FFFFFF",
     fontSize: 25,
     fontFamily: 'Roboto-Light',

@@ -257,7 +257,7 @@ renderItem = ({item, index}) => {
     uncheckedIcon='circle-o'
     checkedColor='white'
     uncheckedColor='white'
-    size = '35%'
+    size = {35}
 
 
     // checked = {true}
@@ -396,6 +396,7 @@ const styles = StyleSheet.create({
   justifyContent: 'center',
 },
 buttonBottomContainer: {
+  marginTop: 10,
 flexDirection:'row',
 justifyContent: 'space-between',
 //width: '100%',
