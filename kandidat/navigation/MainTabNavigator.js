@@ -153,26 +153,6 @@ SavedResultStack.navigationOptions = {
     />),
 };
 
-const LogOutStack = createStackNavigator({
-  LogOut: LogOutScreen,
-});
-
-LogOutStack.navigationOptions = {
-  tabBarLabel: 'My Friends',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-log-out' : 'md-log-out'}
-      onPress={() => alert('Log Out?')}
-    />
-  ),
-  drawerIcon: ({ focused }) => (
-    <Icon
-      name={Platform.OS === "ios" ? "ios-log-out" : "md-log-out"}
-      size={25}
-      onPress={() => alert('Log Out?')}
-    />),
-};
 
 
 const LoginStack = createStackNavigator({
@@ -265,7 +245,6 @@ const DrawerComponent = createDrawerNavigator(
     'Requests ': RequestStack,
     'Saved result ': SavedResultStack,
     'Settings ': SettingsStack,
-    'Log out ': LogOutStack,
   },
 );
 
