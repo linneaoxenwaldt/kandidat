@@ -329,7 +329,7 @@ giveAcceptAnswer() {
   db.collection("Users").doc(vote.sentFromID).collection("PendingVotes").doc(vote.VoteID).collection('Participants').doc(userID).update({
     Answer: "Yes",
   })
-  console.log("längd " + this.state.otherParticipants.length)
+  //console.log("längd " + this.state.otherParticipants.length)
   for(let i=0; i < this.state.otherParticipants.length; i++){
     if(this.state.otherParticipants[i].VoteID === vote.VoteID) {
     var participantID = this.state.otherParticipants[i].ParticipantID
@@ -394,30 +394,136 @@ declineVote() {
   var userID = user.uid;
   var db = firebase.firestore();
   var vote = this.state.currentVote
+  var docRef = db.collection("Users").doc(userID).collection("VoteRequests").doc(vote.VoteID)
 
-  db.collection("Users").doc(userID).collection("VoteRequests").doc(vote.VoteID).delete().then(function() {
+  docRef.collection('Participants').get().then(function(querySnapshot) {
+      querySnapshot.forEach(function(doc) {
+          // doc.data() is never undefined for query doc snapshots
+          const id = doc.id
+          docRef.collection('Participants').doc(id).delete().then(function() {
+            console.log("declineVote - Part: Alt successfully deleted!" + id);
+          }).catch(function(error) {
+            console.error("declineVote - Part: Alt Error removing document: ", error);
+          });
+      });
+  });
+
+  docRef.delete().then(function() {
     console.log("declineVote: FriendReq successfully deleted!" + vote.VoteID);
   }).catch(function(error) {
     console.error("declineVote: Error removing document: ", error);
   });
   this.setState(prevState => ({voteReq: prevState.voteReq.filter(item => item !== vote) }));
 
-  db.collection("Users").doc(vote.sentFromID).collection("PendingVotes").doc(vote.VoteID).collection('Alternatives').get().then(function(querySnapshot) {
+this.declineVoteCreator()
+}
+
+declineVoteCreator() {
+  var that = this
+  var user = firebase.auth().currentUser;
+  var userID = user.uid;
+  var db = firebase.firestore();
+  var vote = this.state.currentVote
+  var docRef = db.collection("Users").doc(vote.sentFromID).collection("PendingVotes").doc(vote.VoteID)
+  docRef.collection('Alternatives').get().then(function(querySnapshot) {
       querySnapshot.forEach(function(doc) {
           // doc.data() is never undefined for query doc snapshots
           const id = doc.id
-          db.collection("Users").doc(vote.sentFromID).collection("PendingVotes").doc(vote.VoteID).collection('Alternatives').doc(id).delete().then(function() {
+          docRef.collection('Alternatives').doc(id).delete().then(function() {
             console.log("declineVote: Alt successfully deleted!" + id);
           }).catch(function(error) {
             console.error("declineVote: Alt Error removing document: ", error);
           });
       });
   });
-  db.collection("Users").doc(vote.sentFromID).collection("PendingVotes").doc(vote.VoteID).delete().then(function() {
+
+  docRef.collection('Participants').get().then(function(querySnapshot) {
+      querySnapshot.forEach(function(doc) {
+          // doc.data() is never undefined for query doc snapshots
+          const id = doc.id
+          docRef.collection('Participants').doc(id).delete().then(function() {
+            console.log("declineVote - Part: Alt successfully deleted!" + id);
+          }).catch(function(error) {
+            console.error("declineVote - Part: Alt Error removing document: ", error);
+          });
+      });
+  });
+
+  docRef.delete().then(function() {
     console.log("declineVote - pendingVote: FriendReq successfully deleted!" + vote.VoteID);
   }).catch(function(error) {
     console.error("declineVote - pendingVote: Error removing document: ", error);
   });
+  this.declineVoteParticipants()
+}
+
+declineVoteParticipants() {
+  var that = this
+  var user = firebase.auth().currentUser;
+  var userID = user.uid;
+  var db = firebase.firestore();
+  var vote = this.state.currentVote
+  for(let i=0; i < this.state.otherParticipants.length; i++){
+  if(this.state.otherParticipants[i].VoteID === vote.VoteID) {
+      var participantID = this.state.otherParticipants[i].ParticipantID
+      var docRef = db.collection('Users').doc(participantID).collection('PendingVotes').doc(vote.VoteID);
+      var docRef2 = db.collection("Users").doc(participantID).collection("VoteRequests").doc(vote.VoteID)
+      var getDoc = docRef.get()
+          .then(doc => {
+              if (!doc.exists) {
+                docRef2.collection('Participants').get().then(function(querySnapshot) {
+                    querySnapshot.forEach(function(doc) {
+                        // doc.data() is never undefined for query doc snapshots
+                        const id = doc.id
+                        docRef2.collection('Participants').doc(id).delete().then(function() {
+                          console.log("declineVote - Part: Alt successfully deleted!" + id);
+                        }).catch(function(error) {
+                          console.error("declineVote - Part: Alt Error removing document: ", error);
+                        });
+                    });
+                });
+
+                docRef2.delete().then(function() {
+                  console.log("declineVote: FriendReq successfully deleted!" + vote.VoteID);
+                }).catch(function(error) {
+                  console.error("declineVote: Error removing document: ", error);
+                });
+              } else {
+                docRef.collection('Alternatives').get().then(function(querySnapshot) {
+                    querySnapshot.forEach(function(doc) {
+                        // doc.data() is never undefined for query doc snapshots
+                        const id = doc.id
+                        docRef.collection('Alternatives').doc(id).delete().then(function() {
+                          console.log("declineVote: Alt successfully deleted!" + id);
+                        }).catch(function(error) {
+                          console.error("declineVote: Alt Error removing document: ", error);
+                        });
+                    });
+                });
+
+                docRef.collection('Participants').get().then(function(querySnapshot) {
+                    querySnapshot.forEach(function(doc) {
+                        // doc.data() is never undefined for query doc snapshots
+                        const id = doc.id
+                        docRef.collection('Participants').doc(id).delete().then(function() {
+                          console.log("declineVote - Part: Alt successfully deleted!" + id);
+                        }).catch(function(error) {
+                          console.error("declineVote - Part: Alt Error removing document: ", error);
+                        });
+                    });
+                });
+
+                docRef.delete().then(function() {
+                  console.log("declineVote - pendingVote: FriendReq successfully deleted!" + vote.VoteID);
+                }).catch(function(error) {
+                  console.error("declineVote - pendingVote: Error removing document: ", error);
+                });
+                }
+          })
+          .catch(err => {
+              console.log('Error getting document', err);
+          });
+    }}
   this.setState({
     showMe: false
   })
