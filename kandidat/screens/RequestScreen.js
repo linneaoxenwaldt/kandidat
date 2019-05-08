@@ -18,7 +18,7 @@ import data from '../data/engWord.json';
 import * as firebase from 'firebase';
 import { SwipeListView } from 'react-native-swipe-list-view';
 
-export default class OngoingVoteScreen extends React.Component {
+export default class RequestScreen extends React.Component {
   constructor(props){
     super(props);
     this.colors = ['#6ACCCB', '#94B4C1', '#8FBC8F', '#CBA3D5', '#689999']

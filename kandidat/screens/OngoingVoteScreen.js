@@ -69,7 +69,7 @@ export default class OngoingVoteScreen extends React.Component {
       var user = firebase.auth().currentUser;
       var userID = user.uid;
       var db = firebase.firestore();
-      db.collection("Users").doc(userID).collection("Votes").get().then(function(querySnapshot) {
+      db.collection("Users").doc(userID).collection("Votes").where("Finished", "==", "No").get().then(function(querySnapshot) {
             querySnapshot.forEach(function(doc) {
                 // doc.data() is never undefined for query doc snapshots
                 //console.log(doc.id)
@@ -98,11 +98,24 @@ export default class OngoingVoteScreen extends React.Component {
                 }))
             });
         });
+        db.collection("Users").doc(userID).collection("Votes").where("Finished", "==", "Yes").get().then(function(querySnapshot) {
+              querySnapshot.forEach(function(doc) {
+                  // doc.data() is never undefined for query doc snapshots
+                  //console.log(doc.id)
+                  const name = doc.get('CatName');
+                  const img = doc.get('CatImg');
+                  that.setState(prevState => ({
+                    yourFriendsTurn: [...prevState.yourFriendsTurn, {VoteID: doc.id, CatName: name, CatImg: img}]
+                  }))
+              });
+          });
       }
 
 
     renderItem1 = ({item, index}) => {
       return (
+        <TouchableOpacity
+        onPress={() => this.props.navigation.navigate('VoteScreen', {VoteID: item.VoteID})}>
         <ImageBackground source={{uri: item.CatImg}} style={{width: '100%', height: 100}}>
         <ListItem
         containerStyle={{ backgroundColor: 'transparent'}}
@@ -112,6 +125,7 @@ export default class OngoingVoteScreen extends React.Component {
         //rightSubtitle={item.expdate}
         />
         </ImageBackground>
+        </TouchableOpacity>
       )
     }
 

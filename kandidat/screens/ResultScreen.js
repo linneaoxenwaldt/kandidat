@@ -6,12 +6,14 @@ import { ScrollView,
   Platform,
   View,
   Text,
-  Alert
+  Alert,
+  FlatList
 } from 'react-native';
 import { DrawerActions } from 'react-navigation';
 import Icon from "react-native-vector-icons/Ionicons";
 import data from '../data/engWord.json';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import * as firebase from 'firebase';
 
 export default class ResultScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -36,6 +38,128 @@ export default class ResultScreen extends React.Component {
       };
     };
 
+    constructor(props) {
+    super(props);
+    this.extractKey = ({AltID, ParticipantID}) => AltID+ParticipantID
+    var user = firebase.auth().currentUser;
+    var userID = user.uid;
+    this.state = {
+      result: [],
+      winner: [],
+      second: [],
+      third: [],
+      highestVote: 0,
+      secondHighestVote: 0,
+    };
+    this.getResult()
+  }
+
+  getResult() {
+    var that = this
+    var user = firebase.auth().currentUser;
+    var userID = user.uid;
+    var db = firebase.firestore();
+    var voteID = this.props.navigation.state.params.VoteID
+    var alternatives = this.props.navigation.state.params.Alternatives
+    var participants = this.props.navigation.state.params.Participants
+  for(let i=0; i < alternatives.length; i++){
+    for(let j=0; j< participants.length; j++){
+       var partID = participants[j].ParticipantID
+       var altID = alternatives[i].AltID
+      // var name = alternatives[i].Name
+        var docRef = db.collection('Users').doc(partID).collection('Votes').doc(voteID).collection('Alternatives').doc(altID)
+        docRef.get().then(function(doc) {
+        var vote = doc.get('Votes')
+        // console.log("i " + i)
+        // console.log("j " + j)
+        that.setState(prevState => ({
+          result: [...prevState.result, {ParticipantID: participants[j].ParticipantID, AltID: alternatives[i].AltID, Name: alternatives[i].Name, Votes: vote}]
+        }))
+        console.log("Document data:", doc.data());
+    })
+    // that.setState(prevState => ({
+    //   result: [...prevState.result, {AltID: altID, Name: name, Votes: finalVotes}]
+    // }))
+    // finalVotes = 0;
+  }
+  }
+}
+
+getWinner() {
+var voteCounter = 0;
+var highestVote = 0;
+var winner = this.state.result[0]
+for(let i=0; i<this.state.result.length; i++){
+  for(let j=0; j<this.state.result.length; j++){
+    if(this.state.result[i].ParticipantID !== this.state.result[j].ParticipantID){
+    if(this.state.result[i].AltID === this.state.result[i].AltID) {
+      voteCounter++
+    }
+  }
+  if(voteCounter > highestVote) {
+    highestVote = voteCounter
+    winner = this.state.result[i]
+  voteCounter = 0
+}
+}
+}
+this.setState(prevState => ({result: prevState.result.filter(item => item.AltID !== winner.AltID) }));
+  return (
+    <Text>{winner.Name}</Text>
+  )
+}
+
+getSecond(){
+var voteCounter = 0;
+var secondHighestVote = 0;
+for(let i=0; i<this.state.result.length; i++){
+  for(let j=0; j<this.state.result.length; j++){
+    if(this.state.result[i].ParticipantID !== this.state.result[j].ParticipantID){
+    if(this.state.result[i].AltID === this.state.result[i].AltID) {
+      voteCounter++
+    }
+  }
+  if(voteCounter > secondHighestVote) {
+    secondHighestVote = voteCounter
+    var second = this.state.result[i]
+    voteCounter = 0
+}
+}
+}
+  return (
+    <Text>{second.Name}</Text>
+  )
+}
+
+  // getResult(){
+  //   var result = this.props.navigation.state.params.result
+  //   console.log("resultat")
+  //   console.log(result)
+  //   this.setState({
+  //     result: result
+  //   })
+  //   var winner = 0
+  //   for(let i=0; i<result.length; i++){
+  //     var votes = this.state.result[i].Votes
+  //     if(votes > winner) {
+  //       winner = votes
+  //       this.setState({
+  //         first: this.state.result[i]
+  //       })
+  //     }
+  //   }
+  //   this.setState(prevState => ({result: prevState.result.filter(item => item !== first) }));
+  // }
+
+  // <View style={styles.firstContainer}>
+  // <Text style={styles.firstText}>{this.state.result[0].Name}</Text>
+  // <View style={styles.trophyIcon}>
+  // <Icon name={Platform.OS === "ios" ? "ios-trophy" : "md-create"}
+  // size={40}
+  // color='#daa520'/>
+  // </View>
+  // </View>
+
     render() {
       return (
         <View style={styles.container}>
@@ -43,7 +167,7 @@ export default class ResultScreen extends React.Component {
         <Text style={styles.resultLabel}>Result</Text>
 
         <View style={styles.firstContainer}>
-        <Text style={styles.firstText}>Alternativ 1</Text>
+        <Text style={styles.firstText}>{this.getWinner()}</Text>
         <View style={styles.trophyIcon}>
         <Icon name={Platform.OS === "ios" ? "ios-trophy" : "md-create"}
         size={40}
@@ -52,7 +176,7 @@ export default class ResultScreen extends React.Component {
         </View>
 
         <View style={styles.secondContainer}>
-        <Text style={styles.secondText}>Alternativ 2</Text>
+        <Text style={styles.secondText}>{this.getSecond()}</Text>
         <View style={styles.trophyIcon}>
         <Icon name={Platform.OS === "ios" ? "ios-trophy" : "md-create"}
         size={40}

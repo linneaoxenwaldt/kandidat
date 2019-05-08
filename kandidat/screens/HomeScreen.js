@@ -62,7 +62,7 @@ export default class HomeScreen extends React.Component {
        .get().then(
        doc => {
          if (doc.exists) {
-           db.collection('Users').doc(userID).collection('Votes').get().
+           db.collection('Users').doc(userID).collection('Votes').where("Finished", "==", "No").get().
              then(sub => {
                if (sub.docs.length > 0) {
                  console.log('subcollection exists');
