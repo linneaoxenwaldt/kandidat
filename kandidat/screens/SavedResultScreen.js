@@ -71,7 +71,7 @@ export default class SavedResultScreen extends React.Component {
         roundAvatar
         title={item.text}
         rightIcon = {<Icon
-          name={Platform.OS === "ios" ? "ios-trash" : "md-trash"}
+          name={Platform.OS === "ios" ? "ios-arrow-forward" : "md-arrow-forward"}
           size={25}
           color='#FFFFFF'
           onPress={() => Alert.alert(

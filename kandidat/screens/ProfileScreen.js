@@ -145,7 +145,7 @@ export default class ProfileScreen extends React.Component {
 
         <Modal visible={this.state.showMe}>
         <View style={styles.modalView}>
-        <TouchableOpacity onPress={()=>{
+        <TouchableOpacity style={styles.closeContainer}onPress={()=>{
           this.setState({
             showMe: false
           })}}>
@@ -282,8 +282,8 @@ showsHorizontalScrollIndicator={false}
       marginTop: 20,
       backgroundColor: '#FFFFFF',
       alignItems: 'center',
-      borderWidth: 3,
-      borderColor: '#BA55B3',
+      //borderWidth: 3,
+      //borderColor: '#BA55B3',
     },
     picStyle: {
       height: 150,
@@ -292,5 +292,27 @@ showsHorizontalScrollIndicator={false}
       borderWidth: 2,
       borderColor: '#689999',
       margin: 10,
+    },
+    closeText: {
+      marginBottom: 10,
+      marginTop: 10,
+      alignItems: 'center',
+      fontSize: 15,
+      color: 'white',
+      justifyContent:'center',
+
+    },
+
+    closeContainer: {
+      marginBottom: 30,
+      marginTop: 20,
+      backgroundColor: '#CBA3D5',
+      alignItems: 'center',
+      borderRadius: 20,
+      width:150,
+      height: 50,
+      alignItems:'center',
+      justifyContent:'center',
+
     },
   });
