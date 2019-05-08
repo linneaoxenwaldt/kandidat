@@ -18,7 +18,7 @@ import data from '../data/engWord.json';
 import * as firebase from 'firebase';
 import { SwipeListView } from 'react-native-swipe-list-view';
 
-export default class OngoingVoteScreen extends React.Component {
+export default class RequestScreen extends React.Component {
   constructor(props){
     super(props);
     this.colors = ['#6ACCCB', '#94B4C1', '#8FBC8F', '#CBA3D5', '#689999']
@@ -89,9 +89,9 @@ export default class OngoingVoteScreen extends React.Component {
           titleStyle={{color: '#FFFFFF', fontSize: 30}}
           title={item.CatName}
           roundAvatar
-          rightAvatar= {{source: {uri: item.sentFromProfilePic}}}
-          rightTitle={data.sentFrom}
-          rightSubtitle={item.sentFromUsername}
+          //rightAvatar= {{source: {uri: item.sentFromProfilePic}}}
+          //rightTitle={data.sentFrom}
+          //rightSubtitle={item.sentFromUsername}
           />
           </ImageBackground>
           </TouchableOpacity>
@@ -115,17 +115,31 @@ export default class OngoingVoteScreen extends React.Component {
         return (
           <ListItem
           containerStyle={{ backgroundColor: this.colors[index % this.colors.length]}}
-          titleStyle={{color: '#FFFFFF', textAlign:'center', fontSize: 20,}}
+          titleStyle={{color: '#FFFFFF', textAlign:'left', fontSize: 20,}}
           title={item.username}
           leftAvatar = {{source: {uri: item.profilePic}}}
-          rightIcon = {<Icon2
+
+          rightSubtitle={
+            <View style = {styles.friendReqButton}>
+            <Icon
+            onPress={() => this.declineFriend(item)}
+            name={Platform.OS === "ios" ? "ios-close-circle-outline": "md-close-circle-outline"}
+            color={'white'}
+            size={40}/>
+            <Icon
             onPress={() => this.acceptFriend(item)}
-            name={'gesture-swipe-right'}
-            size={30}/>}
-            leftIcon = {<Icon2
-              onPress={() => this.declineFriend(item)}
-              name={'gesture-swipe-left'}
-              size={30}/>}/>
+            name={Platform.OS === "ios" ? "ios-checkmark-circle-outline": "md-checkmark-circle-outline"}
+            color={'white'}
+            size={40}/>
+            </View>
+          }
+
+
+
+
+
+
+              />
             )}
 
             getFriendReq() {
@@ -536,20 +550,35 @@ declineVoteParticipants() {
                 <Text style={styles.requestLabel}> {data.requests} </Text>
                 <View style={styles.voteReq}>
                 <Text style={styles.textLabel}> Votes </Text>
-
+                <View
+                style={{
+                  borderBottomColor: '#94B4C1',
+                  borderBottomWidth: 3 }}
+                  />
+                  <View style = {styles.container}>
+                  <FlatList
+                  extraData={this.state}
+                  data={this.state.voteReq}
+                  renderItem={this.voteRequests}
+                  keyExtractor={this.extractKey1}
+                  />
+                  </View>
 
                 <Modal visible={this.state.showMe}
                 onRequestClose = {() => {this.setState({ showMe : false })}}>
                 <View style={styles.modalView}>
-                <Text style={styles.modalText}> Hej hej hej </Text>
+                <Text style={styles.modalText}> {this.state.currentVote.CatName}</Text>
 
-                <Text style={styles.textLabel}> You are invited by: </Text>
-<Image style={{width: 50, height: 50}}
-source={{uri: this.state.currentVote.sentFromProfilePic}}/>
-<Text style={styles.modalText}>{this.state.currentVote.sentFromUsername}</Text>
+                <Text style={styles.textLabel}> {data.invited} </Text>
+                <View style={styles.invitedContainer}>
+                <Image style={styles.  profilePicContainer}
+                source={{uri: this.state.currentVote.sentFromProfilePic}}/>
+                <Text style={styles.invitedByText}>{this.state.currentVote.sentFromUsername}</Text>
 
-                <Text style={styles.miniTextview}> Participants: </Text>
-<View style={styles.modalList}>
+                </View>
+
+                <Text style={styles.miniTextview}> {data.participants} </Text>
+                <View style={styles.modalList}>
                 <FlatList
                 data={this.state.participants}
                 extraData={this.state}
@@ -562,13 +591,13 @@ source={{uri: this.state.currentVote.sentFromProfilePic}}/>
                 <TouchableOpacity
                 style={styles.declineButt}
                 onPress={() => this.declineVote()}>
-                <Text> DECLINE </Text>
+                <Text style={styles.closeText}> {data.decline} </Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
                 onPress={() => this.acceptVote()}
                 style={styles.acceptButt}>
-                <Text> ACCEPT </Text>
+                <Text style={styles.closeText}>{data.accept} </Text>
                 </TouchableOpacity>
                 </View>
 
@@ -587,46 +616,32 @@ source={{uri: this.state.currentVote.sentFromProfilePic}}/>
 
                   </View>
                   </Modal>
+                  </View>
 
 
-                    <View style={styles.miniTextview}>
-                    <Text> <Icon2
-                    name={'gesture-swipe-left'}
-                    size={30}/>  Decline  </Text>
-                    <Text> Accept <Icon2
-                    name={'gesture-swipe-right'}
-                    size={30}/></Text>
-                    </View>
 
-                    <View>
-                    <FlatList
-                    extraData={this.state}
-                    data={this.state.voteReq}
-                    renderItem={this.voteRequests}
-                    keyExtractor={this.extractKey1}
-                    />
-                    </View>
-                    </View>
+
+
 
 
                     <View style={styles.friendReq}>
-                    <Text style={styles.textLabel}> Friends </Text>
-                    <View style={styles.miniTextview}>
-                    <Text> <Icon2
-                    name={'gesture-swipe-left'}
-                    size={30}/>  Decline  </Text>
-                    <Text> Accept <Icon2
-                    name={'gesture-swipe-right'}
-                    size={30}/></Text>
-                    </View>
-                    <FlatList
-                    extraData={this.state}
-                    data={this.state.friendReq}
-                    renderItem={this.friendRequests}
-                    keyExtractor={this.extractKey2}
-                    />
-                    </View>
-                    </View>
+                    <Text style={styles.textLabelFriend}> {data.friends} </Text>
+                    <View
+                    style={{
+                      borderBottomColor: '#94B4C1',
+                      borderBottomWidth: 3 }}
+                      />
+
+
+
+                      <FlatList
+                      extraData={this.state}
+                      data={this.state.friendReq}
+                      renderItem={this.friendRequests}
+                      keyExtractor={this.extractKey2}
+                      />
+                      </View>
+                      </View>
                   );
                 }
               }
@@ -644,19 +659,29 @@ source={{uri: this.state.currentVote.sentFromProfilePic}}/>
                   marginTop: 15,
                 },
                 textLabel: {
-                  marginTop: 10,
-                  fontSize: 30,
+                  marginTop: 20,
+                  fontSize: 25,
+                  color: '#000000',
+                  textAlign: 'center',
+                  fontFamily: "Roboto-Light",
+                },
+                textLabelFriend: {
+                  marginTop: 20,
+                  //position:'fixed',
+                  //  margin: 20,
+                  fontSize: 25,
                   color: '#000000',
                   textAlign: 'center',
                   fontFamily: "Roboto-Light",
                 },
                 miniTextview: {
-                  marginLeft: 10,
+                  marginLeft: 5,
                   width: 340,
                   flexDirection:'row',
                   justifyContent: 'space-between',
                   color: '#000000',
                   fontFamily: "Roboto-Light",
+                  fontSize: 20
                 },
                 voteReq: {
                   height: 260,
@@ -679,8 +704,13 @@ source={{uri: this.state.currentVote.sentFromProfilePic}}/>
                 modalText: {
                   paddingTop: 50,
                   fontFamily: 'Roboto-Light',
-                  fontSize: 25,
+                  fontSize: 40,
                   paddingBottom: 10,
+                },
+                invitedByText: {
+                  fontFamily: 'Roboto-Light',
+                  fontSize: 20,
+
                 },
                 closeText: {
                   marginBottom: 10,
@@ -693,7 +723,20 @@ source={{uri: this.state.currentVote.sentFromProfilePic}}/>
                 },
 
                 closeContainer: {
-                  marginBottom: 30,
+                  marginBottom: 10,
+                  //marginTop: 30,
+                  backgroundColor: '#6BCDFD',
+                  alignItems: 'center',
+                  borderRadius: 20,
+                  width:120,
+                  height: 50,
+                  alignItems:'center',
+                  justifyContent:'center',
+                  fontSize: 10
+                },
+                declineButt: {
+                  color:'white',
+                  marginBottom: 10,
                   marginTop: 10,
                   backgroundColor: '#CBA3D5',
                   alignItems: 'center',
@@ -702,30 +745,63 @@ source={{uri: this.state.currentVote.sentFromProfilePic}}/>
                   height: 50,
                   alignItems:'center',
                   justifyContent:'center',
-                },
-                declineButt: {
-                  height: 50,
-                  width: 150,
-                  color: '#000',
-                  backgroundColor: '#FF0000',
+
                 },
                 acceptButt: {
+                  color:'white',
+                  marginBottom: 10,
+                  marginTop: 10,
+                  backgroundColor: '#8FBC8F',
+                  alignItems: 'center',
+                  borderRadius: 20,
+                  width:150,
                   height: 50,
-                  width: 150,
-                  color: '#000',
-                  backgroundColor: '#008000',
+                  alignItems:'center',
+                  justifyContent:'center',
+
+
                 },
 
                 buttonBottomContainer: {
                   flexDirection:'row',
                   justifyContent: 'space-between',
                   width: 340,
-                  marginTop: 50,
+                  margin: 30,
+                  marginTop:10
 
                 },
                 modalList: {
-                  width: '100%'
-                }
+                  marginBottom:0,
+                  width: '100%',
+                  height: 170,
+                },
+                friendReqButton:{
+                  flexDirection:'row',
+                  justifyContent: 'space-between',
+                  width: 90,
+                  //marginRight: 5
+                },
+                invitedContainer:{
+                  //borderColor:'#689999',
+                  //borderWidth:3,
+                  flexDirection:'row',
+                  alignItems:'center',
+                  borderRadius: 20,
+                  justifyContent: 'center',
+                  width:120,
+                  height:120,
+
+
+                },
+                profilePicContainer: {
+                  height: 50,
+                  width: 50,
+                  borderRadius: 25,
+                  borderWidth: 2,
+                  borderColor: '#689999',
+                  margin: 10,
+                },
+
               });
 
               //   render() {

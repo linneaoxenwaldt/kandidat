@@ -94,7 +94,7 @@ export default class VoteAddFriends extends React.Component {
   this.setState({ isDateTimePickerVisible: true });
 };
 
-hideDateTimePicker = () => {
+  hideDateTimePicker = () => {
     this.setState({ isDateTimePickerVisible: false });
   };
 
@@ -260,15 +260,23 @@ renderItem = ({item, index}) => {
     roundAvatar
     title={item.username}
     leftAvatar = {{source: {uri: item.profilePic}}}
-    rightIcon = {<CheckBox
+    rightSubtitle = {
+      <View style = {styles.checkbox}>
+      <CheckBox
+    style = {styles.checkbox}
       //title='Click Here'
-    checkedIcon='dot-circle-o'
+    checkedIcon='check-circle'
     uncheckedIcon='circle-o'
-    checkedColor='red'
+    checkedColor='white'
+    uncheckedColor='white'
+    size = {35}
+
+
     // checked = {true}
     checked={this.state.checked[item.localID]}
     onPress={() => this.putInFriendsArray(item)}
-    />}
+    />
+  </View>}
 
 
 //     rightIcon = { <RoundCheckbox
@@ -298,6 +306,8 @@ renderItem = ({item, index}) => {
                   isVisible={this.state.isDateTimePickerVisible}
                   onConfirm={this.handleDatePicked}
                   onCancel={this.hideDateTimePicker}
+                  mode={'time'}
+                  titleIOS={'Pick a time'}
 
                 />
                 <Text style={styles.addFriendsText}>Expire date <Icon
@@ -329,12 +339,11 @@ keyExtractor={this.extractKey}
   color="#A9A9A9"/>
 </TouchableOpacity>
 <TouchableOpacity
-onPress={() => this.createVote()}
->
-<Icon
-name={Platform.OS === "ios" ? "ios-arrow-forward" : "md-arrow-forward"}
-size={55}
-color="#A9A9A9"/>
+style = {styles.sendButton}
+onPress={() => this.createVote()}>
+<Text style={styles.sendText}>Start Vote</Text>
+
+
 </TouchableOpacity>
 </View>
       </View>
@@ -400,10 +409,33 @@ const styles = StyleSheet.create({
   justifyContent: 'center',
 },
 buttonBottomContainer: {
+  marginTop: 10,
 flexDirection:'row',
 justifyContent: 'space-between',
 //width: '100%',
 marginLeft: 10,
 marginRight: 10,
 },
+sendButton:{
+    backgroundColor: "#6BCDFD",
+    width: 150,
+    height: 55,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 20,
+    marginBottom:10,
+  },
+  sendText:{
+    fontSize:20,
+    color:'white',
+    fontFamily: "Roboto-Light",
+  },
+  checkbox:{
+    alignItems: 'flex-end'
+
+
+  }
+
+
+
 });
