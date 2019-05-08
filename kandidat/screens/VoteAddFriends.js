@@ -143,11 +143,20 @@ export default class VoteAddFriends extends React.Component {
  }
 
    createVote() {
-     if (this.state.choosenFriends === []) {
+     console.log(this.state.choosenFriends)
+     var check = []
+     if (this.state.choosenFriends.length === 0) {
        Alert.alert(
-         data.missingFriends,
-       )
+     data.missingFriends,
+     undefined,
+     [
+       {text: 'OK',
+       onPress: () => this.props.navigation.navigate('VoteAddFriends')
+     },
+     ],
+     { cancelable: false })
      }
+    else if (this.state.choosenFriends.length !== 0) {
      var alternatives = this.props.navigation.state.params.alternatives
      var category = this.props.navigation.state.params.category
      var catName = category[0].catName
@@ -168,6 +177,7 @@ db.collection("Users").doc(userID).collection("PendingVotes").add({
 .catch(function(error) {
    console.error("Error adding document: ", error);
 });
+}
    }
 
    createAlternatives(voteID, alternatives, userID) {
@@ -250,7 +260,9 @@ renderItem = ({item, index}) => {
     roundAvatar
     title={item.username}
     leftAvatar = {{source: {uri: item.profilePic}}}
-    rightIcon = {<CheckBox
+    rightSubtitle = {
+      <View style = {styles.checkbox}>
+      <CheckBox
     style = {styles.checkbox}
       //title='Click Here'
     checkedIcon='check-circle'
@@ -263,7 +275,8 @@ renderItem = ({item, index}) => {
     // checked = {true}
     checked={this.state.checked[item.localID]}
     onPress={() => this.putInFriendsArray(item)}
-    />}
+    />
+  </View>}
 
 
 //     rightIcon = { <RoundCheckbox
@@ -418,7 +431,8 @@ sendButton:{
     fontFamily: "Roboto-Light",
   },
   checkbox:{
-    margin: 10,
+    alignItems: 'flex-end'
+
 
   }
 

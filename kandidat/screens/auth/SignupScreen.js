@@ -49,9 +49,14 @@ export default class SignupScreen extends React.Component{
       });
     }
     checkUserNames(){
+      var upperUserName = this.state.username.toUpperCase()
+      var upperUserNameArray = []
+      for (let i = 0; i < this.state.rows.length; i++){
+        upperUserNameArray[i] = this.state.rows[i].userName.toUpperCase();
+      }
       var nameTaken = false
       for (let i = 0; i < this.state.rows.length; i++){
-        if (this.state.username == this.state.rows[i].userName){
+        if (upperUserName == upperUserNameArray[i]){
           nameTaken = true
           console.log('nametaken true')
         }

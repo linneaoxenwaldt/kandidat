@@ -113,7 +113,8 @@ renderItem = ({item, index}) => {
       return (
         <View style={styles.container}>
         <Text style={styles.categoryLabel}> Your own category</Text>
-        <Modal visible={this.state.showMe}>
+        <Modal visible={this.state.showMe}
+        onRequestClose = {() => {this.setState({ showMe : false })}}>
         <View style={styles.modalView}>
         <Text style={styles.modalText}>{data.chooseBackground}</Text>
         <TouchableOpacity style={styles.closeContainer}onPress={()=>{

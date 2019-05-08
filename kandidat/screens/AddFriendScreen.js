@@ -105,6 +105,11 @@ getAllUsers() {
  }
 
  checkUsername() {
+   var myFriendSearch = this.state.text.toUpperCase()
+   var everyoneArray = []
+   for (let i = 0; i < this.state.users.length; i++){
+     everyoneArray[i] = this.state.users[i].userName.toUpperCase();
+   }
    if (this.state.text == "") {
      Alert.alert(
        data.noFriendName,
@@ -116,7 +121,7 @@ getAllUsers() {
      // console.log(this.state.users[i].userName)
      // console.log(this.state.users[i].id)
      // console.log(this.state.text)
-     if (this.state.text == this.state.users[i].userName) {
+     if (myFriendSearch == everyoneArray[i]) {
        existFriend = true
        var friend = this.state.users[i]
        console.log("användare finns")

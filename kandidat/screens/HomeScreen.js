@@ -16,8 +16,21 @@ import { MonoText } from '../components/StyledText';
 import Icon from "react-native-vector-icons/Ionicons";
 import data from '../data/engWord.json';
 import { LinearGradient } from 'expo';
+import * as firebase from 'firebase';
 
 export default class HomeScreen extends React.Component {
+  constructor(props){
+    super(props);
+  this.state = {
+    // rows: rows,
+    notificationOngoingVotes: false,
+    notificationRequests: false,
+    notificationResults: false,
+  }
+  this.getnotificationOngoingVotes()
+  this.getnotificationRequests()
+  }
+
   static navigationOptions = ({ navigation }) => {
     return {
       headerTitle: (
@@ -40,6 +53,87 @@ export default class HomeScreen extends React.Component {
       };
     };
 
+    getnotificationOngoingVotes() {
+      var that = this
+      var user = firebase.auth().currentUser;
+      var userID = user.uid;
+      var db = firebase.firestore();
+      db.collection('Users').doc(userID)
+       .get().then(
+       doc => {
+         if (doc.exists) {
+           db.collection('Users').doc(userID).collection('Votes').get().
+             then(sub => {
+               if (sub.docs.length > 0) {
+                 console.log('subcollection exists');
+                 that.setState({
+                   notificationOngoingVotes: true,
+                 })
+               }
+             });
+         }
+       });
+    }
+
+    showNotificationOngoingVotes() {
+      console.log(this.state.notificationOngoingVotes)
+      if(this.state.notificationOngoingVotes === true) {
+        console.log(this.state.notificationOngoingVotes)
+        return(
+        <Icon style={{ position: 'absolute', top: 320, left: 240 }}
+                name={Platform.OS === "ios" ? "ios-notifications" : "md-notifications-outline"}
+                size={40}
+                color='red'/>)
+      }
+    }
+
+    getnotificationRequests() {
+      var that = this
+      var user = firebase.auth().currentUser;
+      var userID = user.uid;
+      var db = firebase.firestore();
+      db.collection('Users').doc(userID)
+       .get().then(
+       doc => {
+         if (doc.exists) {
+           db.collection('Users').doc(userID).collection('VoteRequests').get().
+             then(sub => {
+               if (sub.docs.length > 0) {
+                 console.log('subcollection exists');
+                 that.setState({
+                   notificationRequests: true,
+                 })
+               }
+             });
+         }
+       });
+       db.collection('Users').doc(userID)
+        .get().then(
+        doc => {
+          if (doc.exists) {
+            db.collection('Users').doc(userID).collection('FriendRequests').get().
+              then(sub => {
+                if (sub.docs.length > 0) {
+                  console.log('subcollection exists');
+                  that.setState({
+                    notificationRequests: true,
+                  })
+                }
+              });
+          }
+        });
+    }
+
+    showNotificationRequests() {
+      if(this.state.notificationRequests === true) {
+        return(
+        <Icon style={{ position: 'absolute', top: 320, left: 240 }}
+                name={Platform.OS === "ios" ? "ios-notifications" : "md-notifications-outline"}
+                size={40}
+                color='red'/>)
+      }
+    }
+
     render() {
 
       const config = {
@@ -59,24 +153,35 @@ export default class HomeScreen extends React.Component {
         <TouchableOpacity
         style={styles.ongoingVote}
         onPress={() => this.props.navigation.navigate('OngoingVote')}>
-        <Text style={styles.buttonText}>{data.ongoingVotes}</Text>
+        <Text style={styles.buttonText}>{data.ongoingVotes}
+        {this.showNotificationOngoingVotes()}
+        </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
         style={styles.ongoingRequest}
         onPress={() => this.props.navigation.navigate('RequestScreen')}>
-        <Text style={styles.buttonText}> {data.requests} </Text>
+        <Text style={styles.buttonText}> {data.requests}
+        {this.showNotificationRequests()}
+    </Text>
         </TouchableOpacity>
-        </View>
 
+        <TouchableOpacity
+        style={styles.ongoingRequest}
+        onPress={() => this.props.navigation.navigate('RequestScreen')}>
+        <Text style={styles.buttonText}> {data.results}
         <Icon style={{ position: 'absolute', top: 320, left: 240 }}
         name={Platform.OS === "ios" ? "ios-notifications" : "md-notifications-outline"}
         size={40}
-        color='red'/>
+        color='red'/></Text>
+        </TouchableOpacity>
+        </View>
+
+
 
         <LinearGradient
         colors={['#FFFFFF', '#6ACCCB', '#6ACCCB']}
-        style={{ height: '30%'}}>
+        style={{ height: '30%', zIndex: -10}}>
         </LinearGradient>
         </View>
       );
@@ -100,30 +205,31 @@ export default class HomeScreen extends React.Component {
       textAlign:'center',
     },
     createVote: {
-      width: 250,
+      width: 300,
       height: 100,
-      marginTop: 40,
-      marginBottom:20,
+      marginTop: 80,
+      marginBottom:10,
       padding: 10,
       backgroundColor: '#BA55B3',
       borderRadius:50,
       justifyContent:'center',
     },
     ongoingVote:{
-      width: 250,
+      width: 300,
       height: 100,
-      marginTop: 20,
-      marginBottom: 20,
+      marginTop: 10,
+      marginBottom: 10,
       padding: 10,
       backgroundColor: '#6BCDFD',
       borderRadius:50,
       justifyContent:'center'
     },
     ongoingRequest: {
-      width: 250,
+      width: 300,
       height: 100,
-      marginTop: 20,
+      marginTop: 10,
       padding: 10,
+      marginBottom: 10,
       backgroundColor:'#A9A9A9',
       borderRadius:50,
       justifyContent:'center'
