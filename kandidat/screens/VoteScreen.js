@@ -6,16 +6,23 @@ import { ScrollView,
   Platform,
   View,
   Text,
-  TextInput,
   Alert,
-  Modal,
+  PanResponder,
+  Animated,
 } from 'react-native';
 import Icon from "react-native-vector-icons/Ionicons";
-import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
-import data from '../data/engWord.json';
 import { LinearGradient } from 'expo';
+import data from '../data/engWord.json';
 
-export default class NewCategory extends React.Component {
+const Alternatives = [
+  { id: "1", text: 'hej1'},
+  { id: "2", text: 'hej2'},
+  { id: "3", text: 'hej3'},
+  { id: "4", text: 'hej4'},
+  { id: "5", text: 'hej5'},
+]
+
+export default class VoteScreen extends React.Component {
 
   static navigationOptions = ({ navigation }) => {
     return {
@@ -29,117 +36,199 @@ export default class NewCategory extends React.Component {
       };
     };
 
-    constructor(props) {
-    super(props);
-    this.state = {
-      myText: 'I\'m ready to get swiped!',
-      gestureName: 'none',
-      backgroundColor: '#fff'
-    };
-  }
+    constructor() {
+      super()
+      this.position = new Animated.ValueXY()
+      this.state = {
+        currentIndex: 0
+      }
 
-  onSwipeUp(gestureState) {
-    this.setState({myText: 'You swiped up!'});
-  }
+      this.colors = ['#6ACCCB', '#94B4C1', '#8FBC8F', '#CBA3D5', '#689999']
 
-  onSwipeDown(gestureState) {
-    this.setState({myText: 'You swiped down!'});
-  }
+      this.rotate = this.position.x.interpolate({
+        inputRange: [-150, 0, 150],
+        outputRange: ['-15deg', '0deg', '15deg'],
+        extrapolate: 'clamp'
+      })
 
-  onSwipeLeft(gestureState) {
-    this.setState({myText: 'You swiped left!'});
-  }
-
-  onSwipeRight(gestureState) {
-    this.setState({myText: 'You swiped right!'});
-  }
-
-  onSwipe(gestureName, gestureState) {
-    const {SWIPE_UP, SWIPE_DOWN, SWIPE_LEFT, SWIPE_RIGHT} = swipeDirections;
-    this.setState({gestureName: gestureName});
-    switch (gestureName) {
-      case SWIPE_UP:
-        this.setState({backgroundColor: 'red'});
-        break;
-      case SWIPE_DOWN:
-        this.setState({backgroundColor: 'green'});
-        break;
-      case SWIPE_LEFT:
-        this.setState({backgroundColor: 'blue'});
-        break;
-      case SWIPE_RIGHT:
-        this.setState({backgroundColor: 'yellow'});
-        break;
+      this.rotateAndTranslate = {
+        transform: [{
+          rotate: this.rotate
+        },
+        ...this.position.getTranslateTransform()
+      ]
     }
+
+    this.likeOpacity = this.position.x.interpolate({
+      inputRange: [-150, 0, 150],
+      outputRange: [0, 0, 1],
+      extrapolate: 'clamp'
+    })
+    this.dislikeOpacity = this.position.x.interpolate({
+      inputRange: [-150, 0, 150],
+      outputRange: [1, 0, 0],
+      extrapolate: 'clamp'
+    })
+    this.nextCardOpacity = this.position.x.interpolate({
+      inputRange: [-150, 0, 150],
+      outputRange: [1, 0, 1],
+      extrapolate: 'clamp'
+    })
+    this.nextCardScale = this.position.x.interpolate({
+      inputRange: [-150, 0, 150],
+      outputRange: [1, 0.6, 1],
+      extrapolate: 'clamp'
+    })
+
+
+  }
+  componentWillMount() {
+    this.PanResponder = PanResponder.create({
+
+      onStartShouldSetPanResponder: (evt, gestureState) => true,
+      onPanResponderMove: (evt, gestureState) => {
+        this.position.setValue({ x: gestureState.dx, y: gestureState.dy })
+      },
+      onPanResponderRelease: (evt, gestureState) => {
+        if (gestureState.dx > 120) {
+          Animated.spring(this.position, {
+            toValue: { x: 400, y: gestureState.dy }
+          }).start(() => {
+            this.setState({ currentIndex: this.state.currentIndex + 1 }, () => {
+              this.position.setValue({ x: 0, y: 0 })
+            })
+          })
+        }
+        else if (gestureState.dx < -120) {
+          Animated.spring(this.position, {
+            toValue: { x: -400, y: gestureState.dy }
+          }).start(() => {
+            this.setState({ currentIndex: this.state.currentIndex + 1 }, () => {
+              this.position.setValue({ x: 0, y: 0 })
+            })
+          })
+        }
+        else {
+          Animated.spring(this.position, {
+            toValue: { x: 0, y: 0 },
+            friction: 10
+          }).start()
+        }
+      }
+    })
   }
 
-    render() {
+  renderAlternatives = () => {
 
-      const config = {
-            velocityThreshold: 0.3,
-            directionalOffsetThreshold: 80
-          };
+    return Alternatives.map((item, i) => {
 
-      return (
-        <View style={styles.container}>
+      if (i < this.state.currentIndex) {
+        return null
+      }
+      else if (i == this.state.currentIndex) {
 
-        <View style={styles.swipecontain}>
+        return (
+          <Animated.View
+          {...this.PanResponder.panHandlers}
+          key={item.id} style={[this.rotateAndTranslate, { backgroundColor: this.colors[i % this.colors.length], height: 350, width: 280, borderRadius: 20, position: 'absolute'}]}>
 
-        <GestureRecognizer
-        onSwipe={(direction, state) => this.onSwipe(direction, state)}
-        onSwipeUp={(state) => this.onSwipeUp(state)}
-        onSwipeDown={(state) => this.onSwipeDown(state)}
-        onSwipeLeft={(state) => this.onSwipeLeft(state)}
-        onSwipeRight={(state) => this.onSwipeRight(state)}
-        config={config}
-        style={{
-          flex: 1,
-          backgroundColor: this.state.backgroundColor
-        }}
-        >
-        <Text>{this.state.myText}</Text>
-        <Text>onSwipe callback received gesture: {this.state.gestureName}</Text>
-      </GestureRecognizer>
+          <Animated.View style={{ opacity: this.likeOpacity, transform: [{ rotate: '-30deg' }], position: 'absolute', top: 50, left: 40, zIndex: 1000 }}>
+          <Text style={styles.likeText}>YES</Text>
+          </Animated.View>
+          <Animated.View style={{ opacity: this.dislikeOpacity, transform: [{ rotate: '30deg' }], position: 'absolute', top: 50, right: 40, zIndex: 1000 }}>
+          <Text style={styles.dislikeText}>NO</Text>
+          </Animated.View>
 
-        </View>
+          <Text style={styles.alternativeText}> Detta är: {item.text} </Text>
+          </Animated.View>
+        )
+      }
+      else {
+        return (
+          <Animated.View key={item.id} style={[{
+            opacity: this.nextCardOpacity,
+            transform: [{ scale: this.nextCardScale }], backgroundColor: this.colors[i % this.colors.length],
+            height: 350, width: 280, borderRadius: 20, position: 'absolute'}]}>
 
+          <Animated.View style={{ opacity: 0, transform: [{ rotate: '-30deg' }], position: 'absolute', top: 50, left: 40, zIndex: 1000 }}>
+          <Text style={styles.likeText}>YES</Text>
+          </Animated.View>
+          <Animated.View style={{ opacity: 0, transform: [{ rotate: '30deg' }], position: 'absolute', top: 50, right: 40, zIndex: 1000 }}>
+          <Text style={styles.dislikeText}>NO</Text>
+          </Animated.View>
 
-        <View style={styles.thumbsContain}>
-        <TouchableOpacity>
-        <Icon name={Platform.OS === "ios" ? "ios-thumbs-down" : "md-thumbs-down"}
-        color="#008080"
-        size={80}/>
-        </TouchableOpacity>
-        <TouchableOpacity>
-        <Icon name={Platform.OS === "ios" ? "ios-thumbs-up" : "md-thumbs-up"}
-        color="#008080"
-        size={80}/>
-        </TouchableOpacity>
-        </View>
-
-        <LinearGradient
-        colors={['#FFFFFF', '#6ACCCB']}
-        style={{ height: '100%', alignItems: 'center', borderRadius: 5 }}>
-        </LinearGradient>
-
-
-        </View>
-      );
-    }
+          <Text style={styles.alternativeText}> Detta är: {item.text} </Text>
+          </Animated.View>
+        )
+      }
+    }).reverse()
   }
 
+  render() {
+    return (
+      <View style={styles.container}>
+      <View style={styles.card}>
+      {this.renderAlternatives()}
+      </View>
 
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-    },
-    swipecontain: {
-      height: 230,
-      width: 200,
-    },
-    thumbsContain: {
-      flexDirection:'row',
-      justifyContent: 'space-between',
 
-    },
-  });
+      <View style={styles.thumbsContain}>
+      <TouchableOpacity onPress={() => alert('You dislike it!')}>
+      <Icon name={Platform.OS === "ios" ? "ios-thumbs-down" : "md-thumbs-down"}
+      color="#008080"
+      size={80}/>
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={() => alert('You like it!')}>
+      <Icon name={Platform.OS === "ios" ? "ios-thumbs-up" : "md-thumbs-up"}
+      color="#008080"
+      size={80}/>
+      </TouchableOpacity>
+
+      </View>
+      </View>
+
+
+    );
+  }
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  card: {
+    alignItems: 'center',
+    margin: 40,
+  },
+  alternativeText: {
+    marginTop: 150,
+    textAlign: "center",
+    color: "#000",
+    fontFamily: "Roboto-Light",
+    fontSize: 30,
+  },
+  likeText: {
+    borderWidth: 1,
+    borderColor: 'green',
+    color: 'green',
+    fontSize: 28,
+    fontWeight: '800',
+    padding: 10
+  },
+  dislikeText: {
+    borderWidth: 1,
+    borderColor: 'red',
+    color: 'red',
+    fontSize: 28,
+    fontWeight: '800',
+    padding: 10
+  },
+  thumbsContain: {
+    flexDirection:'row',
+    justifyContent: 'space-between',
+    marginTop: 400,
+    padding: 15,
+  }
+});
