@@ -146,6 +146,7 @@ export default class OngoingVoteScreen extends React.Component {
       return (
         <View style={styles.container}>
         <View style={styles.voteActContainer}>
+        <Text style={styles.ongoingVotesLabel}>{data.ongoingVotes}</Text>
         <Text style={styles.voteLabel}>
         {data.yourTurn}
         </Text>
@@ -199,6 +200,13 @@ export default class OngoingVoteScreen extends React.Component {
           marginTop: 10,
           height: '75%',
 
+        },
+        ongoingVotesLabel: {
+          fontSize: 40,
+          color: '#000000',
+          textAlign: 'center',
+          fontFamily: "Roboto-Light",
+          marginBottom: 30,
         },
         voteLabel: {
           fontSize: 30,
