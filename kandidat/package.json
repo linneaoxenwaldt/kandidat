@@ -24,6 +24,7 @@
     "react-native-check-box": "^2.1.7",
     "react-native-checkbox": "^2.0.0",
     "react-native-circle-checkbox": "^0.1.6",
+    "react-native-draggable": "^1.0.15",
     "react-native-elements": "^1.1.0",
     "react-native-modal-datetime-picker": "^7.4.0",
     "react-native-off-canvas-menu": "^0.1.32",

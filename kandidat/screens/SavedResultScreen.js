@@ -28,9 +28,11 @@ export default class SavedResultScreen extends React.Component {
       {id: '3', text: 'Vote D'},
       {id: '4', text: 'Vote E'},
     ]
+
     this.extractKey = ({id}) => id
     this.state = {
       rows: rows,
+
     }
   }
 
@@ -69,7 +71,7 @@ export default class SavedResultScreen extends React.Component {
         roundAvatar
         title={item.text}
         rightIcon = {<Icon
-          name={Platform.OS === "ios" ? "ios-trash" : "md-trash"}
+          name={Platform.OS === "ios" ? "ios-arrow-forward" : "md-arrow-forward"}
           size={25}
           color='#FFFFFF'
           onPress={() => Alert.alert(
@@ -86,7 +88,12 @@ export default class SavedResultScreen extends React.Component {
           render() {
             return (
               <View style={styles.container}>
-              <Text style={styles.savedResultLabel}>Saved Results</Text>
+              <View style={styles.resultContainer}>
+              <Text style={styles.savedResultLabel}>Results
+              <Text> </Text>
+              <Icon
+                name={Platform.OS === "ios" ? "ios-stats" : "md-stats"}
+                size={30}/></Text>
 
               <FlatList
               data={this.state.rows}
@@ -94,6 +101,22 @@ export default class SavedResultScreen extends React.Component {
               keyExtractor={this.extractKey}
               />
               </View>
+
+              <View style={styles.savedesultContainer}>
+              <Text style={styles.savedResultLabel}>Saved Results
+              <Text> </Text>
+              <Icon
+                name={Platform.OS === "ios" ? "ios-save" : "md-save"}
+                size={30}/>
+                </Text>
+
+              <FlatList
+              data={this.state.rows}
+              renderItem={this.renderItem}
+              keyExtractor={this.extractKey}
+              />
+              </View>
+                </View>
 
             );
           }
@@ -105,13 +128,20 @@ export default class SavedResultScreen extends React.Component {
             paddingTop: 15,
             backgroundColor: '#FFFFFF',
           },
+          resultContainer:{
+            height: '50%'
+          },
+
+          savedResultLabelresultContainer:{
+            height: '50%'
+          },
 
           savedResultLabel: {
-            fontSize: 40,
+            fontSize: 25,
             color: '#000000',
             textAlign: 'center',
             fontFamily: "Roboto-Light",
-            padding: 40,
+            padding: 20,
           },
 
           row: {

@@ -83,7 +83,7 @@ export default class HomeScreen extends React.Component {
         <Icon style={{ position: 'absolute', top: 320, left: 240 }}
                 name={Platform.OS === "ios" ? "ios-notifications" : "md-notifications-outline"}
                 size={40}
-                color='red'/>)
+                color='#EB2C2C'/>)
       }
     }
 
@@ -127,10 +127,10 @@ export default class HomeScreen extends React.Component {
     showNotificationRequests() {
       if(this.state.notificationRequests === true) {
         return(
-        <Icon style={{ position: 'absolute', top: 320, left: 240 }}
+        <Icon style={{ position: 'absolute' }}
                 name={Platform.OS === "ios" ? "ios-notifications" : "md-notifications-outline"}
                 size={40}
-                color='red'/>)
+                color='#EB2C2C'/>)
       }
     }
 
@@ -163,21 +163,18 @@ export default class HomeScreen extends React.Component {
         onPress={() => this.props.navigation.navigate('RequestScreen')}>
         <Text style={styles.buttonText}> {data.requests}
         {this.showNotificationRequests()}
-    </Text>
+        </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-        style={styles.ongoingRequest}
-        onPress={() => this.props.navigation.navigate('RequestScreen')}>
-        <Text style={styles.buttonText}> {data.results}
-        <Icon style={{ position: 'absolute', top: 320, left: 240 }}
+        style={styles.resultsButt}
+        onPress={() => this.props.navigation.navigate('SavedResult')}>
+        <Text style={styles.buttonText}> {data.results}  <Icon style={{ position: 'absolute', top: 320, left: 240 }}
         name={Platform.OS === "ios" ? "ios-notifications" : "md-notifications-outline"}
         size={40}
-        color='red'/></Text>
+        color='#EB2C2C'/></Text>
         </TouchableOpacity>
         </View>
-
-
 
         <LinearGradient
         colors={['#FFFFFF', '#6ACCCB', '#6ACCCB']}
@@ -230,12 +227,18 @@ export default class HomeScreen extends React.Component {
       marginTop: 10,
       padding: 10,
       marginBottom: 10,
-      backgroundColor:'#A9A9A9',
+      backgroundColor:'#8FBC8F',
       borderRadius:50,
       justifyContent:'center'
     },
-    notification: {
-      paddingLeft: 180,
+    resultsButt: {
+      width: 300,
+      height: 100,
+      marginTop: 10,
+      padding: 10,
+      marginBottom: 10,
+      backgroundColor:'#94B4C1',
+      borderRadius:50,
+      justifyContent:'center'
     }
-
   });

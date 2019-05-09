@@ -105,8 +105,8 @@ console.log("mail updated in db ");
       <TextInput
       style={styles.textInfo}
       borderColor='#758e99'
-      //borderWidth= '4'
-      //backgroundColor='#94B4C1'
+      borderWidth= '4'
+      backgroundColor='#94B4C1'
       secureTextEntry={true}
       placeholder="Password"
       value = {this.state.currentPassword}
@@ -116,9 +116,9 @@ console.log("mail updated in db ");
       <Text style={styles.descriptionText}>{data.newEmail}</Text>
       <TextInput
       style={styles.textInfo}
-      //backgroundColor='#8FBC8F'
+      backgroundColor='#8FBC8F'
       borderColor='#6f936f'
-      //borderWidth= '4'
+      borderWidth= '4'
       placeholder="New email"
       value = {this.state.newEmail}
       onChangeText = {(text) => {this.setState({ newEmail : text}) }}
@@ -127,9 +127,9 @@ console.log("mail updated in db ");
       <Text style={styles.descriptionText}>{data.confirmEmail}</Text>
       <TextInput
       style={styles.textInfo}
-      //backgroundColor='#6ACCCB'
+      backgroundColor='#6ACCCB'
       borderColor='#5db3b2'
-      //borderWidth= '4'
+      borderWidth= '4'
       placeholder="New email"
       value = {this.state.confirmNewEmail}
       onChangeText = {(text) => {this.setState({ confirmNewEmail : text}) }}
