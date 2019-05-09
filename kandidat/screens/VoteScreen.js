@@ -154,7 +154,7 @@ renderItem = ({item, index}) => {
 }
 }
 
-giveLike(altID){
+giveLike(altID, origin){
   var that = this
   var user = firebase.auth().currentUser;
   var userID = user.uid;
@@ -166,14 +166,31 @@ giveLike(altID){
 .then(function() {
     console.log("Document successfully updated!");
 });
-this.updateCurrentNumber()
+this.updateCurrentNumber(origin)
 }
 
-updateCurrentNumber(){
+updateCurrentNumber(origin){
+  console.log("num update " + this.state.currentNumber)
+  console.log("index update " + this.state.currentIndex)
+  console.log(origin)
+  if(origin === "button"){
+  this.setState(prevState => ({ currentIndex: prevState.currentIndex + 1 }));
+  }
   var numberAlt = this.state.alternatives.length
   var nowNumber = this.state.currentNumber
 this.setState(prevState => ({ currentNumber: prevState.currentNumber + 1 }));
-//  console.log(this.state.currentNumber)
+if(this.state.alternatives.length === this.state.currentNumber + 1){
+  return(
+    Alert.alert(
+  data.noMoreAlt,
+  undefined,
+  [
+    //{text: 'Cancel', onPress: () => this.props.navigation.navigate('VoteScreen')},
+    {text: 'OK', onPress: () => this.finishVote()},
+  ],
+  { cancelable: false })
+  )
+}
 }
 
 getFinishedAnswers(){
@@ -263,6 +280,7 @@ checkFinishedAnswers(){
               this.position.setValue({ x: 0, y: 0 })
             })
           })
+          this.giveLike(this.state.alternatives[this.state.currentIndex].AltID, "swipe")
         }
         else if (gestureState.dx < -120) {
           Animated.spring(this.position, {
@@ -272,6 +290,7 @@ checkFinishedAnswers(){
               this.position.setValue({ x: 0, y: 0 })
             })
           })
+          this.updateCurrentNumber("swipe")
         }
         else {
           Animated.spring(this.position, {
@@ -338,13 +357,13 @@ checkFinishedAnswers(){
 
 
       <View style={styles.thumbsContain}>
-      <TouchableOpacity onPress={() => alert('You dislike it!')}>
+      <TouchableOpacity onPress={() => this.updateCurrentNumber("button")}>
       <Icon name={Platform.OS === "ios" ? "ios-thumbs-down" : "md-thumbs-down"}
       color="#008080"
       size={80}/>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => alert('You like it!')}>
+      <TouchableOpacity onPress={() => this.giveLike(this.state.alternatives[this.state.currentIndex].AltID, "button")}>
       <Icon name={Platform.OS === "ios" ? "ios-thumbs-up" : "md-thumbs-up"}
       color="#008080"
       size={80}/>
