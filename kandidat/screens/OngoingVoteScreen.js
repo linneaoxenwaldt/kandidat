@@ -193,6 +193,7 @@ export default class OngoingVoteScreen extends React.Component {
         },
         voteActContainer: {
           marginTop: 5,
+          height:'50%',
         },
         votePenContainer: {
           marginTop: 10,
