@@ -10,19 +10,16 @@ import {
   Button,
   Header,
 } from 'react-native';
-import { WebBrowser } from 'expo';
-import { DrawerNavigator, NavigationActions, DrawerActions } from 'react-navigation';
-import { MonoText } from '../components/StyledText';
+import { WebBrowser, LinearGradient } from 'expo';
+import { DrawerActions } from 'react-navigation';
 import Icon from "react-native-vector-icons/Ionicons";
 import data from '../data/engWord.json';
-import { LinearGradient } from 'expo';
 import * as firebase from 'firebase';
 
 export default class HomeScreen extends React.Component {
   constructor(props){
     super(props);
   this.state = {
-    // rows: rows,
     notificationOngoingVotes: false,
     notificationRequests: false,
     notificationResults: false,
@@ -65,7 +62,6 @@ export default class HomeScreen extends React.Component {
            db.collection('Users').doc(userID).collection('Votes').where("Finished", "==", "No").get().
              then(sub => {
                if (sub.docs.length > 0) {
-                 console.log('subcollection exists');
                  that.setState({
                    notificationOngoingVotes: true,
                  })
@@ -76,9 +72,7 @@ export default class HomeScreen extends React.Component {
     }
 
     showNotificationOngoingVotes() {
-      console.log(this.state.notificationOngoingVotes)
       if(this.state.notificationOngoingVotes === true) {
-        console.log(this.state.notificationOngoingVotes)
         return(
         <Icon style={{ position: 'absolute', top: 320, left: 240 }}
                 name={Platform.OS === "ios" ? "ios-notifications" : "md-notifications-outline"}
@@ -99,7 +93,6 @@ export default class HomeScreen extends React.Component {
            db.collection('Users').doc(userID).collection('VoteRequests').get().
              then(sub => {
                if (sub.docs.length > 0) {
-                 console.log('subcollection exists');
                  that.setState({
                    notificationRequests: true,
                  })
@@ -114,7 +107,6 @@ export default class HomeScreen extends React.Component {
             db.collection('Users').doc(userID).collection('FriendRequests').get().
               then(sub => {
                 if (sub.docs.length > 0) {
-                  console.log('subcollection exists');
                   that.setState({
                     notificationRequests: true,
                   })
@@ -135,14 +127,8 @@ export default class HomeScreen extends React.Component {
     }
 
     render() {
-
-      const config = {
-        velocityThreshold: 0.3,
-        directionalOffsetThreshold: 80
-      };
       return (
         <View style={styles.container}>
-
         <View style={styles.buttonContainer}>
         <TouchableOpacity
         style={styles.createVote}
