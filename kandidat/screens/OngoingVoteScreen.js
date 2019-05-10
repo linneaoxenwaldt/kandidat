@@ -95,25 +95,12 @@ export default class OngoingVoteScreen extends React.Component {
         });
 
         db.collection("Users").doc(userID).collection("Votes").where("Finished", "==", "Yes").get().then(function(querySnapshot) {
-<<<<<<< HEAD
-              querySnapshot.forEach(function(doc) {
-                  // doc.data() is never undefined for query doc snapshots
-                  //console.log(doc.id)
-                  const name = doc.get('CatName');
-                  const img = doc.get('CatImg');
-                  that.setState(prevState => ({
-                    yourFriendsTurn: [...prevState.yourFriendsTurn, {VoteID: doc.id, CatName: name, CatImg: img}]
-
-                  }))
-              });
-=======
           querySnapshot.forEach(function(doc) {
             const name = doc.get('CatName');
             const img = doc.get('CatImg');
             that.setState(prevState => ({
               yourFriendsTurn: [...prevState.yourFriendsTurn, {VoteID: doc.id, CatName: name, CatImg: img}]
             }))
->>>>>>> 0dea780d1973a2ce0ce5744da7f73756c6af24be
           });
         });
       }
