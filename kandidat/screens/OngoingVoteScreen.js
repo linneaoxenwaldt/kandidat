@@ -19,21 +19,9 @@ export default class OngoingVoteScreen extends React.Component {
   constructor(props){
     super(props);
     this.colors = ['#6ACCCB', '#94B4C1', '#8FBC8F', '#CBA3D5', '#689999']
-    //   const rows = [
-    //   {id: '0', text: 'Test0', expdate: '12h', turn: true},
-    //   {id: '1', text: 'Test1', expdate: '4h 2m', turn: false},
-    //   {id: '2', text: 'Test2', expdate: '56m', turn: true},
-    //   {id: '3', text: 'Test3', expdate: '33s', turn: true},
-    //   {id: '4', text: 'Test4', expdate: '4m', turn: false},
-    //   {id: '5', text: 'Test5', expdate: '14h 57m', turn: true},
-    //   {id: '6', text: 'Test6', expdate: '3v', turn: false},
-    //   {id: '7', text: 'Test7', expdate: '57m', turn: true},
-    //   {id: '8', text: 'Test8', expdate: '33v', turn: true},
-    // ]
     this.extractKey1 = ({VoteID}) => VoteID
     this.extractKey2 = ({VoteID}) => VoteID
     this.state = {
-      // rows: rows,
       yourTurn: [],
       yourFriendsTurn: [],
       notification: false,
@@ -107,6 +95,7 @@ export default class OngoingVoteScreen extends React.Component {
         });
 
         db.collection("Users").doc(userID).collection("Votes").where("Finished", "==", "Yes").get().then(function(querySnapshot) {
+<<<<<<< HEAD
               querySnapshot.forEach(function(doc) {
                   // doc.data() is never undefined for query doc snapshots
                   //console.log(doc.id)
@@ -117,54 +106,60 @@ export default class OngoingVoteScreen extends React.Component {
 
                   }))
               });
+=======
+          querySnapshot.forEach(function(doc) {
+            const name = doc.get('CatName');
+            const img = doc.get('CatImg');
+            that.setState(prevState => ({
+              yourFriendsTurn: [...prevState.yourFriendsTurn, {VoteID: doc.id, CatName: name, CatImg: img}]
+            }))
+>>>>>>> 0dea780d1973a2ce0ce5744da7f73756c6af24be
           });
-        }
+        });
+      }
 
 
 
-    renderItem1 = ({item, index}) => {
-      return (
-        <TouchableOpacity
-        onPress={() => this.props.navigation.navigate('VoteScreen', {VoteID: item.VoteID})}>
-        <ImageBackground source={{uri: item.CatImg}} style={{width: '100%', height: 100}}>
-        <ListItem
-        containerStyle={{ backgroundColor: 'transparent'}}
-        //  containerStyle={{ backgroundColor: this.colors[index % this.colors.length]}}
-        titleStyle={{color: '#FFFFFF', fontSize: 30}}
-        title={item.CatName}
-        //rightSubtitle={item.expdate}
-        />
-        </ImageBackground>
-        </TouchableOpacity>
-      )
-    }
+      renderItem1 = ({item, index}) => {
+        return (
+          <TouchableOpacity
+          onPress={() => this.props.navigation.navigate('VoteScreen', {VoteID: item.VoteID})}>
+          <ImageBackground source={{uri: item.CatImg}} style={{width: '100%', height: 100}}>
+          <ListItem
+          containerStyle={{ backgroundColor: 'transparent'}}
+          titleStyle={{color: '#FFFFFF', fontSize: 30}}
+          title={item.CatName}
+          />
+          </ImageBackground>
+          </TouchableOpacity>
+        )
+      }
 
-    renderItem2 = ({item, index}) => {
-      return (
-        <ImageBackground source={{uri: item.CatImg}} style={{width: '100%', height: 100}}>
-        <ListItem
-        containerStyle={{ backgroundColor: 'transparent'}}
-        //  containerStyle={{ backgroundColor: this.colors[index % this.colors.length]}}
-        titleStyle={{color: '#FFFFFF', fontSize: 30}}
-        title={item.CatName}
-        //rightSubtitle={item.expdate}
-        />
-        </ImageBackground>
-      )
-    }
+      renderItem2 = ({item, index}) => {
+        return (
+          <ImageBackground source={{uri: item.CatImg}} style={{width: '100%', height: 100}}>
+          <ListItem
+          containerStyle={{ backgroundColor: 'transparent'}}
+          titleStyle={{color: '#FFFFFF', fontSize: 30}}
+          title={item.CatName}
+          />
+          </ImageBackground>
+        )
+      }
 
-    render() {
-      return (
-        <View style={styles.container}>
-        <View style={styles.voteActContainer}>
-        <Text style={styles.ongoingVotesLabel}>{data.ongoingVotes}</Text>
-        <Text style={styles.voteLabel}>
-        {data.yourTurn}
-        </Text>
-        <View
-        style={{
-          borderBottomColor: '#94B4C1',
-          borderBottomWidth: 3 }}
+      render() {
+        return (
+          <View style={styles.container}>
+          <View style={styles.voteActContainer}>
+          <Text style={styles.ongoingVotesLabel}>{data.labelOngoing}</Text>
+          <Text style={styles.voteLabel}>
+          {data.yourTurn}
+          </Text>
+          <View
+          style={{
+            borderBottomColor: '#94B4C1',
+            borderBottomWidth: 3
+          }}
           />
           <FlatList
           extraData={this.state}
@@ -174,63 +169,53 @@ export default class OngoingVoteScreen extends React.Component {
           />
           </View>
 
-
           <View style={styles.votePenContainer}>
-
-          <Text style={styles.voteLabelFriend}>
+          <Text style={styles.voteLabel}>
           {data.yourFriensTurn}
           </Text>
-          <View
-          style={{
+          <View style={{
             borderBottomColor: '#94B4C1',
-            borderBottomWidth: 3 }}
-            />
-            <FlatList
-            extraData={this.state}
-            data={this.state.yourFriendsTurn}
-            renderItem={this.renderItem2}
-            keyExtractor={this.extractKey2}
-            />
-            </View>
-            </View>
-          );
-        }
+            borderBottomWidth: 3,
+          }}
+          />
+          <FlatList
+          extraData={this.state}
+          data={this.state.yourFriendsTurn}
+          renderItem={this.renderItem2}
+          keyExtractor={this.extractKey2}
+          />
+          </View>
+          </View>
+        );
       }
+    }
 
-      const styles = StyleSheet.create({
-        container: {
-          flex: 1,
-          paddingTop: 15,
-          backgroundColor: '#FFFFFF',
-        },
-        voteActContainer: {
-          marginTop: 5,
-          height:'50%',
-        },
-        votePenContainer: {
-          marginTop: 10,
-          height: '75%',
-
-        },
-        ongoingVotesLabel: {
-          fontSize: 40,
-          color: '#000000',
-          textAlign: 'center',
-          fontFamily: "Roboto-Light",
-          marginBottom: 30,
-        },
-        voteLabel: {
-          fontSize: 30,
-          color: '#000000',
-          textAlign: 'center',
-          fontFamily: "Roboto-Light",
-        },
-        voteLabelFriend: {
-          //height: '60%',
-          //position:'absolute',
-          fontSize: 30,
-          color: '#000000',
-          textAlign: 'center',
-          fontFamily: "Roboto-Light",
-        },
-      });
+    const styles = StyleSheet.create({
+      container: {
+        flex: 1,
+        paddingTop: 15,
+        backgroundColor: '#FFFFFF',
+      },
+      ongoingVotesLabel: {
+        fontSize: 40,
+        color: '#000000',
+        textAlign: 'center',
+        fontFamily: "Roboto-Light",
+        marginBottom: 30,
+      },
+      voteLabel: {
+        fontSize: 30,
+        color: '#000000',
+        textAlign: 'center',
+        fontFamily: "Roboto-Light",
+      },
+      voteActContainer: {
+        marginTop: 5,
+        height:300,
+      },
+      votePenContainer: {
+        marginTop: 10,
+        paddingBottom: 50,
+        height: 300,
+      },
+    });
