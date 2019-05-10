@@ -69,11 +69,7 @@ export default class OngoingVoteScreen extends React.Component {
       var user = firebase.auth().currentUser;
       var userID = user.uid;
       var db = firebase.firestore();
-<<<<<<< HEAD
-      db.collection("Users").doc(userID).collection("Votes").onSnapshot(function(querySnapshot) {
-=======
-      db.collection("Users").doc(userID).collection("Votes").where("Finished", "==", "No").get().then(function(querySnapshot) {
->>>>>>> 0305bbadda2ce6126802a19c9f8c4f038a60f3c0
+      db.collection("Users").doc(userID).collection("Votes").where("Finished", "==", "No").onSnapshot(function(querySnapshot) {
             querySnapshot.forEach(function(doc) {
                 // doc.data() is never undefined for query doc snapshots
                 //console.log(doc.id)
@@ -90,30 +86,21 @@ export default class OngoingVoteScreen extends React.Component {
       var user = firebase.auth().currentUser;
       var userID = user.uid;
       var db = firebase.firestore();
-<<<<<<< HEAD
-      db.collection("Users").doc(userID).collection("PendingVotes").onSnapshot(function(querySnapshot) {
-            querySnapshot.forEach(function(doc) {
+      db.collection("Users").doc(userID).collection("PendingVotes").onSnapshot(function(querySnapshot)
+      {
+            querySnapshot.forEach(function(doc)
+            {
                 // doc.data() is never undefined for query doc snapshots
                 console.log(doc.id)
                 const name = doc.get('CatName');
                 const img = doc.get('CatImg');
-                that.setState(prevState => ({
+                that.setState(prevState => (
+                  {
                   yourFriendsTurn: [...prevState.yourFriendsTurn, {VoteID: doc.id, CatName: name, CatImg: img}]
                 }))
             });
-=======
-      db.collection("Users").doc(userID).collection("PendingVotes").get().then(function(querySnapshot) {
-        querySnapshot.forEach(function(doc) {
-          // doc.data() is never undefined for query doc snapshots
-          console.log(doc.id)
-          const name = doc.get('CatName');
-          const img = doc.get('CatImg');
-          that.setState(prevState => ({
-            yourFriendsTurn: [...prevState.yourFriendsTurn, {VoteID: doc.id, CatName: name, CatImg: img}]
-          }))
->>>>>>> 0305bbadda2ce6126802a19c9f8c4f038a60f3c0
         });
-      })
+
         db.collection("Users").doc(userID).collection("Votes").where("Finished", "==", "Yes").get().then(function(querySnapshot) {
               querySnapshot.forEach(function(doc) {
                   // doc.data() is never undefined for query doc snapshots
@@ -125,7 +112,8 @@ export default class OngoingVoteScreen extends React.Component {
                   }))
               });
           });
-      }
+        }
+
 
 
     renderItem1 = ({item, index}) => {
