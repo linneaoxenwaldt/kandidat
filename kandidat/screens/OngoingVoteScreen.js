@@ -68,7 +68,7 @@ export default class OngoingVoteScreen extends React.Component {
       var user = firebase.auth().currentUser;
       var userID = user.uid;
       var db = firebase.firestore();
-      db.collection("Users").doc(userID).collection("Votes").get().then(function(querySnapshot) {
+      db.collection("Users").doc(userID).collection("Votes").onSnapshot(function(querySnapshot) {
             querySnapshot.forEach(function(doc) {
                 // doc.data() is never undefined for query doc snapshots
                 //console.log(doc.id)
@@ -86,7 +86,7 @@ export default class OngoingVoteScreen extends React.Component {
       var user = firebase.auth().currentUser;
       var userID = user.uid;
       var db = firebase.firestore();
-      db.collection("Users").doc(userID).collection("PendingVotes").get().then(function(querySnapshot) {
+      db.collection("Users").doc(userID).collection("PendingVotes").onSnapshot(function(querySnapshot) {
             querySnapshot.forEach(function(doc) {
                 // doc.data() is never undefined for query doc snapshots
                 console.log(doc.id)

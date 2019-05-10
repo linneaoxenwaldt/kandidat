@@ -143,7 +143,8 @@ export default class ProfileScreen extends React.Component {
         </TouchableOpacity>
         </View>
 
-        <Modal visible={this.state.showMe}>
+        <Modal visible={this.state.showMe}
+        onRequestClose = {() => {this.setState({ showMe : false })}}>
         <View style={styles.modalView}>
         <TouchableOpacity onPress={()=>{
           this.setState({

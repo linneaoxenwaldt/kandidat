@@ -129,31 +129,34 @@ export default class OngoingVoteScreen extends React.Component {
             )}
 
             getFriendReq() {
+
               var that = this
               var user = firebase.auth().currentUser;
               var userID = user.uid;
               var db = firebase.firestore();
-              db.collection("Users").doc(userID).collection("FriendRequests").get().then(function(querySnapshot) {
+
+              db.collection("Users").doc(userID).collection("FriendRequests").onSnapshot(function(querySnapshot) {
+                that.setState({friendReq: []})
                 querySnapshot.forEach(function(doc) {
                   // doc.data() is never undefined for query doc snapshots
                   const id = doc.id;
-                  var docRef = db.collection('Users').doc(id);
+var docRef = db.collection('Users').doc(id);
                   docRef.get().then(function(doc) {
                     if (doc.exists) {
                       const username = doc.data().Username
                       const profilePic = doc.data().ProfilePic
-                      that.setState(prevState => ({
-                        friendReq: [...prevState.friendReq, {id: id, username: username, profilePic: profilePic}]
-                      }))
+                        that.setState(prevState => ({
+                          friendReq: [...prevState.friendReq, {id: id, username: username, profilePic: profilePic}],
+                        }))
                       //console.log("Document data: 2");
-                    } else {
+                    }else {
                       // doc.data() will be undefined in this case
                       console.log("getFriendReq: No such document!");
                     }
                   }).catch(function(error) {
                     console.log("getFriendReq: Error getting document:", error);
                   });
-                })
+                }  );
               });
             }
 

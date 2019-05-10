@@ -128,7 +128,7 @@ updateFriends(friend) {
     var user = firebase.auth().currentUser;
     var userID = user.uid;
     var db = firebase.firestore();
-    db.collection("Users").doc(userID).collection("Friends").get().then(function(querySnapshot) {
+    db.collection("Users").doc(userID).collection("Friends").onSnapshot(function(querySnapshot) {
         querySnapshot.forEach(function(doc) {
             // doc.data() is never undefined for query doc snapshots
             const id = doc.id;
@@ -187,7 +187,7 @@ renderItem = ({item, index}) => {
                 onPress={() => this.props.navigation.navigate('AddFriend', { updateFriends: this.updateFriends.bind(this) })}
                 underlayColor='#fff'>
                 <Text style={styles.addFriendsText}>{data.addFriend} <Icon
-                  name={Platform.OS === "ios" ? "ios-person-add" : "md-add-person-add"}
+                  name={Platform.OS === "ios" ? "ios-person-add" : "md-add"}
                   size={25}
                 /></Text>
        </TouchableOpacity>
