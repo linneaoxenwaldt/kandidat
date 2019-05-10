@@ -90,9 +90,9 @@ export default class ChangePasswordScreen extends React.Component {
       <Text style={styles.descriptionText}>{data.currentPassword}</Text>
       <TextInput
       style={styles.textInfo}
-      //backgroundColor='#94B4C1'
+      backgroundColor='#94B4C1'
       borderColor='#758e99'
-      //borderWidth= '4'
+      borderWidth= '4'
       secureTextEntry={true}
       placeholder="Password"
       value = {this.state.currentPassword}
@@ -102,9 +102,9 @@ export default class ChangePasswordScreen extends React.Component {
       <Text style={styles.descriptionText}>{data.newPassword}</Text>
       <TextInput
       style={styles.textInfo}
-      //backgroundColor='#8FBC8F'
+      backgroundColor='#8FBC8F'
       borderColor='#6f936f'
-      //borderWidth= '4'
+      borderWidth= '4'
       secureTextEntry={true}
       placeholder="New password"
       value = {this.state.newPassword}
@@ -114,9 +114,9 @@ export default class ChangePasswordScreen extends React.Component {
       <Text style={styles.descriptionText}>{data.confirmNewPassword}</Text>
       <TextInput
       style={styles.textInfo}
-      //backgroundColor='#6ACCCB'
+      backgroundColor='#6ACCCB'
       borderColor='#5db3b2'
-      //borderWidth= '4'
+      borderWidth= '4'
       secureTextEntry={true}
       placeholder="New password"
       value = {this.state.newPasswordConfirm}

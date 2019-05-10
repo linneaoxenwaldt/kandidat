@@ -10,14 +10,24 @@ import {
   Button,
   Header,
 } from 'react-native';
-import { WebBrowser } from 'expo';
-import { DrawerNavigator, NavigationActions, DrawerActions } from 'react-navigation';
-import { MonoText } from '../components/StyledText';
+import { WebBrowser, LinearGradient } from 'expo';
+import { DrawerActions } from 'react-navigation';
 import Icon from "react-native-vector-icons/Ionicons";
 import data from '../data/engWord.json';
-import { LinearGradient } from 'expo';
+import * as firebase from 'firebase';
 
 export default class HomeScreen extends React.Component {
+  constructor(props){
+    super(props);
+  this.state = {
+    notificationOngoingVotes: false,
+    notificationRequests: false,
+    notificationResults: false,
+  }
+  this.getnotificationOngoingVotes()
+  this.getnotificationRequests()
+  }
+
   static navigationOptions = ({ navigation }) => {
     return {
       headerTitle: (
@@ -40,15 +50,85 @@ export default class HomeScreen extends React.Component {
       };
     };
 
-    render() {
+    getnotificationOngoingVotes() {
+      var that = this
+      var user = firebase.auth().currentUser;
+      var userID = user.uid;
+      var db = firebase.firestore();
+      db.collection('Users').doc(userID)
+       .get().then(
+       doc => {
+         if (doc.exists) {
+           db.collection('Users').doc(userID).collection('Votes').where("Finished", "==", "No").get().
+             then(sub => {
+               if (sub.docs.length > 0) {
+                 that.setState({
+                   notificationOngoingVotes: true,
+                 })
+               }
+             });
+         }
+       });
+    }
 
-      const config = {
-        velocityThreshold: 0.3,
-        directionalOffsetThreshold: 80
-      };
+    showNotificationOngoingVotes() {
+      if(this.state.notificationOngoingVotes === true) {
+        return(
+        <Icon style={{ position: 'absolute', top: 320, left: 240 }}
+                name={Platform.OS === "ios" ? "ios-notifications" : "md-notifications-outline"}
+                size={40}
+                color='#EB2C2C'/>)
+      }
+    }
+
+    getnotificationRequests() {
+      var that = this
+      var user = firebase.auth().currentUser;
+      var userID = user.uid;
+      var db = firebase.firestore();
+      db.collection('Users').doc(userID)
+       .get().then(
+       doc => {
+         if (doc.exists) {
+           db.collection('Users').doc(userID).collection('VoteRequests').get().
+             then(sub => {
+               if (sub.docs.length > 0) {
+                 that.setState({
+                   notificationRequests: true,
+                 })
+               }
+             });
+         }
+       });
+       db.collection('Users').doc(userID)
+        .get().then(
+        doc => {
+          if (doc.exists) {
+            db.collection('Users').doc(userID).collection('FriendRequests').get().
+              then(sub => {
+                if (sub.docs.length > 0) {
+                  that.setState({
+                    notificationRequests: true,
+                  })
+                }
+              });
+          }
+        });
+    }
+
+    showNotificationRequests() {
+      if(this.state.notificationRequests === true) {
+        return(
+        <Icon style={{ position: 'absolute' }}
+                name={Platform.OS === "ios" ? "ios-notifications" : "md-notifications-outline"}
+                size={40}
+                color='#EB2C2C'/>)
+      }
+    }
+
+    render() {
       return (
         <View style={styles.container}>
-
         <View style={styles.buttonContainer}>
         <TouchableOpacity
         style={styles.createVote}
@@ -59,24 +139,32 @@ export default class HomeScreen extends React.Component {
         <TouchableOpacity
         style={styles.ongoingVote}
         onPress={() => this.props.navigation.navigate('OngoingVote')}>
-        <Text style={styles.buttonText}>{data.ongoingVotes}</Text>
+        <Text style={styles.buttonText}>{data.ongoingVotes}
+        {this.showNotificationOngoingVotes()}
+        </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
         style={styles.ongoingRequest}
         onPress={() => this.props.navigation.navigate('RequestScreen')}>
-        <Text style={styles.buttonText}> {data.requests} </Text>
+        <Text style={styles.buttonText}> {data.requests}
+        {this.showNotificationRequests()}
+        </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+        style={styles.resultsButt}
+        onPress={() => this.props.navigation.navigate('SavedResult')}>
+        <Text style={styles.buttonText}> {data.results}  <Icon style={{ position: 'absolute', top: 320, left: 240 }}
+        name={Platform.OS === "ios" ? "ios-notifications" : "md-notifications-outline"}
+        size={40}
+        color='#EB2C2C'/></Text>
         </TouchableOpacity>
         </View>
 
-        <Icon style={{ position: 'absolute', top: 320, left: 240 }}
-        name={Platform.OS === "ios" ? "ios-notifications" : "md-notifications-outline"}
-        size={40}
-        color='red'/>
-
         <LinearGradient
         colors={['#FFFFFF', '#6ACCCB', '#6ACCCB']}
-        style={{ height: '30%'}}>
+        style={{ height: '30%', zIndex: -10}}>
         </LinearGradient>
         </View>
       );
@@ -100,36 +188,43 @@ export default class HomeScreen extends React.Component {
       textAlign:'center',
     },
     createVote: {
-      width: 250,
+      width: 300,
       height: 100,
-      marginTop: 40,
-      marginBottom:20,
+      marginTop: 80,
+      marginBottom:10,
       padding: 10,
       backgroundColor: '#BA55B3',
       borderRadius:50,
       justifyContent:'center',
     },
     ongoingVote:{
-      width: 250,
+      width: 300,
       height: 100,
-      marginTop: 20,
-      marginBottom: 20,
+      marginTop: 10,
+      marginBottom: 10,
       padding: 10,
       backgroundColor: '#6BCDFD',
       borderRadius:50,
       justifyContent:'center'
     },
     ongoingRequest: {
-      width: 250,
+      width: 300,
       height: 100,
-      marginTop: 20,
+      marginTop: 10,
       padding: 10,
-      backgroundColor:'#A9A9A9',
+      marginBottom: 10,
+      backgroundColor:'#8FBC8F',
       borderRadius:50,
       justifyContent:'center'
     },
-    notification: {
-      paddingLeft: 180,
+    resultsButt: {
+      width: 300,
+      height: 100,
+      marginTop: 10,
+      padding: 10,
+      marginBottom: 10,
+      backgroundColor:'#94B4C1',
+      borderRadius:50,
+      justifyContent:'center'
     }
-
   });

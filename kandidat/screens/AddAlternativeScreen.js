@@ -220,6 +220,7 @@ createVoteForUser(){
   docRef.set({
     CatName: vote.CatName,
     CatImg: vote.CatImg,
+    Finished: "No",
   })
   for(let i=0; i<this.state.rows.length; i++) {
     var altID = this.state.rows[i].id;
@@ -229,6 +230,13 @@ createVoteForUser(){
     Name: altName,
     Votes: altVotes,
   })
+}
+docRef.collection('Participants').doc(createrID).set({
+})
+for(let i=0; i< participants.length; i++) {
+  var partID = participants[i].ParticipantID;
+docRef.collection('Participants').doc(partID).set({
+})
 }
 var docRef2 = db.collection("Users").doc(userID).collection("PendingVotes").doc(voteID)
 docRef2.collection('Alternatives').get().then(function(querySnapshot) {
@@ -272,6 +280,7 @@ createVoteForCreater(){
   docRef.set({
     CatName: vote.CatName,
     CatImg: vote.CatImg,
+    Finished: "No",
   })
   for(let i=0; i<this.state.rows.length; i++) {
     var altID = this.state.rows[i].id;
@@ -281,6 +290,13 @@ createVoteForCreater(){
     Name: altName,
     Votes: altVotes,
   })
+}
+docRef.collection('Participants').doc(userID).set({
+})
+for(let i=0; i< participants.length; i++) {
+  var partID = participants[i].ParticipantID;
+docRef.collection('Participants').doc(partID).set({
+})
 }
 var docRef2 = db.collection("Users").doc(createrID).collection("PendingVotes").doc(voteID)
 docRef2.collection('Alternatives').get().then(function(querySnapshot) {
@@ -316,6 +332,9 @@ createVoteForParticipants(){
   var participants = this.props.navigation.state.params.participants
   var vote = this.props.navigation.state.params.vote
   var voteID = vote.VoteID
+  var createrID = vote.sentFromID
+  var user = firebase.auth().currentUser;
+  var userID = user.uid;
   console.log("alla " + participants)
   var db = firebase.firestore();
   console.log("längd " + participants.length)
@@ -327,6 +346,7 @@ createVoteForParticipants(){
   docRef.set({
     CatName: vote.CatName,
     CatImg: vote.CatImg,
+    Finished: "No",
   })
   for(let i=0; i<this.state.rows.length; i++) {
     var altID = this.state.rows[i].id;
@@ -336,6 +356,17 @@ createVoteForParticipants(){
     Name: altName,
     Votes: altVotes,
   })
+}
+docRef.collection('Participants').doc(createrID).set({
+})
+docRef.collection('Participants').doc(userID).set({
+})
+for(let i=0; i< participants.length; i++) {
+  var partID = participants[i].ParticipantID;
+  if(partID !== participantID){
+docRef.collection('Participants').doc(partID).set({
+})
+}
 }
 var docRef2 = db.collection("Users").doc(participantID).collection("PendingVotes").doc(voteID)
 docRef2.collection('Alternatives').get().then(function(querySnapshot) {

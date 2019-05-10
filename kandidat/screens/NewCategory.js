@@ -36,7 +36,7 @@ export default class NewCategory extends React.Component {
       super(props)
         const rows = [
         {id: '0', img: 'https://firebasestorage.googleapis.com/v0/b/swipesolver.appspot.com/o/Category%20Image%2Fanimals.jpg?alt=media&token=b37a7136-2043-4f5f-ae03-a5afd5aed9a3'},
-        {id: '1', img: 'https://firebasestorage.googleapis.com/v0/b/swipesolver.appspot.com/o/Category%20Image%2Fcolors.jpg?alt=media&token=e65f0a39-c9b9-4db0-b261-428313aa42d3'},
+        {id: '1', img: 'https://firebasestorage.googleapis.com/v0/b/swipesolver.appspot.com/o/Category%20Image%2FColors.jpg?alt=media&token=131c5e18-f477-4b87-8912-e1cdc8ecb2d7'},
         {id: '2', img: 'https://firebasestorage.googleapis.com/v0/b/swipesolver.appspot.com/o/Category%20Image%2Ffoodpic.jpg?alt=media&token=33280555-1ee5-44c2-a709-03b5a5b363b4'},
         {id: '3', img: 'https://firebasestorage.googleapis.com/v0/b/swipesolver.appspot.com/o/Category%20Image%2FGavelpic2.jpg?alt=media&token=a12267ee-2e38-4130-a08b-4c809e586a65'},
         {id: '4', img: 'https://firebasestorage.googleapis.com/v0/b/swipesolver.appspot.com/o/Category%20Image%2Fmoviepic.jpg?alt=media&token=50f1c532-db00-459c-8caf-7f03fd4f80a4'},

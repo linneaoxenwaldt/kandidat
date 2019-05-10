@@ -26,6 +26,8 @@ import AddFriendScreen from '../screens/AddFriendScreen';
 import VoteAddFriends from '../screens/VoteAddFriends';
 import RequestScreen from '../screens/RequestScreen';
 import AddAlternativeScreen from '../screens/AddAlternativeScreen';
+import VoteScreen from '../screens/VoteScreen';
+import ResultScreen from '../screens/ResultScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -143,12 +145,12 @@ SavedResultStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-save' : 'md-save'}
+      name={Platform.OS === 'ios' ? 'ios-stats' : 'md-stats'}
     />
   ),
   drawerIcon: ({ focused }) => (
     <Icon
-      name={Platform.OS === "ios" ? "ios-save" : "md-save"}
+      name={Platform.OS === "ios" ? "ios-stats" : "md-stats"}
       size={25}
     />),
 };
@@ -212,6 +214,18 @@ const AddAlternativeScreenStack = createStackNavigator({
 AddAlternativeScreenStack.navigationOptions = {
 };
 
+const VoteScreenStack = createStackNavigator({
+  VoteScreen: VoteScreen,
+});
+VoteScreenStack.navigationOptions = {
+};
+
+const ResultScreenStack = createStackNavigator({
+  ResultScreen: ResultScreen,
+});
+ResultScreenStack.navigationOptions = {
+};
+
 const VoteAddFriendsStack = createStackNavigator({
   VoteAddFriends: VoteAddFriends,
 });
@@ -225,12 +239,12 @@ RequestStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-help' : 'md-help'}
+      name={Platform.OS === 'ios' ? 'ios-help-circle' : 'md-help-circle'}
     />
   ),
   drawerIcon: ({ focused }) => (
     <Icon
-      name={Platform.OS === "ios" ? "ios-help" : "md-help"}
+      name={Platform.OS === 'ios' ? 'ios-help-circle' : 'md-help-circle'}
       size={25}
     />),
 };
@@ -243,7 +257,7 @@ const DrawerComponent = createDrawerNavigator(
     'Create new vote  ': NewVoteStack,
     'Ongoing votes ': OngoingVoteStack,
     'Requests ': RequestStack,
-    'Saved result ': SavedResultStack,
+    'Results ': SavedResultStack,
     'Settings ': SettingsStack,
   },
 );
@@ -260,6 +274,8 @@ const AppStack = createStackNavigator({
   //RequestScreen: {screen: RequestStack},
   VoteAddFriends: {screen: VoteAddFriendsStack},
   AddAlternative: {screen: AddAlternativeScreenStack},
+  VoteScreen: {screen: VoteScreenStack},
+  ResultScreen: {screen: ResultScreenStack}
 }, {
   headerMode: 'none',
 });
