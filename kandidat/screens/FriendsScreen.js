@@ -94,6 +94,8 @@ export default class FriendsScreen extends React.Component {
     var userID = user.uid;
     var db = firebase.firestore();
     db.collection("Users").doc(userID).collection("Friends").onSnapshot(function(querySnapshot) {
+      that.setState({friendsInfo:[] })
+
         querySnapshot.forEach(function(doc) {
           const id = doc.id;
           var docRef = db.collection('Users').doc(id);
