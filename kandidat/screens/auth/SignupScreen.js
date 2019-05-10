@@ -152,18 +152,18 @@ for(let i = 0; i < info.length; i++){
         <View style={styles.inputFields}>
         <TextInput style={styles.inputText}
         placeholder="Enter a username... "
-        backgroundColor= '#94B4C1'
+        //backgroundColor= '#94B4C1'
         borderColor= '#758e99'
-        borderWidth='4'
+        //borderWidth='4'
         value = {this.state.username}
         onChangeText = {(text) => {this.setState({ username : text}) }}
 
         />
         <TextInput style={styles.inputText}
         placeholder="Enter an email... "
-        backgroundColor='#8FBC8F'
+        //backgroundColor='#8FBC8F'
         borderColor= '#6f936f'
-        borderWidth='4'
+        //borderWidth='4'
         value = {this.state.email}
         onChangeText = {(text) => {this.setState({ email : text}) }}
         />
@@ -171,9 +171,9 @@ for(let i = 0; i < info.length; i++){
         <TextInput style={styles.inputText}
         secureTextEntry={true}
         placeholder="Enter a password..."
-        backgroundColor='#6ACCCB'
+        //backgroundColor='#6ACCCB'
         borderColor= '#5db3b2'
-        borderWidth='4'
+        //borderWidth='4'
         value = {this.state.password}
         //display = 'block'
         onChangeText = {(text) => {this.setState({ password : text}) }}
@@ -182,9 +182,9 @@ for(let i = 0; i < info.length; i++){
         <TextInput style={styles.inputText}
         secureTextEntry={true}
         placeholder="Confirm the password..."
-        backgroundColor='#689999'
+        //backgroundColor='#689999'
         borderColor= '#567f7f'
-        borderWidth='4'
+        //borderWidth='4'
         borderColor= '#567f7f'
         value = {this.state.passwordConfirm}
         onChangeText = {(text) => {this.setState({ passwordConfirm : text}) }}

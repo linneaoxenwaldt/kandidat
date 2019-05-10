@@ -154,7 +154,7 @@ export default class RequestScreen extends React.Component {
                 querySnapshot.forEach(function(doc) {
                   // doc.data() is never undefined for query doc snapshots
                   const id = doc.id;
-var docRef = db.collection('Users').doc(id);
+                  var docRef = db.collection('Users').doc(id);
                   docRef.get().then(function(doc) {
                     if (doc.exists) {
                       const username = doc.data().Username
@@ -222,7 +222,8 @@ var docRef = db.collection('Users').doc(id);
           var userID = user.uid;
           var db = firebase.firestore();
           var docRef = db.collection("Users").doc(userID).collection("VoteRequests")
-          docRef.get().then(function(querySnapshot) {
+          docRef.onSnapshot(function(querySnapshot) {
+            that.setState({ voteReq: [] })
               querySnapshot.forEach(function(doc) {
                   // doc.data() is never undefined for query doc snapshots
                   var voteID = doc.id;
