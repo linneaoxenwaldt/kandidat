@@ -7,14 +7,14 @@ import * as firebase from 'firebase';
 
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
-import LinksScreen from '../screens/LinksScreen';
+//import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import FriendsScreen from '../screens/FriendsScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import NewVoteScreen from '../screens/NewVoteScreen';
 import OngoingVoteScreen from '../screens/OngoingVoteScreen';
 import SavedResultScreen from '../screens/SavedResultScreen';
-import LogOutScreen from '../screens/LogOutScreen';
+//import LogOutScreen from '../screens/LogOutScreen';
 import LoginScreen from '../screens/auth/LoginScreen'
 import SignupScreen from '../screens/auth/SignupScreen'
 import ForgotPasswordScreen from '../screens/auth/ForgotPasswordScreen'
@@ -182,19 +182,19 @@ const AddFriendStack = createStackNavigator({
 ChangeEmailStack.navigationOptions = {
 };
 
-const LinksStack = createStackNavigator({
-  Links: LinksScreen,
-});
-
-LinksStack.navigationOptions = {
-  tabBarLabel: 'Links',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
-    />
-  ),
-};
+// const LinksStack = createStackNavigator({
+//   Links: LinksScreen,
+// });
+//
+// LinksStack.navigationOptions = {
+//   tabBarLabel: 'Links',
+//   tabBarIcon: ({ focused }) => (
+//     <TabBarIcon
+//       focused={focused}
+//       name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
+//     />
+//   ),
+// };
 
 const NewCategoryStack = createStackNavigator({
   newCategory: NewCategory,
