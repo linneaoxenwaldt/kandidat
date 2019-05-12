@@ -250,13 +250,139 @@ checkFinishedAnswers(){
   }
   }
   if(allAnswerYes === true) {
+    this.createResult()
     console.log(this.state.partFinished)
-    this.props.navigation.navigate('ResultScreen', {VoteID: voteID, Participants: this.state.allParticipants, Alternatives: this.state.alternatives})
+    this.props.navigation.navigate('ResultScreen', {VoteID: voteID})
     //this.getResults()
   }
   else if(allAnswerYes === false) {
     this.props.navigation.navigate('OngoingVote')
   }
+}
+
+createResult(){
+  var that = this;
+  var user = firebase.auth().currentUser;
+  var userID = user.uid;
+  var db = firebase.firestore();
+  var alternatives = this.state.alternatives
+  var participants = this.state.allParticipants
+  var voteID = this.props.navigation.state.params.VoteID
+  var docRef1 = db.collection("Users").doc(userID).collection("Votes").doc(voteID)
+  docRef1.get().then(function(doc) {
+    if (doc.exists) {
+      var catName = doc.get('CatName')
+      var catImg = doc.get('CatImg')
+      //console.log(participants)
+      for(let k=0; k < participants.length; k++){
+        //console.log(participants[k])
+      var docRef = db.collection("Users").doc(participants[k].ParticipantID).collection("Result").doc(voteID)
+      docRef.set({
+        CatName: catName,
+        CatImg: catImg,
+      })
+      for(let i=0; i<alternatives.length; i++) {
+        //var finalVote = this.checkVotes(alternatives[i].AltID)
+        docRef.collection('Alternatives').doc(alternatives[i].AltID).set({
+          Name: alternatives[i].Name,
+          Votes: 0,
+        })
+      }
+    }
+      for(let j=0; j< participants.length; j++){
+        console.log(participants[j])
+        var partID = participants[j].ParticipantID
+        docRef2 = db.collection("Users").doc(partID).collection("Votes").doc(voteID)
+        docRef2.collection('Alternatives').get().then(function(querySnapshot) {
+          querySnapshot.forEach(function(doc) {
+            // doc.data() is never undefined for query doc snapshots
+            const altID = doc.id;
+            const votes = doc.get('Votes')
+           //console.log("blaa " + votes)
+            if(votes === 1) {
+              for(let h=0; h < participants.length; h++) {
+              db.collection("Users").doc(participants[h].ParticipantID).collection("Result").doc(voteID).collection('Alternatives').doc(altID).update({
+                Votes: firebase.firestore.FieldValue.increment(1)
+              })
+            }
+            }
+          })
+        })
+      }
+    }
+    that.deleteVote()
+      }).catch(function(error) {
+    console.log("Error getting document:", error);
+  });
+}
+
+deleteVote() {
+  var that = this;
+  var user = firebase.auth().currentUser;
+  var userID = user.uid;
+  var db = firebase.firestore();
+  var alternatives = this.state.alternatives
+  var participants = this.state.allParticipants
+  var voteID = this.props.navigation.state.params.VoteID
+  for(let m=0; m < participants.length; i++){
+    var partID = participants[m].ParticipantID
+    var docRef = db.collection("Users").doc(partID).collection("Votes").doc(voteID)
+    docRef.collection('Alternatives').get().then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+            // doc.data() is never undefined for query doc snapshots
+            const id = doc.id
+            docRef.collection('Alternatives').doc(id).delete().then(function() {
+              console.log("delete alternatives " + id + " " + partID);
+            }).catch(function(error) {
+              console.error("delete alternatives ", error);
+            });
+        });
+    });
+  docRef.collection('Participants').get().then(function(querySnapshot) {
+      querySnapshot.forEach(function(doc) {
+          // doc.data() is never undefined for query doc snapshots
+          const id = doc.id
+          docRef.collection('Participants').doc(id).delete().then(function() {
+            console.log("delete participant " + id + " " + partID);
+          }).catch(function(error) {
+            console.error("delete participant ", error);
+          });
+      });
+  });
+  docRef.delete().then(function() {
+  console.log("delete vote " + voteID);
+  }).catch(function(error) {
+  console.error("delete vote ", error);
+  });
+}}
+
+createVoteAltPart(){
+  var that = this;
+  var user = firebase.auth().currentUser;
+  var userID = user.uid;
+  var db = firebase.firestore();
+  var alternatives = this.state.alternatives
+  var participants = this.state.allParticipants
+  var voteID = this.props.navigation.state.params.VoteID
+  console.log("AAAAAA")
+  db.collection("Users").doc(userID).collection("Result").doc(voteID).collection('Alternatives').get().then(function(querySnapshot) {
+      querySnapshot.forEach(function(doc) {
+          // doc.data() is never undefined for query doc snapshots
+          for(let j=0; j< participants.length; j++){
+            //console.log(participants[j].Name)
+            if(participants[j].ParticipantID !== userID){
+            //console.log(participants[j].Name)
+              const id = doc.id;
+              const votes = doc.get('Votes')
+              console.log(votes)
+              var docRef = db.collection('Users').doc(id);
+              db.collection("Users").doc(participants[j].ParticipantID).collection("Result").doc(voteID).collection('Alternatives').doc(id).update({
+                Votes: votes
+              })
+            }
+        }
+          })
+      });
 }
 
 

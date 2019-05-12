@@ -13,7 +13,7 @@ import { DrawerActions } from 'react-navigation';
 import Icon from "react-native-vector-icons/Ionicons";
 import data from '../data/engWord.json';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import * as firebase from 'firebase';
+import firebase from '@firebase/app';
 
 export default class ResultScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -40,134 +40,127 @@ export default class ResultScreen extends React.Component {
 
     constructor(props) {
     super(props);
-    this.extractKey = ({AltID, ParticipantID}) => AltID+ParticipantID
+    this.extractKey = ({AltID}) => AltID
     var user = firebase.auth().currentUser;
     var userID = user.uid;
     this.state = {
+      myResult: [],
       result: [],
+      result: [{AltID: "1", Name: "", Votes: -1},
+    {AltID: "2", Name: "", Votes: -1},
+    {AltID: "3", Name: "", Votes: -1}],
       winner: [],
       second: [],
       third: [],
       highestVote: 0,
       secondHighestVote: 0,
     };
-    this.getResult()
+  this.getResult()
+    // this.createResult()
   }
+  //
+  // componentDidMount() {
+  //   this.createResult()
+  // }
+
 
   getResult() {
-    var that = this
+    var that = this;
     var user = firebase.auth().currentUser;
     var userID = user.uid;
     var db = firebase.firestore();
+    // var alternatives = this.props.navigation.state.params.Alternatives
+    // var participants = this.props.navigation.state.params.Participants
     var voteID = this.props.navigation.state.params.VoteID
-    var alternatives = this.props.navigation.state.params.Alternatives
-    var participants = this.props.navigation.state.params.Participants
-  for(let i=0; i < alternatives.length; i++){
-    for(let j=0; j< participants.length; j++){
-       var partID = participants[j].ParticipantID
-       var altID = alternatives[i].AltID
-      // var name = alternatives[i].Name
-        var docRef = db.collection('Users').doc(partID).collection('Votes').doc(voteID).collection('Alternatives').doc(altID)
-        docRef.get().then(function(doc) {
-        var vote = doc.get('Votes')
-        // console.log("i " + i)
-        // console.log("j " + j)
-        that.setState(prevState => ({
-          result: [...prevState.result, {ParticipantID: participants[j].ParticipantID, AltID: alternatives[i].AltID, Name: alternatives[i].Name, Votes: vote}]
-        }))
-        console.log("Document data:", doc.data());
+    var docRef = db.collection("Users").doc(userID).collection("Result").doc(voteID)
+//     docRef.set({})
+//     for(let i=0; i<alternatives.length; i++) {
+//       //var finalVote = this.checkVotes(alternatives[i].AltID)
+//       docRef.collection('Alternatives').doc(alternatives[i].AltID).set({
+//       Name: alternatives[i].Name,
+//       Votes: 0,
+//     })
+//   }
+//   for(let j=0; j< participants.length; j++){
+//   db.collection("Users").doc(participants[j].ParticipantID).collection("Votes").doc(voteID).collection('Alternatives').get().then(function(querySnapshot) {
+//       querySnapshot.forEach(function(doc) {
+//           // doc.data() is never undefined for query doc snapshots
+//           const altID = doc.id;
+//           const votes = doc.get('Votes')
+//           //console.log(votes)
+//           if(votes === 1) {
+//           docRef.collection('Alternatives').doc(altID).update({
+//             Votes: firebase.firestore.FieldValue.increment(1)
+//           })
+//         }
+//       });
+//   });
+// }
+docRef.collection("Alternatives").onSnapshot(function(querySnapshot) {
+  that.setState({result: []})
+    querySnapshot.forEach(function(doc) {
+      const altID = doc.id;
+      const name = doc.get('Name')
+      const votes = doc.get('Votes')
+    //  console.log(that.state.result)
+      that.setState(prevState => ({
+        result: [...prevState.result, {AltID: altID, Name: name, Votes: votes}]
+      }))
+      that.state.result.sort((a, b) => (a.Votes < b.Votes) ? 1 : -1)
+      that.setState({winner: that.state.result[0].Name})
+      if(that.state.result.length > 1){
+        that.setState({second: that.state.result[1].Name})
+      }
+      if(that.state.result.length > 2){
+          that.setState({third: that.state.result[2].Name})
+      }
     })
-    // that.setState(prevState => ({
-    //   result: [...prevState.result, {AltID: altID, Name: name, Votes: finalVotes}]
-    // }))
-    // finalVotes = 0;
-  }
-  }
+  })
 }
 
-getWinner() {
-var voteCounter = 0;
-var highestVote = 0;
-var winner = this.state.result[0]
-for(let i=0; i<this.state.result.length; i++){
-  for(let j=0; j<this.state.result.length; j++){
-    if(this.state.result[i].ParticipantID !== this.state.result[j].ParticipantID){
-    if(this.state.result[i].AltID === this.state.result[i].AltID) {
-      voteCounter++
-    }
-  }
-  if(voteCounter > highestVote) {
-    highestVote = voteCounter
-    winner = this.state.result[i]
-  voteCounter = 0
-}
-}
-}
-this.setState(prevState => ({result: prevState.result.filter(item => item.AltID !== winner.AltID) }));
-  return (
-    <Text>{winner.Name}</Text>
-  )
-}
 
-getSecond(){
-var voteCounter = 0;
-var secondHighestVote = 0;
-for(let i=0; i<this.state.result.length; i++){
-  for(let j=0; j<this.state.result.length; j++){
-    if(this.state.result[i].ParticipantID !== this.state.result[j].ParticipantID){
-    if(this.state.result[i].AltID === this.state.result[i].AltID) {
-      voteCounter++
-    }
-  }
-  if(voteCounter > secondHighestVote) {
-    secondHighestVote = voteCounter
-    var second = this.state.result[i]
-    voteCounter = 0
-}
-}
-}
-  return (
-    <Text>{second.Name}</Text>
-  )
-}
+// renderWinner = ({item, index}) => {
+//   console.log("efter " + this.state.result[0].Name)
+//   if(item.AltID === this.state.result[0].AltID) {
+//   return (
+// <Text style={styles.firstText}>{item.Name}</Text>
+// )
+// }
+// }
+//
+// renderSecond = ({item, index}) => {
+//   if(item.AltID === this.state.result[1].AltID) {
+//   return (
+// <Text style={styles.secondText}>{item.Name}</Text>
+// )
+// }
+// }
+//
+// renderThird = ({item, index}) => {
+//   console.log(item.AltID)
+//   console.log(this.state.result[2].AltID)
+//   if(item.AltID === this.state.result[2].AltID) {
+//   return (
+// <Text style={styles.thirdText}>{item.Name}</Text>
+// )
+// }
+// }
+//
+// <FlatList
+// extraData = {this.state}
+// data={this.state.result}
+// renderItem={this.renderWinner}
+// keyExtractor={this.extractKey}
+// />
 
-  // getResult(){
-  //   var result = this.props.navigation.state.params.result
-  //   console.log("resultat")
-  //   console.log(result)
-  //   this.setState({
-  //     result: result
-  //   })
-  //   var winner = 0
-  //   for(let i=0; i<result.length; i++){
-  //     var votes = this.state.result[i].Votes
-  //     if(votes > winner) {
-  //       winner = votes
-  //       this.setState({
-  //         first: this.state.result[i]
-  //       })
-  //     }
-  //   }
-  //   this.setState(prevState => ({result: prevState.result.filter(item => item !== first) }));
-  // }
-
-  // <View style={styles.firstContainer}>
-  // <Text style={styles.firstText}>{this.state.result[0].Name}</Text>
-  // <View style={styles.trophyIcon}>
-  // <Icon name={Platform.OS === "ios" ? "ios-trophy" : "md-create"}
-  // size={40}
-  // color='#daa520'/>
-  // </View>
-  // </View>
 
     render() {
       return (
         <View style={styles.container}>
         <Image source={require('../assets/images/medal.png')} style={styles.medalPic}/>
         <Text style={styles.resultLabel}>Result</Text>
-
         <View style={styles.firstContainer}>
-        <Text style={styles.firstText}>{this.getWinner()}</Text>
+        <Text style={styles.firstText}>{this.state.winner}</Text>
         <View style={styles.trophyIcon}>
         <Icon name={Platform.OS === "ios" ? "ios-trophy" : "md-create"}
         size={40}
@@ -176,7 +169,7 @@ for(let i=0; i<this.state.result.length; i++){
         </View>
 
         <View style={styles.secondContainer}>
-        <Text style={styles.secondText}>{this.getSecond()}</Text>
+<Text style={styles.secondText}>{this.state.second}</Text>
         <View style={styles.trophyIcon}>
         <Icon name={Platform.OS === "ios" ? "ios-trophy" : "md-create"}
         size={40}
@@ -185,7 +178,7 @@ for(let i=0; i<this.state.result.length; i++){
         </View>
 
         <View style={styles.thirdContainer}>
-        <Text style={styles.thirdText}>Alternativ 3</Text>
+<Text style={styles.thirdText}>{this.state.third}</Text>
         <View style={styles.trophyIcon}>
         <Icon name={Platform.OS === "ios" ? "ios-trophy" : "md-create"}
         size={40}
