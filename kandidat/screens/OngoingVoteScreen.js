@@ -60,14 +60,10 @@ export default class OngoingVoteScreen extends React.Component {
       db.collection("Users").doc(userID).collection("Votes").where("Finished", "==", "No").onSnapshot(function(querySnapshot) {
         that.setState({ yourTurn: []})
             querySnapshot.forEach(function(doc) {
-                // doc.data() is never undefined for query doc snapshots
-                //console.log(doc.id)
                 const name = doc.get('CatName');
                 const img = doc.get('CatImg');
                 that.setState(prevState => ({
                   yourTurn: [...prevState.yourTurn, {VoteID: doc.id, CatName: name, CatImg: img}],
-
-
                 }))
             });
         });}
@@ -81,15 +77,11 @@ export default class OngoingVoteScreen extends React.Component {
       {
         that.setState({ yourFriendsTurn: []})
             querySnapshot.forEach(function(doc)
-            {
-                // doc.data() is never undefined for query doc snapshots
-                console.log(doc.id)
-                const name = doc.get('CatName');
+            {   const name = doc.get('CatName');
                 const img = doc.get('CatImg');
                 that.setState(prevState => (
                   {
                   yourFriendsTurn: [...prevState.yourFriendsTurn, {VoteID: doc.id, CatName: name, CatImg: img}]
-
                 }))
             });
         });
@@ -104,8 +96,6 @@ export default class OngoingVoteScreen extends React.Component {
           });
         });
       }
-
-
 
       renderItem1 = ({item, index}) => {
         return (

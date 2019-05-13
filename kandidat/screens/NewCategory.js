@@ -19,7 +19,6 @@ import * as firebase from 'firebase';
 import 'firebase/firestore';
 
 export default class NewCategory extends React.Component {
-
   static navigationOptions = ({ navigation }) => {
     return {
       headerTitle: (
@@ -34,7 +33,7 @@ export default class NewCategory extends React.Component {
 
     constructor(props) {
       super(props)
-        const rows = [
+      const rows = [
         {id: '0', img: 'https://firebasestorage.googleapis.com/v0/b/swipesolver.appspot.com/o/Category%20Image%2Fanimals.jpg?alt=media&token=b37a7136-2043-4f5f-ae03-a5afd5aed9a3'},
         {id: '1', img: 'https://firebasestorage.googleapis.com/v0/b/swipesolver.appspot.com/o/Category%20Image%2FColors.jpg?alt=media&token=131c5e18-f477-4b87-8912-e1cdc8ecb2d7'},
         {id: '2', img: 'https://firebasestorage.googleapis.com/v0/b/swipesolver.appspot.com/o/Category%20Image%2Ffoodpic.jpg?alt=media&token=33280555-1ee5-44c2-a709-03b5a5b363b4'},
@@ -66,7 +65,6 @@ export default class NewCategory extends React.Component {
 
     createNewCat() {
       var that = this
-      console.log(this.state.text)
       if(this.state.text == "") {
         Alert.alert(
           data.missingCatName,
@@ -77,97 +75,95 @@ export default class NewCategory extends React.Component {
         var userID = user.uid;
         var db = firebase.firestore();
         db.collection("Users").doc(userID).collection("Category").add({
-    CatName: this.state.text,
-    CatImg: this.state.choosenImg,
-})
-.then(function(docRef) {
-    console.log("Document written with ID: ", docRef.id);
-    var cat = {id: docRef.id}
-    that.props.navigation.state.params.addToCategoryList(cat);
-    that.props.navigation.navigate('AlternativeScreen', {CatID: docRef.id, prePage: "New"})
-})
-.catch(function(error) {
-    console.error("Error adding document: ", error);
-});
+          CatName: this.state.text,
+          CatImg: this.state.choosenImg,
+        })
+        .then(function(docRef) {
+          console.log("Document written with ID: ", docRef.id);
+          var cat = {id: docRef.id}
+          that.props.navigation.state.params.addToCategoryList(cat);
+          that.props.navigation.navigate('AlternativeScreen', {CatID: docRef.id, prePage: "New"})
+        })
+        .catch(function(error) {
+          console.error("Error adding document: ", error);
+        });
+      }
     }
-}
 
-setBackground(item) {
-  this.state.choosenImg = item.img
-  this.setState({
-    showMe: false
-  })
-}
+    setBackground(item) {
+      this.state.choosenImg = item.img
+      this.setState({
+        showMe: false
+      })
+    }
 
-renderItem = ({item, index}) => {
-  return (
-    <TouchableOpacity
-    onPress={() => this.setBackground(item)}>
-    <Image source={{uri: item.img}} style={styles.picStyle}/>
-    </TouchableOpacity>
-  )
-}
-
+    renderItem = ({item, index}) => {
+      return (
+        <TouchableOpacity
+        onPress={() => this.setBackground(item)}>
+        <Image
+        source={{uri: item.img}}
+        style={styles.picStyle}/>
+        </TouchableOpacity>
+      )
+    }
 
     render() {
       return (
         <View style={styles.container}>
-        <Text style={styles.categoryLabel}> Your own category</Text>
-        <Modal visible={this.state.showMe}
+        <Text style={styles.categoryLabel}>{data.newCategory}</Text>
+        <Modal
+        visible={this.state.showMe}
         onRequestClose = {() => {this.setState({ showMe : false })}}>
         <View style={styles.modalView}>
         <Text style={styles.modalText}>{data.chooseBackground}</Text>
-        <TouchableOpacity style={styles.closeContainer}onPress={()=>{
+        <TouchableOpacity
+        style={styles.closeContainer}
+        onPress={()=>{
           this.setState({
             showMe: false
           })}}>
-          <Text style={styles.closeText}> Close Window </Text>
+          <Text style={styles.closeText}>{data.closeWindow}</Text>
           </TouchableOpacity>
 
-        <FlatList
-   data={this.state.rows}
-   renderItem={this.renderItem}
-   keyExtractor={this.extractKey}
-   />
+          <FlatList
+          data={this.state.rows}
+          renderItem={this.renderItem}
+          keyExtractor={this.extractKey}
+          />
           </View>
           </Modal>
 
-            <View style={styles.nameCategoryCon}>
+          <View style={styles.nameCategoryCon}>
+          <TextInput
+          style={styles.nameText}
+          placeholder={data.enterCatName}
+          onChangeText={(text) => this.setState({text})}/>
+          </View>
 
-            <TextInput
-            style={styles.nameText}
-            placeholder="Enter a category name..."
-            onChangeText={(text) => this.setState({text})}/>
+          <View style={styles.picContain}>
+          <TouchableOpacity
+          onPress={()=>{
+            this.setState({
+              showMe: true
+            })}}>
+            <Text style={styles.picText}>{data.photo}
+            <Icon name={Platform.OS === "ios" ? "ios-image" : "md-image"}
+            color='#FFFFFF'
+            size={30}/>
+            </Text>
+            </TouchableOpacity>
             </View>
 
+            <Text style={styles.catText}>{data.yourNewCat}</Text>
 
-
-            <View style={styles.picContain}>
-            <TouchableOpacity
-            onPress={()=>{
-              this.setState({
-                showMe: true
-              })}}>
-              <Text style={styles.picText}>{data.photo}
-              <Text style={styles.picText}>  </Text>
-              <Icon name={Platform.OS === "ios" ? "ios-image" : "md-image"}
-              color='#FFFFFF'
-              size={30}/>
-              </Text>
-              </TouchableOpacity>
-
-
-
-              </View>
-
-
-
-
-              <View style={styles.createdCat}>
-              <ImageBackground source={{uri: this.state.choosenImg}} style={{width: '100%', height: 100, justifyContent: 'center'}}>
-              <Text style={styles.createdCatText}>{this.state.text}</Text>
-              </ImageBackground>
-              </View>
+            <View style={styles.createdCat}>
+            <ImageBackground
+            source={{uri: this.state.choosenImg}}
+            style={{width: '100%', height: 100, justifyContent: 'center'}}>
+            <Text style={styles.createdCatText}>{this.state.text}</Text>
+            </ImageBackground>
+            </View>
 
             <View style={styles.buttonBottomContainer}>
             <TouchableOpacity
@@ -187,50 +183,63 @@ renderItem = ({item, index}) => {
             color="#A9A9A9"/>
             </TouchableOpacity>
             </View>
-
-
-
             </View>
           );
         }
       }
 
-
       const styles = StyleSheet.create({
         container: {
           height: '100%',
           flex: 1,
-
           backgroundColor: '#FFFFFF',
-          //marginLeft: 30,
           textAlign: "center",
           alignItems: "center",
         },
-
-
+        categoryLabel: {
+          marginTop: 40,
+          marginBottom: 20,
+          fontSize: 34,
+          color: '#000000',
+          textAlign: 'center',
+          fontFamily: "Roboto-Light",
+        },
+        nameCategoryCon: {
+          width: 350,
+          height: 70,
+          backgroundColor: '#6BCDFD',
+          marginTop: 10,
+          justifyContent: 'center',
+          borderRadius: 50,
+          borderWidth: 4,
+          borderColor: '#3BCDFD',
+        },
+        nameText: {
+          fontFamily: 'Roboto-Light',
+          color: '#FFFFFF',
+          fontSize: 24,
+          textAlign: 'center',
+        },
         picContain: {
           alignItems: 'center',
           justifyContent: 'center',
           textAlign: 'center',
-          //marginLeft: 50,
           borderRadius: 50,
-          //borderWidth: 6,
           borderColor: '#BA55B3',
-          marginTop: 20,
-          height:70,
-          width:350,
+          marginTop: 30,
+          height: 70,
+          width: 350,
           backgroundColor: '#BA55B3',
           marginBottom: 30,
         },
         picText:{
           justifyContent:'center',
-          // marginBottom: 15,
           fontFamily: 'Roboto-Light',
           color: '#FFFFFF',
-          fontSize: 20,
+          fontSize: 24,
           textAlign: 'center',
           margin:10,
-          paddingBottom:10
+          paddingBottom:10,
         },
         modalView:{
           flex: 1,
@@ -238,8 +247,6 @@ renderItem = ({item, index}) => {
           marginTop: 10,
           backgroundColor: '#FFFFFF',
           alignItems: 'center',
-
-
         },
         modalText: {
           paddingTop: 50,
@@ -259,9 +266,7 @@ renderItem = ({item, index}) => {
           fontSize: 15,
           color: 'white',
           justifyContent:'center',
-
         },
-
         closeContainer: {
           marginBottom: 30,
           marginTop: 10,
@@ -272,31 +277,12 @@ renderItem = ({item, index}) => {
           height: 50,
           alignItems:'center',
           justifyContent:'center',
-
         },
-        nameCategoryCon: {
-          width: 350,
-          height: 70,
-          backgroundColor: '#6BCDFD',
-          marginTop: 10,
-          justifyContent: 'center',
-          borderRadius: 50,
-          borderWidth: 4,
-          borderColor: '#3BCDFD',
-
-        },
-        nameText: {
+        catText: {
+          color: "#000",
           fontFamily: 'Roboto-Light',
-          color: '#FFFFFF',
-          fontSize: 24,
-          textAlign: 'center',
-        },
-        buttonBottomContainer: {
-          flexDirection:'row',
-          justifyContent: 'space-between',
-          width: 340,
-          marginTop: 50,
-
+          fontSize: 25,
+          margin: 10,
         },
         createdCat: {
           marginTop: 10,
@@ -305,19 +291,17 @@ renderItem = ({item, index}) => {
           backgroundColor: 'transparent',
           justifyContent: 'center',
           borderRadius:6,
-          borderColor:'black'
+          borderColor:'black',
+          marginBottom: 50,
         },
         createdCatText: {
           fontSize: 30,
           color: '#FFFFFF',
           marginLeft: 10,
         },
-        categoryLabel: {
-          margin:20,
-          fontSize: 40,
-          color: '#000000',
-          textAlign: 'center',
-          fontFamily: "Roboto-Light",
+        buttonBottomContainer: {
+          flexDirection:'row',
+          justifyContent: 'space-between',
+          width: 340,
         },
-
       });
