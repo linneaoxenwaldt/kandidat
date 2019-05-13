@@ -84,18 +84,16 @@ export default class ResultScreen extends React.Component {
       })
     }
 
-saveResult() {
-  var user = firebase.auth().currentUser;
-  var userID = user.uid;
-  var db = firebase.firestore();
-  var voteID = this.props.navigation.state.params.VoteID
-  var docRef = db.collection('Users').doc(userID).collection('Result').doc(voteID)
-  docRef.update({
-    Saved: true
-  })
-  this.props.navigation.navigate('SavedResult')
-}
-
+    saveResult() {
+      var user = firebase.auth().currentUser;
+      var userID = user.uid;
+      var db = firebase.firestore();
+      var voteID = this.props.navigation.state.params.VoteID
+      var docRef = db.collection('Users').doc(userID).collection('Result').doc(voteID)
+      docRef.update({
+        Saved: true
+      })
+      this.props.navigation.navigate('SavedResult')
     }
 
     deleteResult() {
@@ -115,84 +113,82 @@ saveResult() {
           });
         });
       });
-  });
-  docRef.delete().then(function() {
-  }).catch(function(error) {
-  console.error("delete vote ", error);
-  });
-  this.props.navigation.navigate('SavedResult')
-}
+      docRef.delete().then(function() {
+      }).catch(function(error) {
+        console.error("delete vote ", error);
+      });
+      this.props.navigation.navigate('SavedResult')
+    }
 
-checkSaved() {
-  if(this.state.saved === false){
-    return(
-      <View style = {styles.buttonContainer}>
-      <TouchableOpacity
-      style = {styles.saveResult}
-      underlayColor='#fff'
-      onPress={() => Alert.alert(
-        data.deleteResult,
-        `${data.sureMsg}?` ,
-        [
-          {text: data.cancel, onPress: () => this.props.navigation.navigate('ResultScreen')},
-          {text: data.ok, onPress: () => this.deleteResult()},
-        ],
-        { cancelable: false })}>
-      <Text style= {styles.saveResultText}>{data.delete} </Text>
-      </TouchableOpacity>
+    checkSaved() {
+      if(this.state.saved === false){
+        return(
+          <View style = {styles.buttonContainer}>
+          <TouchableOpacity
+          style = {styles.saveResult}
+          underlayColor='#fff'
+          onPress={() => Alert.alert(
+            data.deleteResult,
+            `${data.sureMsg}?` ,
+            [
+              {text: data.cancel, onPress: () => this.props.navigation.navigate('ResultScreen')},
+              {text: data.ok, onPress: () => this.deleteResult()},
+            ],
+            { cancelable: false })}>
+            <Text style= {styles.saveResultText}>{data.delete} </Text>
+            </TouchableOpacity>
 
-      <TouchableOpacity
-      style = {styles.saveResult}
-      underlayColor='#fff'
-      onPress={() => this.saveResult()}>
-      <Text style= {styles.saveResultText}>{data.save}{data.result}</Text>
-      </TouchableOpacity>
-      </View>
-    )
-  }
-  else if(this.state.saved === true){
-    return(
-      <View style={styles.buttonBottomContainer}>
-      <TouchableOpacity
-      onPress={() => this.props.navigation.navigate('SavedResult')}
-      >
-      <Icon
-      name={Platform.OS === "ios" ? "ios-arrow-back" : "md-arrow-back"}
-      size={55}
-      color="#A9A9A9"/>
-      </TouchableOpacity>
-      <TouchableOpacity
-      style = {styles.deleteButton}
-      onPress={() => this.deleteResult()}>
-      <Text style={styles.deleteText}>{data.delete}</Text>
-      </TouchableOpacity>
-      </View>
-    )
-  }
-}
+            <TouchableOpacity
+            style = {styles.saveResult}
+            underlayColor='#fff'
+            onPress={() => this.saveResult()}>
+            <Text style= {styles.saveResultText}>{data.save}{data.result}</Text>
+            </TouchableOpacity>
+            </View>
+          )
+        }
+        else if(this.state.saved === true){
+          return(
+            <View style={styles.buttonBottomContainer}>
+            <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('SavedResult')}
+            >
+            <Icon
+            name={Platform.OS === "ios" ? "ios-arrow-back" : "md-arrow-back"}
+            size={55}
+            color="#A9A9A9"/>
+            </TouchableOpacity>
+            <TouchableOpacity
+            style = {styles.deleteButton}
+            onPress={() => this.deleteResult()}>
+            <Text style={styles.deleteText}>{data.delete}</Text>
+            </TouchableOpacity>
+            </View>
+          )
+        }
+      }
+      render() {
+        return (
+          <View style={styles.container}>
+          <Image source={require('../assets/images/medal.png')} style={styles.medalPic}/>
+          <Text style={styles.resultLabel}>{data.result}</Text>
+          <View style={styles.firstContainer}>
+          <Text style={styles.containText}>{this.state.winner}</Text>
+          <View style={styles.trophyIcon}>
+          <Icon name={Platform.OS === "ios" ? "ios-trophy" : "md-create"}
+          size={40}
+          color='#daa520'/>
+          </View>
+          </View>
 
-    render() {
-      return (
-        <View style={styles.container}>
-        <Image source={require('../assets/images/medal.png')} style={styles.medalPic}/>
-        <Text style={styles.resultLabel}>{data.results}</Text>
-        <View style={styles.firstContainer}>
-        <Text style={styles.containText}>{this.state.winner}</Text>
-        <View style={styles.trophyIcon}>
-        <Icon name={Platform.OS === "ios" ? "ios-trophy" : "md-create"}
-        size={40}
-        color='#daa520'/>
-        </View>
-        </View>
-
-        <View style={styles.secondContainer}>
-        <Text style={styles.containText}>{this.state.second}</Text>
-        <View style={styles.trophyIcon}>
-        <Icon name={Platform.OS === "ios" ? "ios-trophy" : "md-create"}
-        size={40}
-        color='#c0c0c0'/>
-        </View>
-        </View>
+          <View style={styles.secondContainer}>
+          <Text style={styles.containText}>{this.state.second}</Text>
+          <View style={styles.trophyIcon}>
+          <Icon name={Platform.OS === "ios" ? "ios-trophy" : "md-create"}
+          size={40}
+          color='#c0c0c0'/>
+          </View>
+          </View>
 
           <View style={styles.thirdContainer}>
           <Text style={styles.containText}>{this.state.third}</Text>
@@ -207,7 +203,6 @@ checkSaved() {
         );
       }
     }
-  }
 
     const styles = StyleSheet.create({
       container: {
@@ -291,7 +286,6 @@ checkSaved() {
         height: 70,
         margin: 10,
         padding: 10,
-        //marginTop:100,
         backgroundColor:'#BA55B3',
         borderRadius:20,
         borderWidth: 1,
