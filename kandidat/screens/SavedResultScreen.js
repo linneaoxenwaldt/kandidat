@@ -70,7 +70,8 @@ getResults() {
   var user = firebase.auth().currentUser;
   var userID = user.uid;
   var db = firebase.firestore();
-  db.collection("Users").doc(userID).collection("Result").where("Saved", "==", false).get().then(function(querySnapshot) {
+  db.collection("Users").doc(userID).collection("Result").where("Saved", "==", false).onSnapshot(function(querySnapshot) {
+        that.setState({results: []})
         querySnapshot.forEach(function(doc) {
             // doc.data() is never undefined for query doc snapshots
             //console.log(doc.id)
@@ -88,7 +89,8 @@ getSavedResults(){
   var user = firebase.auth().currentUser;
   var userID = user.uid;
   var db = firebase.firestore();
-  db.collection("Users").doc(userID).collection("Result").where("Saved", "==", true).get().then(function(querySnapshot) {
+  db.collection("Users").doc(userID).collection("Result").where("Saved", "==", true).onSnapshot(function(querySnapshot) {
+        that.setState({savedResults: []})
         querySnapshot.forEach(function(doc) {
             // doc.data() is never undefined for query doc snapshots
             //console.log(doc.id)
@@ -125,7 +127,7 @@ getSavedResults(){
       }).catch(function(error) {
       console.error("delete vote ", error);
       });
-      this.setState(prevState => ({savedResults: prevState.savedResults.filter(item => item !== delItem) }));
+    //  this.setState(prevState => ({savedResults: prevState.savedResults.filter(item => item !== delItem) }));
     }
 
 

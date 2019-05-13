@@ -56,6 +56,7 @@ export default class ResultScreen extends React.Component {
       this.getResult()
     }
 
+
   getResult() {
     var that = this;
     var user = firebase.auth().currentUser;
@@ -64,7 +65,7 @@ export default class ResultScreen extends React.Component {
     var voteID = this.props.navigation.state.params.VoteID
     var docRef = db.collection("Users").doc(userID).collection("Result").doc(voteID)
 docRef.collection("Alternatives").onSnapshot(function(querySnapshot) {
-  that.setState({result: []})
+  that.setState({ result: [] })
     querySnapshot.forEach(function(doc) {
       const altID = doc.id;
       const name = doc.get('Name')
@@ -74,7 +75,9 @@ docRef.collection("Alternatives").onSnapshot(function(querySnapshot) {
         result: [...prevState.result, {AltID: altID, Name: name, Votes: votes}]
       }))
       that.state.result.sort((a, b) => (a.Votes < b.Votes) ? 1 : -1)
+      if(that.state.result.length > 0) {
       that.setState({winner: that.state.result[0].Name})
+      }
       if(that.state.result.length > 1){
         that.setState({second: that.state.result[1].Name})
       }

@@ -79,6 +79,7 @@
   "invalidInput": "Error: Invalid inut!",
   "passwDoNotMatch": "Passwords do not match!",
   "changedPassword": "Password is changed",
+  "noAlternatives": "You must create at least one alternative",
 
 
 }
