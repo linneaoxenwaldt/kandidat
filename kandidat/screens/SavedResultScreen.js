@@ -33,12 +33,14 @@ export default class SavedResultScreen extends React.Component {
 
     this.extractKey = ({id}) => id
     this.extractKey1 = ({VoteID}) => VoteID
+    this.extractKey2 = ({VoteID}) => VoteID
     this.state = {
       rows: rows,
       results:[],
-
+      savedResults: [],
     }
     this.getResults()
+    this.getSavedResults()
   }
 
   static navigationOptions = ({ navigation }) => {
@@ -68,7 +70,7 @@ getResults() {
   var user = firebase.auth().currentUser;
   var userID = user.uid;
   var db = firebase.firestore();
-  db.collection("Users").doc(userID).collection("Result").get().then(function(querySnapshot) {
+  db.collection("Users").doc(userID).collection("Result").where("Saved", "==", false).get().then(function(querySnapshot) {
         querySnapshot.forEach(function(doc) {
             // doc.data() is never undefined for query doc snapshots
             //console.log(doc.id)
@@ -81,8 +83,48 @@ getResults() {
     });
 }
 
+getSavedResults(){
+  var that = this
+  var user = firebase.auth().currentUser;
+  var userID = user.uid;
+  var db = firebase.firestore();
+  db.collection("Users").doc(userID).collection("Result").where("Saved", "==", true).get().then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+            // doc.data() is never undefined for query doc snapshots
+            //console.log(doc.id)
+            const name = doc.get('CatName');
+            const img = doc.get('CatImg');
+            that.setState(prevState => ({
+              savedResults: [...prevState.savedResults, {VoteID: doc.id, CatName: name, CatImg: img}]
+            }))
+        });
+    });
+}
+
     deleteResult(delItem) {
-      this.setState(prevState => ({rows: prevState.rows.filter(item => item !== delItem) }));
+      var that = this;
+      var user = firebase.auth().currentUser;
+      var userID = user.uid;
+      var db = firebase.firestore();
+      var voteID = this.props.navigation.state.params.VoteID
+      var docRef = db.collection('Users').doc(userID).collection('Result').doc(voteID)
+      docRef.collection('Alternatives').get().then(function(querySnapshot) {
+          querySnapshot.forEach(function(doc) {
+              // doc.data() is never undefined for query doc snapshots
+              const id = doc.id
+              docRef.collection('Alternatives').doc(id).delete().then(function() {
+                console.log("delete alternatives ");
+              }).catch(function(error) {
+                console.error("delete alternatives ", error);
+              });
+          });
+      });
+      docRef.delete().then(function() {
+      console.log("delete vote " + voteID);
+      }).catch(function(error) {
+      console.error("delete vote ", error);
+      });
+      this.setState(prevState => ({savedResults: prevState.savedResults.filter(item => item !== delItem) }));
     }
 
 
@@ -97,35 +139,67 @@ getResults() {
         //  containerStyle={{ backgroundColor: this.colors[index % this.colors.length]}}
         titleStyle={{color: '#FFFFFF', fontSize: 30}}
         title={item.CatName}
-        //rightSubtitle={item.expdate}
+            rightIcon = {<Icon
+              name={Platform.OS === "ios" ? "ios-arrow-forward" : "md-arrow-forward"}
+              size={40}
+              color='#FFFFFF'/>}
         />
         </ImageBackground>
         </TouchableOpacity>
       )
     }
 
-    renderItem = ({item, index}) => {
-      var msg = `${data.sureMsg} ${item.text}?`
+    renderItem2 = ({item, index}) => {
+      console.log(item)
       return (
+        <TouchableOpacity
+        onPress={() => this.props.navigation.navigate('ResultScreen', {VoteID: item.VoteID})}>
+        <ImageBackground source={{uri: item.CatImg}} style={{width: '100%', height: 100}}>
         <ListItem
-        containerStyle={{ backgroundColor: this.colors[index % this.colors.length]}}
+        containerStyle={{ backgroundColor: 'transparent'}}
+        //  containerStyle={{ backgroundColor: this.colors[index % this.colors.length]}}
         titleStyle={{color: '#FFFFFF', fontSize: 30}}
-        roundAvatar
-        title={item.text}
+        title={item.CatName}
         rightIcon = {<Icon
-          name={Platform.OS === "ios" ? "ios-arrow-forward" : "md-arrow-forward"}
-          size={25}
+          name={Platform.OS === "ios" ? "ios-trash" : "md-trash"}
+          size={40}
           color='#FFFFFF'
           onPress={() => Alert.alert(
             data.deleteResult,
-            msg,
+            `${data.sureMsg} ${item.text}?` ,
             [
-              {text: 'Cancel', onPress: () => this.props.navigation.navigate('SavedResults')},
-              {text: 'OK', onPress: () => this.deleteResult(item)},
+              {text: data.cancel, onPress: () => this.props.navigation.navigate('SavedResult')},
+              {text: data.ok, onPress: () => this.deleteResult(item)},
             ],
             { cancelable: false })}/>}
-            />)
-          }
+        />
+        </ImageBackground>
+        </TouchableOpacity>
+      )
+    }
+
+    // renderItem = ({item, index}) => {
+    //   var msg = `${data.sureMsg} ${item.text}?`
+    //   return (
+    //     <ListItem
+    //     containerStyle={{ backgroundColor: this.colors[index % this.colors.length]}}
+    //     titleStyle={{color: '#FFFFFF', fontSize: 30}}
+    //     roundAvatar
+    //     title={item.text}
+    //     rightIcon = {<Icon
+    //       name={Platform.OS === "ios" ? "ios-arrow-forward" : "md-arrow-forward"}
+    //       size={25}
+    //       color='#FFFFFF'
+    //       onPress={() => Alert.alert(
+    //         data.deleteResult,
+    //         msg,
+    //         [
+    //           {text: 'Cancel', onPress: () => this.props.navigation.navigate('SavedResults')},
+    //           {text: 'OK', onPress: () => this.deleteResult(item)},
+    //         ],
+    //         { cancelable: false })}/>}
+    //         />)
+    //       }
 
           render() {
             return (
@@ -152,11 +226,11 @@ getResults() {
                 size={30}/>
                 </Text>
 
-              <FlatList
-              data={this.state.rows}
-              renderItem={this.renderItem}
-              keyExtractor={this.extractKey}
-              />
+                <FlatList
+                data={this.state.savedResults}
+                renderItem={this.renderItem2}
+                keyExtractor={this.extractKey2}
+                />
               </View>
                 </View>
 

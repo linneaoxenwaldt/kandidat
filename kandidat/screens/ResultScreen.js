@@ -56,12 +56,8 @@ export default class ResultScreen extends React.Component {
       secondHighestVote: 0,
     };
   this.getResult()
-    // this.createResult()
   }
-  //
-  // componentDidMount() {
-  //   this.createResult()
-  // }
+
 
 
   getResult() {
@@ -69,33 +65,8 @@ export default class ResultScreen extends React.Component {
     var user = firebase.auth().currentUser;
     var userID = user.uid;
     var db = firebase.firestore();
-    // var alternatives = this.props.navigation.state.params.Alternatives
-    // var participants = this.props.navigation.state.params.Participants
     var voteID = this.props.navigation.state.params.VoteID
     var docRef = db.collection("Users").doc(userID).collection("Result").doc(voteID)
-//     docRef.set({})
-//     for(let i=0; i<alternatives.length; i++) {
-//       //var finalVote = this.checkVotes(alternatives[i].AltID)
-//       docRef.collection('Alternatives').doc(alternatives[i].AltID).set({
-//       Name: alternatives[i].Name,
-//       Votes: 0,
-//     })
-//   }
-//   for(let j=0; j< participants.length; j++){
-//   db.collection("Users").doc(participants[j].ParticipantID).collection("Votes").doc(voteID).collection('Alternatives').get().then(function(querySnapshot) {
-//       querySnapshot.forEach(function(doc) {
-//           // doc.data() is never undefined for query doc snapshots
-//           const altID = doc.id;
-//           const votes = doc.get('Votes')
-//           //console.log(votes)
-//           if(votes === 1) {
-//           docRef.collection('Alternatives').doc(altID).update({
-//             Votes: firebase.firestore.FieldValue.increment(1)
-//           })
-//         }
-//       });
-//   });
-// }
 docRef.collection("Alternatives").onSnapshot(function(querySnapshot) {
   that.setState({result: []})
     querySnapshot.forEach(function(doc) {
@@ -116,6 +87,43 @@ docRef.collection("Alternatives").onSnapshot(function(querySnapshot) {
       }
     })
   })
+}
+
+saveResult() {
+  //var that = this;
+  var user = firebase.auth().currentUser;
+  var userID = user.uid;
+  var db = firebase.firestore();
+  var voteID = this.props.navigation.state.params.VoteID
+  var docRef = db.collection('Users').doc(userID).collection('Result').doc(voteID)
+  docRef.update({
+    Saved: true
+  })
+}
+
+deleteResult() {
+  var that = this;
+  var user = firebase.auth().currentUser;
+  var userID = user.uid;
+  var db = firebase.firestore();
+  var voteID = this.props.navigation.state.params.VoteID
+  var docRef = db.collection('Users').doc(userID).collection('Result').doc(voteID)
+  docRef.collection('Alternatives').get().then(function(querySnapshot) {
+      querySnapshot.forEach(function(doc) {
+          // doc.data() is never undefined for query doc snapshots
+          const id = doc.id
+          docRef.collection('Alternatives').doc(id).delete().then(function() {
+            console.log("delete alternatives ");
+          }).catch(function(error) {
+            console.error("delete alternatives ", error);
+          });
+      });
+  });
+  docRef.delete().then(function() {
+  console.log("delete vote " + voteID);
+  }).catch(function(error) {
+  console.error("delete vote ", error);
+  });
 }
 
 
