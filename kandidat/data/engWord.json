@@ -79,6 +79,16 @@
   "invalidInput": "Error: Invalid inut!",
   "passwDoNotMatch": "Passwords do not match!",
   "changedPassword": "Password is changed",
-
+  "info": "Info",
+  "sound": "Sound",
+  "notifications": "Notifications",
+  "deleteAccount": "Account",
+  "logOut": "Log Out",
+  "enableSound": "Are you sure you want to enable sound?",
+  "disableNotification": "Are you sure you want to disable notifications?",
+  "deleteAccount": "Delete Account",
+  "cannotRegret": "You cannot regret this!",
+  "sureLogOut": "Are you sure you want to log out?",
+  "settings": "Settings",
 
 }
