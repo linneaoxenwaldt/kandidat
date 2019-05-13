@@ -232,7 +232,7 @@ export default class VoteAddFriends extends React.Component {
             isVisible={this.state.isDateTimePickerVisible}
             onConfirm={this.handleDatePicked}
             onCancel={this.hideDateTimePicker}
-            mode={data.time}
+            mode={"time"}
             titleIOS={data.pickTime}
             />
             <Text style={styles.addFriendsText}> {data.expireDate} <Icon

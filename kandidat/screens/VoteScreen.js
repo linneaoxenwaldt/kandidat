@@ -302,6 +302,7 @@ createResult(){
       docRef.set({
         CatName: catName,
         CatImg: catImg,
+        Saved: false,
       })
       for(let i=0; i<alternatives.length; i++) {
         //var finalVote = this.checkVotes(alternatives[i].AltID)
