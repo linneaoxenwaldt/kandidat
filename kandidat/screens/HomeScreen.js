@@ -26,6 +26,7 @@ export default class HomeScreen extends React.Component {
   }
   this.getnotificationOngoingVotes()
   this.getnotificationRequests()
+  this.getnotificationResults()
   }
 
   static navigationOptions = ({ navigation }) => {
@@ -49,6 +50,37 @@ export default class HomeScreen extends React.Component {
         ),
       };
     };
+
+    getnotificationResults() {
+      var that = this
+      var user = firebase.auth().currentUser;
+      var userID = user.uid;
+      var db = firebase.firestore();
+      db.collection('Users').doc(userID)
+       .get().then(
+       doc => {
+         if (doc.exists) {
+           db.collection('Users').doc(userID).collection('Result').where("Saved", "==", false).get().
+             then(sub => {
+               if (sub.docs.length > 0) {
+                 that.setState({
+                   notificationResults: true,
+                 })
+               }
+             });
+         }
+       });
+    }
+
+    showNotificationResults() {
+      if(this.state.notificationResults === true) {
+        return(
+        <Icon style={{ position: 'absolute', top: 320, left: 240 }}
+                name={Platform.OS === "ios" ? "ios-notifications" : "md-notifications-outline"}
+                size={40}
+                color='#EB2C2C'/>)
+      }
+    }
 
     getnotificationOngoingVotes() {
       var that = this
@@ -155,10 +187,9 @@ export default class HomeScreen extends React.Component {
         <TouchableOpacity
         style={styles.resultsButt}
         onPress={() => this.props.navigation.navigate('SavedResult')}>
-        <Text style={styles.buttonText}> {data.results}  <Icon style={{ position: 'absolute', top: 320, left: 240 }}
-        name={Platform.OS === "ios" ? "ios-notifications" : "md-notifications-outline"}
-        size={40}
-        color='#EB2C2C'/></Text>
+        <Text style={styles.buttonText}> {data.results}
+        {this.showNotificationResults()}
+        </Text>
         </TouchableOpacity>
         </View>
 
