@@ -11,7 +11,6 @@ import { ScrollView,
   Alert,
   TextInput,
   Modal,
-  Switch,
 } from 'react-native';
 import { ListItem } from 'react-native-elements';
 import { DrawerActions } from 'react-navigation';
@@ -64,14 +63,13 @@ export default class SettingsScreen extends React.Component {
 
       this.iconsRight = [infos, resultss, sounds, notificationss, accounts, logouts]
       const rows = [
-        {id: '0', text: 'Info'},
-        {id: '1', text: 'Results'},
-        {id: '2', text: 'Sound'},
-        {id: '3', text: 'Notificatios'},
-        {id: '4', text: 'Delete Account'},
-        {id: '5', text: 'Logout'},
+        {id: '0', text: data.info},
+        {id: '1', text: data.results},
+        {id: '2', text: data.sound},
+        {id: '3', text: data.notifications},
+        {id: '4', text: data.deleteAccount},
+        {id: '5', text: data.logOut},
       ]
-
       this.extractKey = ({id}) => id
       this.state = {
         rows: rows,
@@ -88,60 +86,54 @@ export default class SettingsScreen extends React.Component {
         this.props.navigation.navigate('SavedResult')
       }else if(id == 2){
         Alert.alert(
-          'Sound',
-          'Are you sure you want to enable sound?',
+          data.sound,
+          data.enableSound,
           [
             {
-              text: "Cancel",
-              onPress: () => console.log('Cancel Pressed'),
+              text: data.cancel,
             },
             {
-              text: 'OK',
-              onPress: () => console.log('OK pressed!')
+              text: data.ok,
             },
           ]
         )
       }else if(id == 3){
         Alert.alert(
-          'Notifications',
-          'Are you sure you want to disable notifications?',
+          data.notifications,
+          data.disableNotification,
           [
             {
-              text: "Cancel",
-              onPress: () => console.log('Cancel Pressed'),
+              text: data.cancel,
             },
             {
-              text: 'OK',
-              onPress: () => console.log('OK pressed!')
+              text: data.ok,
             },
           ]
         )
       }else if(id == 4){
         Alert.alert(
-          'Delete Account',
-          'You cannot regret this!',
+          data.deleteAccount,
+          data.cannotRegret,
           [
             {
-              text: "Cancel",
-              onPress: () => console.log('Cancel Pressed'),
+              text: data.cancel,
             },
             {
-              text: 'OK',
+              text: data.ok,
               onPress: () => firebase.auth().signOut()
             },
           ]
         )
       }else if(id== 5){
         Alert.alert(
-          'Log out',
-          'Are you sure you want to log out?',
+          data.logOut,
+          data.sureLogOut,
           [
             {
-              text: "Cancel",
-              onPress: () => console.log('Cancel Pressed'),
+              text: data.cancel,
             },
             {
-              text: 'ok',
+              text: data.ok,
               onPress: () => firebase.auth().signOut()
             },
           ]
@@ -166,98 +158,98 @@ export default class SettingsScreen extends React.Component {
         title={item.text}
         leftAvatar={this.iconsLeft[index % this.iconsLeft.length]}
         rightIcon ={this.iconsRight[index % this.iconsRight.length]}
-          />)
-        }
-
-
-        render() {
-          return (
-            <View style={styles.container}>
-            <Text style={styles.settingsLabel}>Settings
-            <Icon name={Platform.OS === "ios" ? "ios-settings" : "md-settings"}
-            size={40} color='grey'/>
-            </Text>
-
-            <FlatList
-            data={this.state.rows}
-            extraData = {this.state.icon}
-            renderItem={this.renderItem}
-            keyExtractor={this.extractKey}
-            />
-
-            <Modal visible = {this.state.showMe}
-            onRequestClose = {() => {this.setState({ showMe : false })}}>
-            <View style={styles.modalView}>
-            <Text style={styles.modalText}>{data.infoText}</Text>
-            </View>
-            <TouchableOpacity style={styles.closeIcon} onPress = {() =>{this.setState({ showMe : false })}}>
-            <Icon name={Platform.OS === "ios" ? "ios-close" : "md-close"}
-            size={100} color='#EB2C2C'/>
-            </TouchableOpacity>
-            </Modal>
-            </View>
-
-          );
-        }
+        />)
       }
 
-      const styles = StyleSheet.create({
-        container: {
-          flex: 1,
-          paddingTop: 15,
-          backgroundColor: '#FFFFFF',
-        },
-        settingsLabel: {
-          fontSize: 40,
-          color: '#000000',
-          textAlign: 'center',
-          fontFamily: "Roboto-Light",
-          padding: 40,
-        },
-        row: {
-          fontFamily: "Roboto-Light",
-          color: '#FFFFFF',
-          padding: 15,
-          marginBottom: 5,
-          fontSize: 20,
-          justifyContent: 'center',
-        },
-        modalView: {
-          alignItems: 'center',
-          padding: 20,
-          marginTop: 50,
-          marginLeft: 20,
-          marginRight: 20,
-          borderWidth: 5,
-          borderColor: "#6ACCCB",
-        },
-        modalText: {
-          textAlign: 'center',
-          fontFamily: "Roboto-Light",
-          fontSize: 20,
-        },
-        closeIcon: {
-          marginTop: 30,
-          alignItems: 'center',
-        },
-        saveResult: {
-          alignItems:'center',
-          justifyContent: 'center',
-          width: 200,
-          height: 70,
-          margin: 10,
-          padding: 10,
-          marginTop:10,
-          backgroundColor:'#BA55B3',
-          borderRadius:20,
-          borderWidth: 1,
-          borderColor: '#fff'
-        },
-        saveResultText:{
-          alignItems:'center',
-          fontSize:25,
-          textAlign:'center',
-          alignItems:'center',
-          color: 'white',
-        },
-      });
+
+      render() {
+        return (
+          <View style={styles.container}>
+          <Text style={styles.settingsLabel}> {data.settings}
+          <Icon name={Platform.OS === "ios" ? "ios-settings" : "md-settings"}
+          size={40} color='#A9A9A9'/>
+          </Text>
+
+          <FlatList
+          data={this.state.rows}
+          extraData = {this.state.icon}
+          renderItem={this.renderItem}
+          keyExtractor={this.extractKey}
+          />
+
+          <Modal visible = {this.state.showMe}
+          onRequestClose = {() => {this.setState({ showMe : false })}}>
+          <View style={styles.modalView}>
+          <Text style={styles.modalText}>{data.infoText}</Text>
+          </View>
+          <TouchableOpacity style={styles.closeIcon} onPress = {() =>{this.setState({ showMe : false })}}>
+          <Icon name={Platform.OS === "ios" ? "ios-close" : "md-close"}
+          size={100} color='#EB2C2C'/>
+          </TouchableOpacity>
+          </Modal>
+          </View>
+
+        );
+      }
+    }
+
+    const styles = StyleSheet.create({
+      container: {
+        flex: 1,
+        paddingTop: 15,
+        backgroundColor: '#FFFFFF',
+      },
+      settingsLabel: {
+        fontSize: 40,
+        color: '#000000',
+        textAlign: 'center',
+        fontFamily: "Roboto-Light",
+        padding: 40,
+      },
+      row: {
+        fontFamily: "Roboto-Light",
+        color: '#FFFFFF',
+        padding: 15,
+        marginBottom: 5,
+        fontSize: 20,
+        justifyContent: 'center',
+      },
+      modalView: {
+        alignItems: 'center',
+        padding: 20,
+        marginTop: 50,
+        marginLeft: 20,
+        marginRight: 20,
+        borderWidth: 5,
+        borderColor: "#6ACCCB",
+      },
+      modalText: {
+        textAlign: 'center',
+        fontFamily: "Roboto-Light",
+        fontSize: 20,
+      },
+      closeIcon: {
+        marginTop: 30,
+        alignItems: 'center',
+      },
+      saveResult: {
+        alignItems:'center',
+        justifyContent: 'center',
+        width: 200,
+        height: 70,
+        margin: 10,
+        padding: 10,
+        marginTop:10,
+        backgroundColor:'#BA55B3',
+        borderRadius:20,
+        borderWidth: 1,
+        borderColor: '#fff'
+      },
+      saveResultText:{
+        alignItems:'center',
+        fontSize:25,
+        textAlign:'center',
+        alignItems:'center',
+        color: '#fff',
+      },
+    });
