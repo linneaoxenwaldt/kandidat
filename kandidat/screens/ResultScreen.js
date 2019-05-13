@@ -51,76 +51,122 @@ export default class ResultScreen extends React.Component {
         third: [],
         highestVote: 0,
         secondHighestVote: 0,
+        saved: this.props.navigation.state.params.saved,
       };
       this.getResult()
     }
 
-  getResult() {
-    var that = this;
-    var user = firebase.auth().currentUser;
-    var userID = user.uid;
-    var db = firebase.firestore();
-    var voteID = this.props.navigation.state.params.VoteID
-    var docRef = db.collection("Users").doc(userID).collection("Result").doc(voteID)
-docRef.collection("Alternatives").onSnapshot(function(querySnapshot) {
-  that.setState({result: []})
-    querySnapshot.forEach(function(doc) {
-      const altID = doc.id;
-      const name = doc.get('Name')
-      const votes = doc.get('Votes')
-    //  console.log(that.state.result)
-      that.setState(prevState => ({
-        result: [...prevState.result, {AltID: altID, Name: name, Votes: votes}]
-      }))
-      that.state.result.sort((a, b) => (a.Votes < b.Votes) ? 1 : -1)
-      that.setState({winner: that.state.result[0].Name})
-      if(that.state.result.length > 1){
-        that.setState({second: that.state.result[1].Name})
-      }
-      if(that.state.result.length > 2){
-          that.setState({third: that.state.result[2].Name})
-      }
-    })
-  })
-}
+    getResult() {
+      var that = this;
+      var user = firebase.auth().currentUser;
+      var userID = user.uid;
+      var db = firebase.firestore();
+      var voteID = this.props.navigation.state.params.VoteID
+      var docRef = db.collection("Users").doc(userID).collection("Result").doc(voteID)
+      docRef.collection("Alternatives").onSnapshot(function(querySnapshot) {
+        that.setState({result: []})
+        querySnapshot.forEach(function(doc) {
+          const altID = doc.id;
+          const name = doc.get('Name')
+          const votes = doc.get('Votes')
+          that.setState(prevState => ({
+            result: [...prevState.result, {AltID: altID, Name: name, Votes: votes}]
+          }))
+          that.state.result.sort((a, b) => (a.Votes < b.Votes) ? 1 : -1)
+          that.setState({winner: that.state.result[0].Name})
+          if(that.state.result.length > 1){
+            that.setState({second: that.state.result[1].Name})
+          }
+          if(that.state.result.length > 2){
+            that.setState({third: that.state.result[2].Name})
+          }
+        })
+      })
+    }
 
-saveResult() {
-  //var that = this;
-  var user = firebase.auth().currentUser;
-  var userID = user.uid;
-  var db = firebase.firestore();
-  var voteID = this.props.navigation.state.params.VoteID
-  var docRef = db.collection('Users').doc(userID).collection('Result').doc(voteID)
-  docRef.update({
-    Saved: true
-  })
-}
+    saveResult() {
+      var user = firebase.auth().currentUser;
+      var userID = user.uid;
+      var db = firebase.firestore();
+      var voteID = this.props.navigation.state.params.VoteID
+      var docRef = db.collection('Users').doc(userID).collection('Result').doc(voteID)
+      docRef.update({
+        Saved: true
+      })
+      this.props.navigation.navigate('SavedResult')
+    }
 
-deleteResult() {
-  var that = this;
-  var user = firebase.auth().currentUser;
-  var userID = user.uid;
-  var db = firebase.firestore();
-  var voteID = this.props.navigation.state.params.VoteID
-  var docRef = db.collection('Users').doc(userID).collection('Result').doc(voteID)
-  docRef.collection('Alternatives').get().then(function(querySnapshot) {
-      querySnapshot.forEach(function(doc) {
-          // doc.data() is never undefined for query doc snapshots
+    deleteResult() {
+      var that = this;
+      var user = firebase.auth().currentUser;
+      var userID = user.uid;
+      var db = firebase.firestore();
+      var voteID = this.props.navigation.state.params.VoteID
+      var docRef = db.collection('Users').doc(userID).collection('Result').doc(voteID)
+      docRef.collection('Alternatives').get().then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
           const id = doc.id
           docRef.collection('Alternatives').doc(id).delete().then(function() {
             console.log("delete alternatives ");
           }).catch(function(error) {
             console.error("delete alternatives ", error);
           });
+        });
       });
-  });
-  docRef.delete().then(function() {
-  console.log("delete vote " + voteID);
-  }).catch(function(error) {
-  console.error("delete vote ", error);
-  });
-}
+      docRef.delete().then(function() {
+      }).catch(function(error) {
+        console.error("delete vote ", error);
+      });
+      this.props.navigation.navigate('SavedResult')
+    }
 
+    checkSaved() {
+      if(this.state.saved === false){
+        return(
+          <View style = {styles.buttonContainer}>
+          <TouchableOpacity
+          style = {styles.saveResult}
+          underlayColor='#fff'
+          onPress={() => Alert.alert(
+            data.deleteResult,
+            `${data.sureMsg}?` ,
+            [
+              {text: data.cancel, onPress: () => this.props.navigation.navigate('ResultScreen')},
+              {text: data.ok, onPress: () => this.deleteResult()},
+            ],
+            { cancelable: false })}>
+            <Text style= {styles.saveResultText}>{data.delete} </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+            style = {styles.saveResult}
+            underlayColor='#fff'
+            onPress={() => this.saveResult()}>
+            <Text style= {styles.saveResultText}>{data.save}{data.result}</Text>
+            </TouchableOpacity>
+            </View>
+          )
+        }
+        else if(this.state.saved === true){
+          return(
+            <View style={styles.buttonBottomContainer}>
+            <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('SavedResult')}
+            >
+            <Icon
+            name={Platform.OS === "ios" ? "ios-arrow-back" : "md-arrow-back"}
+            size={55}
+            color="#A9A9A9"/>
+            </TouchableOpacity>
+            <TouchableOpacity
+            style = {styles.deleteButton}
+            onPress={() => this.deleteResult()}>
+            <Text style={styles.deleteText}>{data.delete}</Text>
+            </TouchableOpacity>
+            </View>
+          )
+        }
+      }
       render() {
         return (
           <View style={styles.container}>
@@ -152,21 +198,7 @@ deleteResult() {
           color='#a0522d'/>
           </View>
           </View>
-
-          <View style = {styles.buttonContainer}>
-
-          <TouchableOpacity
-          style = {styles.saveResult}
-          underlayColor='#fff'>
-          <Text style= {styles.saveResultText}>{data.delete} </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-          style = {styles.saveResult}
-          underlayColor='#fff'>
-          <Text style= {styles.saveResultText}>{data.save}{data.result}</Text>
-          </TouchableOpacity>
-          </View>
+          {this.checkSaved()}
           </View>
         );
       }
@@ -182,9 +214,6 @@ deleteResult() {
       medalPic: {
         height: 120,
         width: 120,
-        //borderRadius: 100,
-        //borderWidth: 2,
-        //borderColor: 'white',
       },
       resultLabel:{
         fontFamily: 'Roboto-Light',
@@ -257,7 +286,6 @@ deleteResult() {
         height: 70,
         margin: 10,
         padding: 10,
-        //marginTop:100,
         backgroundColor:'#BA55B3',
         borderRadius:20,
         borderWidth: 1,
@@ -268,5 +296,19 @@ deleteResult() {
         textAlign:'center',
         alignItems:'center',
         color: 'white',
+      },
+      deleteButton:{
+        backgroundColor: "#6BCDFD",
+        width: 150,
+        height: 55,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 20,
+        marginBottom:10,
+      },
+      deleteText:{
+        fontSize:20,
+        color:'white',
+        fontFamily: "Roboto-Light",
       },
     });

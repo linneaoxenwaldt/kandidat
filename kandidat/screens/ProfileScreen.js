@@ -116,7 +116,7 @@ export default class ProfileScreen extends React.Component {
         <Text style={styles.userNameText}>{this.state.username}</Text>
         </View>
         <View style={styles.emailContainer}>
-        <Text style={styles.emailText}>{this.state.email}</Text>
+        <Text style={styles.enText}>{this.state.email}</Text>
         <TouchableOpacity
         style={styles.changeIcon}
         onPress={() => this.props.navigation.navigate('ChangeEmail')}>
@@ -126,7 +126,7 @@ export default class ProfileScreen extends React.Component {
         </TouchableOpacity>
         </View>
         <View style={styles.passwordContainer}>
-        <Text style={styles.emailText}>{data.changePassword}</Text>
+        <Text style={styles.enText}>{data.changePassword}</Text>
         <TouchableOpacity
         style={styles.changeIcon}
         onPress={() => this.props.navigation.navigate('ChangePassword')}>
@@ -136,7 +136,7 @@ export default class ProfileScreen extends React.Component {
         </TouchableOpacity>
         </View>
         <View style={styles.profilePicContainer}>
-        <Text style={styles.profilePicText}>{data.changeProfilePic}</Text>
+        <Text style={styles.enText}>{data.changeProfilePic}</Text>
         <TouchableOpacity
         style={styles.changeIcon}
         onPress={()=>{
@@ -219,7 +219,7 @@ export default class ProfileScreen extends React.Component {
           padding: 10,
           alignItems:'center'
         },
-        emailText: {
+        enText: {
           flexGrow: 1,
           fontFamily: 'Roboto-Light',
           color: '#FFFFFF',
@@ -248,14 +248,6 @@ export default class ProfileScreen extends React.Component {
           margin: 5,
           padding: 10,
           alignItems:'center'
-        },
-        profilePicText: {
-          flexGrow: 1,
-          fontFamily: 'Roboto-Light',
-          color: '#FFFFFF',
-          fontSize: 20,
-          alignSelf: 'center',
-          justifyContent:'center',
         },
         changeIcon: {
           alignSelf: 'center',
