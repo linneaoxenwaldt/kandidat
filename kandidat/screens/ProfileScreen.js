@@ -105,7 +105,13 @@ export default class ProfileScreen extends React.Component {
     render() {
       return (
         <View style={styles.container}>
+        <TouchableOpacity
+        onPress={()=>{
+          this.setState({
+            showMe: true
+          })}}>
         <Image source={{uri: this.state.profilePic}} style={styles.profilePic}/>
+        </TouchableOpacity>
         <View style={styles.userNameContainer}>
         <Text style={styles.userNameText}>{this.state.username}</Text>
         </View>

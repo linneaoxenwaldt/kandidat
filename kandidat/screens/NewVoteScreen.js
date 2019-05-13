@@ -71,7 +71,20 @@ export default class NewVoteScreen extends React.Component {
       var user = firebase.auth().currentUser;
       var userID = user.uid;
       var db = firebase.firestore();
-      db.collection("Users").doc(userID).collection('Category').doc(delItem.id).delete().then(function() {
+      var docRef = db.collection("Users").doc(userID).collection('Category').doc(delItem.id)
+      docRef.collection('Alternative').get().then(function(querySnapshot) {
+          querySnapshot.forEach(function(doc) {
+              // doc.data() is never undefined for query doc snapshots
+              const id = doc.id
+              docRef.collection('Alternative').doc(id).delete().then(function() {
+                console.log("delete alternatives ");
+              }).catch(function(error) {
+                console.error("delete alternatives ", error);
+              });
+          });
+      });
+
+      docRef.delete().then(function() {
         console.log("Document successfully deleted!");
       }).catch(function(error) {
         console.error("Error removing document: ", error);

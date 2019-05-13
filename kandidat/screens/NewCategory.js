@@ -79,7 +79,6 @@ export default class NewCategory extends React.Component {
           CatImg: this.state.choosenImg,
         })
         .then(function(docRef) {
-          console.log("Document written with ID: ", docRef.id);
           var cat = {id: docRef.id}
           that.props.navigation.state.params.addToCategoryList(cat);
           that.props.navigation.navigate('AlternativeScreen', {CatID: docRef.id, prePage: "New"})

@@ -87,7 +87,7 @@ export default class OngoingVoteScreen extends React.Component {
         });
 
         db.collection("Users").doc(userID).collection("Votes").where("Finished", "==", "Yes").onSnapshot(function(querySnapshot) {
-          that.setState({ yourFriendsTurn: []})
+          //that.setState({ yourFriendsTurn: []})
           querySnapshot.forEach(function(doc) {
             const name = doc.get('CatName');
             const img = doc.get('CatImg');

@@ -85,29 +85,45 @@ export default class HomeScreen extends React.Component {
     }
 
     getnotificationRequests() {
-      var requestBoolean = true
       var that = this
       var user = firebase.auth().currentUser;
       var userID = user.uid;
       var db = firebase.firestore();
-      db.collection('Users').doc(userID)
-       .onSnapshot(
-       doc => {
-         if (doc.exists) {
+      db.collection('Users').doc(userID).onSnapshot(
+       doc =>
+       {
+         if (doc.exists)
+         {
            db.collection('Users').doc(userID).collection('VoteRequests').get().
-             then(sub => {
-               if (sub.docs.length > 0) {
-                 that.setState({
+             then(sub =>
+               {
+               if (sub.docs.length > 0)
+               {
+                 that.setState(
+                   {
                    notificationRequests: true,
-                 })
-               }else if (sub.docs.length == 0 ){
-                 that.setState({
+                   })
+               }else
+               {
+                 db.collection('Users').doc(userID).collection('FriendRequests').onSnapshot(sub =>
+                   {
+                     if (sub.docs.length > 0)
+                     {
+                       that.setState(
+                         {
+                         notificationRequests: true,
+                         })
+                     }else
+               {
+                 that.setState(
+                   {
                    notificationRequests: false,
-                 })
+                   })
                }
              });
          }
        });
+     }})
        db.collection('Users').doc(userID)
         .onSnapshot(
         doc => {
@@ -117,15 +133,22 @@ export default class HomeScreen extends React.Component {
                   that.setState({
                     notificationRequests: true,
                   })
-                }else{
-                  that.setState({
-                    notificationRequests: false,
-                  })
+                }else {
+                  db.collection('Users').doc(userID).collection('VoteRequests').onSnapshot(sub => {
+                    if (sub.docs.length > 0) {
+                      that.setState({
+                        notificationRequests: true,
+                      })
+                    }else {
+                      that.setState({
+                        notificationRequests: false,
+                      })
+                    }
                 }
-              });
+              );
           }
         });
-    }
+    }})}
 
     showNotificationRequests() {
       if(this.state.notificationRequests === true) {

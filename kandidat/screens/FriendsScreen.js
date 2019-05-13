@@ -55,14 +55,12 @@ export default class FriendsScreen extends React.Component {
       var userID = user.uid;
       var db = firebase.firestore();
       db.collection("Users").doc(userID).collection("Friends").doc(delItem.id).delete().then(function() {
-        console.log("Document successfully deleted!");
       }).catch(function(error) {
         console.error("Error removing document: ", error);
       });
       this.setState(prevState => ({friendsInfo: prevState.friendsInfo.filter(item => item !== delItem) }));
 
       db.collection("Users").doc(delItem.id).collection("Friends").doc(userID).delete().then(function() {
-        console.log("Document successfully deleted!");
       }).catch(function(error) {
         console.error("Error removing document: ", error);
       });
@@ -134,8 +132,8 @@ export default class FriendsScreen extends React.Component {
             data.deleteFriend,
             msg,
             [
-              {text: 'Cancel', onPress: () => this.props.navigation.navigate('Friends')},
-              {text: 'OK', onPress: () => this.deleteFriend(item)},
+              {text: data.cancel, onPress: () => this.props.navigation.navigate('Friends')},
+              {text: data.ok, onPress: () => this.deleteFriend(item)},
             ],
             { cancelable: false })}/>}
             />)
@@ -174,11 +172,9 @@ export default class FriendsScreen extends React.Component {
             flex: 1,
             paddingTop: 15,
             backgroundColor: '#FFFFFF',
-
           },
           buttonContainer:{
             alignItems:'center',
-
           },
           friendLabel: {
             fontSize: 40,
