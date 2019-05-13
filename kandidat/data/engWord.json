@@ -62,5 +62,7 @@
   "time": "Time",
   "pickTime": "Pick a time",
   "expireDate": "Expire date ",
+  "delete":"Delete",
+  "saveResult":"Save Result",
 
 }

@@ -150,14 +150,25 @@ docRef.collection("Alternatives").onSnapshot(function(querySnapshot) {
         color='#a0522d'/>
         </View>
         </View>
+        <View style = {styles.saveContainer}>
 
         <TouchableOpacity
                   style = {styles.saveResult}
+                  backgroundColor={'#6BCDFD'}
                   //onPress={spara resultatet}
                   underlayColor='#fff'>
-                  <Text style= {styles.saveResultText}> Save Result
+                  <Text style= {styles.saveResultText}> {data.delete}
                   </Text>
          </TouchableOpacity>
+         <TouchableOpacity
+                   style = {styles.saveResult}
+                   backgroundColor={'#BA55B3'}
+                   //onPress={spara resultatet}
+                   underlayColor='#fff'>
+                   <Text style= {styles.saveResultText}> {data.saveResult}
+                   </Text>
+          </TouchableOpacity>
+        </View>
         </View>
       );
     }
@@ -171,11 +182,11 @@ docRef.collection("Alternatives").onSnapshot(function(querySnapshot) {
       alignItems: 'center',
     },
     medalPic: {
-      height: 200,
-      width: 200,
-      borderRadius: 100,
-      borderWidth: 2,
-      borderColor: 'white',
+      height: 120,
+      width: 120,
+      //borderRadius: 0,
+      //borderWidth: 2,
+      //borderColor: 'white',
     },
 
     resultLabel:{
@@ -255,17 +266,34 @@ docRef.collection("Alternatives").onSnapshot(function(querySnapshot) {
       borderColor: 'white'
 
     },
+    saveContainer:{
+      flex: 1,
+      paddingTop: 15,
+      backgroundColor: '#FFFFFF',
+      alignItems: 'center',
+      flexDirection:'row',
+      justifyContent: 'space-between',
+      marginLeft: 10,
+      marginRight: 10,
+
+      //marginBottom:10,
+
+    },
     saveResult: {
       justifyContent: 'center',
-      width: 200,
+      width: 130,
       height: 70,
-      margin: 10,
+      //margin: 10,
       padding: 10,
-      marginTop:100,
+      //marginTop:100,
       backgroundColor:'#BA55B3',
       borderRadius:20,
       borderWidth: 1,
-      borderColor: '#fff'
+      borderColor: '#fff',
+      marginBottom:10,
+      marginLeft:30,
+      marginRight:30,
+
     },
     saveResultText:{
       fontSize:20,
