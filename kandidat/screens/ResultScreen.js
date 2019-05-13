@@ -51,6 +51,7 @@ export default class ResultScreen extends React.Component {
         third: [],
         highestVote: 0,
         secondHighestVote: 0,
+        saved: this.props.navigation.state.params.saved,
       };
       this.getResult()
     }
@@ -83,15 +84,17 @@ export default class ResultScreen extends React.Component {
       })
     }
 
-    saveResult() {
-      var user = firebase.auth().currentUser;
-      var userID = user.uid;
-      var db = firebase.firestore();
-      var voteID = this.props.navigation.state.params.VoteID
-      var docRef = db.collection('Users').doc(userID).collection('Result').doc(voteID)
-      docRef.update({
-        Saved: true
-      })
+saveResult() {
+  var user = firebase.auth().currentUser;
+  var userID = user.uid;
+  var db = firebase.firestore();
+  var voteID = this.props.navigation.state.params.VoteID
+  var docRef = db.collection('Users').doc(userID).collection('Result').doc(voteID)
+  docRef.update({
+    Saved: true
+  })
+  this.props.navigation.navigate('SavedResult')
+}
 
     }
 
@@ -112,11 +115,61 @@ export default class ResultScreen extends React.Component {
           });
         });
       });
-      docRef.delete().then(function() {
-      }).catch(function(error) {
-        console.error("delete vote ", error);
-      });
-    }
+  });
+  docRef.delete().then(function() {
+  }).catch(function(error) {
+  console.error("delete vote ", error);
+  });
+  this.props.navigation.navigate('SavedResult')
+}
+
+checkSaved() {
+  if(this.state.saved === false){
+    return(
+      <View style = {styles.buttonContainer}>
+      <TouchableOpacity
+      style = {styles.saveResult}
+      underlayColor='#fff'
+      onPress={() => Alert.alert(
+        data.deleteResult,
+        `${data.sureMsg}?` ,
+        [
+          {text: data.cancel, onPress: () => this.props.navigation.navigate('ResultScreen')},
+          {text: data.ok, onPress: () => this.deleteResult()},
+        ],
+        { cancelable: false })}>
+      <Text style= {styles.saveResultText}>{data.delete} </Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+      style = {styles.saveResult}
+      underlayColor='#fff'
+      onPress={() => this.saveResult()}>
+      <Text style= {styles.saveResultText}>{data.save}{data.result}</Text>
+      </TouchableOpacity>
+      </View>
+    )
+  }
+  else if(this.state.saved === true){
+    return(
+      <View style={styles.buttonBottomContainer}>
+      <TouchableOpacity
+      onPress={() => this.props.navigation.navigate('SavedResult')}
+      >
+      <Icon
+      name={Platform.OS === "ios" ? "ios-arrow-back" : "md-arrow-back"}
+      size={55}
+      color="#A9A9A9"/>
+      </TouchableOpacity>
+      <TouchableOpacity
+      style = {styles.deleteButton}
+      onPress={() => this.deleteResult()}>
+      <Text style={styles.deleteText}>{data.delete}</Text>
+      </TouchableOpacity>
+      </View>
+    )
+  }
+}
 
     render() {
       return (
@@ -141,127 +194,127 @@ export default class ResultScreen extends React.Component {
         </View>
         </View>
 
-        <View style={styles.thirdContainer}>
-        <Text style={styles.containText}>{this.state.third}</Text>
-        <View style={styles.trophyIcon}>
-        <Icon name={Platform.OS === "ios" ? "ios-trophy" : "md-create"}
-        size={40}
-        color='#a0522d'/>
-        </View>
-        </View>
-
-        <View style = {styles.buttonContainer}>
-
-        <TouchableOpacity
-        style = {styles.saveResult}
-        underlayColor='#fff'
-        onPress={() => this.saveResult()}>
-        <Text style= {styles.saveResultText}>{data.delete} </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-        style = {styles.saveResult}
-        underlayColor='#fff'
-        onPress={() => this.deleteResult()}>
-        <Text style= {styles.saveResultText}>{data.save}{data.result}</Text>
-        </TouchableOpacity>
-        </View>
-        </View>
-      );
+          <View style={styles.thirdContainer}>
+          <Text style={styles.containText}>{this.state.third}</Text>
+          <View style={styles.trophyIcon}>
+          <Icon name={Platform.OS === "ios" ? "ios-trophy" : "md-create"}
+          size={40}
+          color='#a0522d'/>
+          </View>
+          </View>
+          {this.checkSaved()}
+          </View>
+        );
+      }
     }
   }
 
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      paddingTop: 15,
-      backgroundColor: '#FFFFFF',
-      alignItems: 'center',
-    },
-    medalPic: {
-      height: 120,
-      width: 120,
-    },
-    resultLabel:{
-      fontFamily: 'Roboto-Light',
-      color: '#000',
-      fontSize: 40,
-      padding: 20,
-    },
-    containText: {
-      textAlign: 'center',
-      flexGrow: 1,
-      fontFamily: 'Roboto-Light',
-      color: '#FFFFFF',
-      fontSize: 25,
-      alignSelf: 'center',
-    },
-    firstContainer: {
-      flexDirection:'row',
-      width: 350,
-      height: 70,
-      backgroundColor: '#8FBC8F',
-      justifyContent: 'center',
-      borderRadius: 30,
-      margin: 5,
-      padding: 10,
-    },
-    secondContainer: {
-      flexDirection:'row',
-      width: 350,
-      height: 70,
-      backgroundColor: '#6ACCCB',
-      justifyContent: 'center',
-      borderRadius: 30,
-      margin: 5,
-      padding: 10,
-    },
-    thirdContainer: {
-      flexDirection:'row',
-      width: 350,
-      height: 70,
-      backgroundColor: '#94B4C1',
-      justifyContent: 'center',
-      borderRadius: 30,
-      margin: 5,
-      padding: 10,
-    },
-    trophyIcon: {
-      justifyContent:'center',
-      alignItems:'center',
-      alignSelf: 'center',
-      textAlign:'center',
-      backgroundColor: 'white',
-      borderRadius:100,
-      alignSelf: 'center',
-      color: '#daa520',
-      paddingRight: 0,
-      height: 50,
-      width: 50,
-      borderWidth: 2,
-      borderColor: 'white'
-    },
-    buttonContainer:{
-      flexDirection:'row',
-      justifyContent: 'space-between',
-      marginLeft: 10,
-      marginRight: 10,
-    },
-    saveResult: {
-      justifyContent: 'center',
-      width: 130,
-      height: 70,
-      margin: 10,
-      padding: 10,
-      backgroundColor:'#BA55B3',
-      borderRadius:20,
-      borderWidth: 1,
-      borderColor: '#fff'
-    },
-    saveResultText:{
-      fontSize:20,
-      textAlign:'center',
-      alignItems:'center',
-      color: 'white',
-    },
-  });
+    const styles = StyleSheet.create({
+      container: {
+        flex: 1,
+        paddingTop: 15,
+        backgroundColor: '#FFFFFF',
+        alignItems: 'center',
+      },
+      medalPic: {
+        height: 120,
+        width: 120,
+      },
+      resultLabel:{
+        fontFamily: 'Roboto-Light',
+        color: 'black',
+        fontSize: 40,
+        padding: 20,
+      },
+      containText: {
+        textAlign: 'center',
+        flexGrow: 1,
+        fontFamily: 'Roboto-Light',
+        color: '#FFFFFF',
+        fontSize: 25,
+        alignSelf: 'center',
+      },
+      firstContainer: {
+        flexDirection:'row',
+        width: 350,
+        height: 70,
+        backgroundColor: '#8FBC8F',
+        justifyContent: 'center',
+        borderRadius: 30,
+        margin: 5,
+        padding: 10,
+      },
+      secondContainer: {
+        flexDirection:'row',
+        width: 350,
+        height: 70,
+        backgroundColor: '#6ACCCB',
+        justifyContent: 'center',
+        borderRadius: 30,
+        margin: 5,
+        padding: 10,
+      },
+      thirdContainer: {
+        flexDirection:'row',
+        width: 350,
+        height: 70,
+        backgroundColor: '#94B4C1',
+        justifyContent: 'center',
+        borderRadius: 30,
+        margin: 5,
+        padding: 10,
+      },
+      trophyIcon: {
+        justifyContent:'center',
+        alignItems:'center',
+        alignSelf: 'center',
+        textAlign:'center',
+        backgroundColor: 'white',
+        borderRadius:100,
+        alignSelf: 'center',
+        color: '#daa520',
+        paddingRight: 0,
+        height: 50,
+        width: 50,
+        borderWidth: 2,
+        borderColor: 'white'
+      },
+      buttonContainer:{
+        flexDirection:'row',
+        justifyContent: 'space-between',
+        marginLeft: 10,
+        marginRight: 10,
+      },
+      saveResult: {
+        justifyContent: 'center',
+        width: 130,
+        height: 70,
+        margin: 10,
+        padding: 10,
+        //marginTop:100,
+        backgroundColor:'#BA55B3',
+        borderRadius:20,
+        borderWidth: 1,
+        borderColor: '#fff'
+      },
+      saveResultText:{
+        fontSize:20,
+        textAlign:'center',
+        alignItems:'center',
+        color: 'white',
+      },
+      deleteButton:{
+        backgroundColor: "#6BCDFD",
+        width: 150,
+        height: 55,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 20,
+        marginBottom:10,
+      },
+      deleteText:{
+        fontSize:20,
+        color:'white',
+        fontFamily: "Roboto-Light",
+      },
+    });

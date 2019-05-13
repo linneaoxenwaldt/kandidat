@@ -276,7 +276,7 @@ checkFinishedAnswers(){
   if(allAnswerYes === true) {
     this.createResult()
     console.log(this.state.partFinished)
-    this.props.navigation.navigate('ResultScreen', {VoteID: voteID})
+    this.props.navigation.navigate('ResultScreen', {VoteID: voteID, saved: false})
     //this.getResults()
   }
   else if(allAnswerYes === false) {
@@ -436,8 +436,8 @@ deleteVote() {
           key={item.AltID} style={[this.rotateAndTranslate, { backgroundColor: this.colors[i % this.colors.length], height: 280, width: 280, borderRadius: 20, position: 'absolute'}]}
          >
          <Animated.View style = {styles.pinIcon}>
-         <Icon2 name="pushpin" size={40} color={'grey'}/>
-         <Icon2 style = {styles.pin2}name="pushpin" size={40} color={'grey'} />
+         <Icon2 name="pushpin" size={50} color={'grey'}/>
+         <Icon2 style = {styles.pin2}name="pushpin" size={50} color={'grey'} />
          </Animated.View>
           <Animated.View style={{ opacity: this.likeOpacity, transform: [{ rotate: '-30deg' }], position: 'absolute', top: 50, left: 40, zIndex: 1000 }}>
           <Text style={styles.likeText}>{data.yes}</Text>
@@ -457,15 +457,15 @@ deleteVote() {
             transform: [{ scale: this.nextCardScale }], backgroundColor: this.colors[i % this.colors.length],
             height: 280, width: 280, borderRadius: 20, position: 'absolute'}]}>
             <Animated.View style = {styles.pinIcon}>
-            <Icon2  name="pushpin" size={40} color={'grey'}/>
-            <Icon2 style = {styles.pin2} name="pushpin" size={40} color={'grey'} />
+            <Icon2  name="pushpin" size={50} color={'grey'}/>
+            <Icon2 style = {styles.pin2} name="pushpin" size={50} color={'grey'} />
             </Animated.View>
 
           <Animated.View style={{ opacity: 0, transform: [{ rotate: '-30deg' }], position: 'absolute', top: 50, left: 40, zIndex: 1000 }}>
-          <Text style={styles.likeText}>YES</Text>
+          <Text style={styles.likeText}>{data.yes}</Text>
           </Animated.View>
           <Animated.View style={{ opacity: 0, transform: [{ rotate: '30deg' }], position: 'absolute', top: 50, right: 40, zIndex: 1000 }}>
-          <Text style={styles.dislikeText}>NO</Text>
+          <Text style={styles.dislikeText}>{data.no}</Text>
           </Animated.View>
 
           <Text style={styles.alternativeText}>{item.Name}</Text>
@@ -478,7 +478,7 @@ deleteVote() {
   render() {
     return (
       <View style={styles.container}>
-      <Text style={styles.catLabel}> Category </Text>
+      <Text style={styles.catLabel}> {this.state.CatName} </Text>
       <View style={styles.card}>
       {this.renderAlternatives()}
       </View>
@@ -563,6 +563,10 @@ const styles = StyleSheet.create({
   pinIcon: {
     flexDirection:'row',
     justifyContent: 'space-between',
+    marginLeft: -20,
+    marginRight:-20,
+    width:320,
+
 
   },
   pin2:{transform: [{ rotate: '90deg' }]
