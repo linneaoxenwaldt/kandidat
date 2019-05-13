@@ -152,7 +152,6 @@ export default class RequestScreen extends React.Component {
                   db.collection("Users").doc(userID).collection("Friends").doc(friendItem.id).set({
                   })
                   db.collection("Users").doc(userID).collection("FriendRequests").doc(friendItem.id).delete().then(function() {
-                    console.log("acceptFriend: successfully deleted!" + friendItem.id);
                   }).catch(function(error) {
                     console.error("acceptFriend: Error removing document: ", error);
                   });
@@ -161,7 +160,6 @@ export default class RequestScreen extends React.Component {
                   db.collection("Users").doc(friendItem.id).collection("Friends").doc(userID).set({
                   })
                   db.collection("Users").doc(friendItem.id).collection("PendingFriendRequests").doc(userID).delete().then(function() {
-                    console.log("acceptFriend: FriendReq successfully deleted!" + friendItem.id);
                   }).catch(function(error) {
                     console.error("acceptFriend: Error removing document: ", error);
                   });

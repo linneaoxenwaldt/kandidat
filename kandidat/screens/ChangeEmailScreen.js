@@ -69,19 +69,19 @@ export default class ChangeEmailScreen extends React.Component {
     newEmailFunc = () => {
       this.reauthenticate(this.state.currentPassword).then(() => {
         if (this.state.newEmail !== this.state.confirmNewEmail){
-          Alert.alert('Emails do not match!')
+          Alert.alert(data.emailsDoNotMatch)
           return;
         } else{
           this.updateNewEmail()
           user.updateEmail(this.state.newEmail).then(function() {
-            Alert.alert('Email is changed!')
+            Alert.alert(data.emailIsChanged)
           }).catch(function(error) {
-            Alert.alert('Error')
+            Alert.alert(data.error)
           });
         } (error) =>{
         };
       }).catch((error)=>{
-        Alert.alert('Error: Invalid inut!')
+        Alert.alert(data.invalidInput)
       })
       var user = firebase.auth().currentUser;
     }

@@ -58,19 +58,19 @@ export default class ChangePasswordScreen extends React.Component {
     newPasswordFunc = () => {
       this.reauthenticate(this.state.currentPassword).then(() => {
         if (this.state.newPassword !== this.state.newPasswordConfirm){
-          Alert.alert('Passwords do not match')
+          Alert.alert(data.passwDoNotMatch)
           return;
         } else{
           user.updatePassword(this.state.newPassword).then(function() {
-            Alert.alert('Password changed')
+            Alert.alert(data.changedPassword)
           }).catch(function(error) {
-            Alert.alert('Error ')
+            Alert.alert(data.error)
           });
         } (error) =>{
-          Alert.alert('Error');
+          Alert.alert(data.error);
         };
       }).catch((error)=>{
-        Alert.alert('Error!')
+        Alert.alert(data.invalidInput)
       })
       var user = firebase.auth().currentUser;
     }
@@ -112,7 +112,7 @@ export default class ChangePasswordScreen extends React.Component {
         borderColor='#758e99'
         borderWidth= '4'
         secureTextEntry={true}
-        placeholder="Password"
+        placeholder={data.password}
         value = {this.state.currentPassword}
         onChangeText = {(text) => {this.setState({ currentPassword : text}) }}
         />

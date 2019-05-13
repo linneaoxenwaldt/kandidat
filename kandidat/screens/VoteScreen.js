@@ -13,9 +13,11 @@ import { ScrollView,
   Animated,
 } from 'react-native';
 import Icon from "react-native-vector-icons/Ionicons";
+import Icon2 from 'react-native-vector-icons/AntDesign'
 import { LinearGradient } from 'expo';
 import * as firebase from 'firebase';
 import data from '../data/engWord.json';
+
 
 const Alternatives = [
   { id: "1", text: 'hej1'},
@@ -431,13 +433,17 @@ deleteVote() {
         return (
           <Animated.View
           {...this.PanResponder.panHandlers}
-          key={item.AltID} style={[this.rotateAndTranslate, { backgroundColor: this.colors[i % this.colors.length], height: 350, width: 280, borderRadius: 20, position: 'absolute'}]}>
-
+          key={item.AltID} style={[this.rotateAndTranslate, { backgroundColor: this.colors[i % this.colors.length], height: 280, width: 280, borderRadius: 20, position: 'absolute'}]}
+         >
+         <Animated.View style = {styles.pinIcon}>
+         <Icon2 name="pushpin" size={40} color={'grey'}/>
+         <Icon2 style = {styles.pin2}name="pushpin" size={40} color={'grey'} />
+         </Animated.View>
           <Animated.View style={{ opacity: this.likeOpacity, transform: [{ rotate: '-30deg' }], position: 'absolute', top: 50, left: 40, zIndex: 1000 }}>
-          <Text style={styles.likeText}>YES</Text>
+          <Text style={styles.likeText}>{data.yes}</Text>
           </Animated.View>
           <Animated.View style={{ opacity: this.dislikeOpacity, transform: [{ rotate: '30deg' }], position: 'absolute', top: 50, right: 40, zIndex: 1000 }}>
-          <Text style={styles.dislikeText}>NO</Text>
+          <Text style={styles.dislikeText}>{data.no}</Text>
           </Animated.View>
 
           <Text style={styles.alternativeText}>{item.Name}</Text>
@@ -449,7 +455,11 @@ deleteVote() {
           <Animated.View key={item.AltID} style={[{
             opacity: this.nextCardOpacity,
             transform: [{ scale: this.nextCardScale }], backgroundColor: this.colors[i % this.colors.length],
-            height: 350, width: 280, borderRadius: 20, position: 'absolute'}]}>
+            height: 280, width: 280, borderRadius: 20, position: 'absolute'}]}>
+            <Animated.View style = {styles.pinIcon}>
+            <Icon2  name="pushpin" size={40} color={'grey'}/>
+            <Icon2 style = {styles.pin2} name="pushpin" size={40} color={'grey'} />
+            </Animated.View>
 
           <Animated.View style={{ opacity: 0, transform: [{ rotate: '-30deg' }], position: 'absolute', top: 50, left: 40, zIndex: 1000 }}>
           <Text style={styles.likeText}>YES</Text>
@@ -468,6 +478,7 @@ deleteVote() {
   render() {
     return (
       <View style={styles.container}>
+      <Text style={styles.catLabel}> Category </Text>
       <View style={styles.card}>
       {this.renderAlternatives()}
       </View>
@@ -501,14 +512,31 @@ const styles = StyleSheet.create({
   },
   card: {
     alignItems: 'center',
+    textAlign:'center',
     margin: 40,
+
   },
+  catLabel: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    fontFamily: "Roboto-Light",
+    fontSize: 40,
+    textAlign: 'center',
+    marginTop: 50,
+
+  },
+
   alternativeText: {
-    marginTop: 150,
+    marginTop: 70,
     textAlign: "center",
     color: "#000",
     fontFamily: "Roboto-Light",
-    fontSize: 30,
+    fontSize: 40,
+    color:'white',
+    textAlign:'center',
+    justifyContent:'center',
+    alignItems:'center'
+
   },
   likeText: {
     borderWidth: 1,
@@ -529,7 +557,15 @@ const styles = StyleSheet.create({
   thumbsContain: {
     flexDirection:'row',
     justifyContent: 'space-between',
-    marginTop: 400,
+    marginTop: 300,
     padding: 15,
-  }
+  },
+  pinIcon: {
+    flexDirection:'row',
+    justifyContent: 'space-between',
+
+  },
+  pin2:{transform: [{ rotate: '90deg' }]
+
+  },
 });
