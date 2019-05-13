@@ -79,11 +79,6 @@
   "invalidInput": "Error: Invalid inut!",
   "passwDoNotMatch": "Passwords do not match!",
   "changedPassword": "Password is changed",
-<<<<<<< HEAD
-  "unchecked": "Unchecked Results",
-  "savedResults":"Saved Results",
-
-=======
   "info": "Info",
   "sound": "Sound",
   "notifications": "Notifications",
@@ -95,6 +90,7 @@
   "cannotRegret": "You cannot regret this!",
   "sureLogOut": "Are you sure you want to log out?",
   "settings": "Settings",
->>>>>>> 1555a021895e14c12a579f664b3e9b9751069556
+  "unchecked": "Unchecked Results",
+  "savedResults":"Saved Results",
 
 }
