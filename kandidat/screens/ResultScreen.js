@@ -51,6 +51,7 @@ export default class ResultScreen extends React.Component {
         third: [],
         highestVote: 0,
         secondHighestVote: 0,
+        saved: this.props.navigation.state.params.saved,
       };
       this.getResult()
     }
@@ -94,7 +95,7 @@ saveResult() {
   docRef.update({
     Saved: true
   })
-  
+  this.props.navigation.navigate('SavedResult')
 }
 
 deleteResult() {
@@ -120,6 +121,55 @@ deleteResult() {
   }).catch(function(error) {
   console.error("delete vote ", error);
   });
+  this.props.navigation.navigate('SavedResult')
+}
+
+checkSaved() {
+  if(this.state.saved === false){
+    return(
+      <View style = {styles.buttonContainer}>
+      <TouchableOpacity
+      style = {styles.saveResult}
+      underlayColor='#fff'
+      onPress={() => Alert.alert(
+        data.deleteResult,
+        `${data.sureMsg}?` ,
+        [
+          {text: data.cancel, onPress: () => this.props.navigation.navigate('ResultScreen')},
+          {text: data.ok, onPress: () => this.deleteResult()},
+        ],
+        { cancelable: false })}>
+      <Text style= {styles.saveResultText}>{data.delete} </Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+      style = {styles.saveResult}
+      underlayColor='#fff'
+      onPress={() => this.saveResult()}>
+      <Text style= {styles.saveResultText}>{data.save}{data.result}</Text>
+      </TouchableOpacity>
+      </View>
+    )
+  }
+  else if(this.state.saved === true){
+    return(
+      <View style={styles.buttonBottomContainer}>
+      <TouchableOpacity
+      onPress={() => this.props.navigation.navigate('SavedResult')}
+      >
+      <Icon
+      name={Platform.OS === "ios" ? "ios-arrow-back" : "md-arrow-back"}
+      size={55}
+      color="#A9A9A9"/>
+      </TouchableOpacity>
+      <TouchableOpacity
+      style = {styles.deleteButton}
+      onPress={() => this.deleteResult()}>
+      <Text style={styles.deleteText}>{data.delete}</Text>
+      </TouchableOpacity>
+      </View>
+    )
+  }
 }
 
       render() {
@@ -153,23 +203,7 @@ deleteResult() {
           color='#a0522d'/>
           </View>
           </View>
-
-          <View style = {styles.buttonContainer}>
-
-          <TouchableOpacity
-          style = {styles.saveResult}
-          underlayColor='#fff'
-            onPress={() => this.saveResult()}>
-          <Text style= {styles.saveResultText}>{data.delete} </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-          style = {styles.saveResult}
-          underlayColor='#fff'
-          onPress={() => this.deleteResult()}>
-          <Text style= {styles.saveResultText}>{data.save}{data.result}</Text>
-          </TouchableOpacity>
-          </View>
+          {this.checkSaved()}
           </View>
         );
       }
@@ -271,5 +305,19 @@ deleteResult() {
         textAlign:'center',
         alignItems:'center',
         color: 'white',
+      },
+      deleteButton:{
+        backgroundColor: "#6BCDFD",
+        width: 150,
+        height: 55,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 20,
+        marginBottom:10,
+      },
+      deleteText:{
+        fontSize:20,
+        color:'white',
+        fontFamily: "Roboto-Light",
       },
     });

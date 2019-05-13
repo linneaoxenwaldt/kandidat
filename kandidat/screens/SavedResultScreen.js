@@ -106,7 +106,8 @@ getSavedResults(){
       var user = firebase.auth().currentUser;
       var userID = user.uid;
       var db = firebase.firestore();
-      var voteID = this.props.navigation.state.params.VoteID
+      //var voteID = this.props.navigation.state.params.VoteID
+      var voteID = delItem.VoteID
       var docRef = db.collection('Users').doc(userID).collection('Result').doc(voteID)
       docRef.collection('Alternatives').get().then(function(querySnapshot) {
           querySnapshot.forEach(function(doc) {
@@ -132,17 +133,13 @@ getSavedResults(){
       console.log(item)
       return (
         <TouchableOpacity
-        onPress={() => this.props.navigation.navigate('ResultScreen', {VoteID: item.VoteID})}>
+        onPress={() => this.props.navigation.navigate('ResultScreen', {VoteID: item.VoteID, saved: false})}>
         <ImageBackground source={{uri: item.CatImg}} style={{width: '100%', height: 100}}>
         <ListItem
         containerStyle={{ backgroundColor: 'transparent'}}
         //  containerStyle={{ backgroundColor: this.colors[index % this.colors.length]}}
         titleStyle={{color: '#FFFFFF', fontSize: 30}}
         title={item.CatName}
-            rightIcon = {<Icon
-              name={Platform.OS === "ios" ? "ios-arrow-forward" : "md-arrow-forward"}
-              size={40}
-              color='#FFFFFF'/>}
         />
         </ImageBackground>
         </TouchableOpacity>
@@ -153,7 +150,7 @@ getSavedResults(){
       console.log(item)
       return (
         <TouchableOpacity
-        onPress={() => this.props.navigation.navigate('ResultScreen', {VoteID: item.VoteID})}>
+        onPress={() => this.props.navigation.navigate('ResultScreen', {VoteID: item.VoteID, saved: true})}>
         <ImageBackground source={{uri: item.CatImg}} style={{width: '100%', height: 100}}>
         <ListItem
         containerStyle={{ backgroundColor: 'transparent'}}
@@ -166,7 +163,7 @@ getSavedResults(){
           color='#FFFFFF'
           onPress={() => Alert.alert(
             data.deleteResult,
-            `${data.sureMsg} ${item.text}?` ,
+            `${data.sureMsg} ${item.CatName}?` ,
             [
               {text: data.cancel, onPress: () => this.props.navigation.navigate('SavedResult')},
               {text: data.ok, onPress: () => this.deleteResult(item)},
