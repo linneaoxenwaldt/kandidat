@@ -19,7 +19,6 @@ import * as firebase from 'firebase';
 export default class HomeScreen extends React.Component {
   constructor(props){
     super(props);
-<<<<<<< HEAD
     this.state = {
       notificationOngoingVotes: false,
       notificationRequests: false,
@@ -27,16 +26,6 @@ export default class HomeScreen extends React.Component {
     }
     this.getnotificationOngoingVotes()
     this.getnotificationRequests()
-=======
-  this.state = {
-    notificationOngoingVotes: false,
-    notificationRequests: false,
-    notificationResults: false,
-  }
-  this.getnotificationOngoingVotes()
-  this.getnotificationRequests()
-  this.getnotificationResults()
->>>>>>> 079e923ddcf05b60e815ee69f946a6f76be827fa
   }
 
   static navigationOptions = ({ navigation }) => {
@@ -60,37 +49,6 @@ export default class HomeScreen extends React.Component {
         ),
       };
     };
-
-    getnotificationResults() {
-      var that = this
-      var user = firebase.auth().currentUser;
-      var userID = user.uid;
-      var db = firebase.firestore();
-      db.collection('Users').doc(userID)
-       .get().then(
-       doc => {
-         if (doc.exists) {
-           db.collection('Users').doc(userID).collection('Result').where("Saved", "==", false).get().
-             then(sub => {
-               if (sub.docs.length > 0) {
-                 that.setState({
-                   notificationResults: true,
-                 })
-               }
-             });
-         }
-       });
-    }
-
-    showNotificationResults() {
-      if(this.state.notificationResults === true) {
-        return(
-        <Icon style={{ position: 'absolute', top: 320, left: 240 }}
-                name={Platform.OS === "ios" ? "ios-notifications" : "md-notifications-outline"}
-                size={40}
-                color='#EB2C2C'/>)
-      }
-    }
 
     getnotificationOngoingVotes() {
       var that = this
@@ -168,7 +126,6 @@ export default class HomeScreen extends React.Component {
                 }
               }
 
-<<<<<<< HEAD
               render() {
                 return (
                   <View style={styles.container}>
@@ -178,16 +135,6 @@ export default class HomeScreen extends React.Component {
                   onPress={() => this.props.navigation.navigate('NewVote')}>
                   <Text style={styles.buttonText}>{data.createNewVote}</Text>
                   </TouchableOpacity>
-=======
-        <TouchableOpacity
-        style={styles.resultsButt}
-        onPress={() => this.props.navigation.navigate('SavedResult')}>
-        <Text style={styles.buttonText}> {data.results}
-        {this.showNotificationResults()}
-        </Text>
-        </TouchableOpacity>
-        </View>
->>>>>>> 079e923ddcf05b60e815ee69f946a6f76be827fa
 
                   <TouchableOpacity
                   style={styles.ongoingVote}
