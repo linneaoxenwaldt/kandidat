@@ -9,11 +9,13 @@ import { ScrollView,
   FlatList,
   Alert,
   TextInput,
+  ImageBackground,
 } from 'react-native';
 import { ListItem } from 'react-native-elements';
 import { DrawerActions } from 'react-navigation';
 import Icon from "react-native-vector-icons/Ionicons";
 import data from '../data/engWord.json';
+import * as firebase from 'firebase';
 
 
 
@@ -30,10 +32,13 @@ export default class SavedResultScreen extends React.Component {
     ]
 
     this.extractKey = ({id}) => id
+    this.extractKey1 = ({VoteID}) => VoteID
     this.state = {
       rows: rows,
+      results:[],
 
     }
+    this.getResults()
   }
 
   static navigationOptions = ({ navigation }) => {
@@ -58,8 +63,45 @@ export default class SavedResultScreen extends React.Component {
       };
     };
 
+getResults() {
+  var that = this
+  var user = firebase.auth().currentUser;
+  var userID = user.uid;
+  var db = firebase.firestore();
+  db.collection("Users").doc(userID).collection("Result").get().then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+            // doc.data() is never undefined for query doc snapshots
+            //console.log(doc.id)
+            const name = doc.get('CatName');
+            const img = doc.get('CatImg');
+            that.setState(prevState => ({
+              results: [...prevState.results, {VoteID: doc.id, CatName: name, CatImg: img}]
+            }))
+        });
+    });
+}
+
     deleteResult(delItem) {
       this.setState(prevState => ({rows: prevState.rows.filter(item => item !== delItem) }));
+    }
+
+
+    renderItem1 = ({item, index}) => {
+      console.log(item)
+      return (
+        <TouchableOpacity
+        onPress={() => this.props.navigation.navigate('ResultScreen', {VoteID: item.VoteID})}>
+        <ImageBackground source={{uri: item.CatImg}} style={{width: '100%', height: 100}}>
+        <ListItem
+        containerStyle={{ backgroundColor: 'transparent'}}
+        //  containerStyle={{ backgroundColor: this.colors[index % this.colors.length]}}
+        titleStyle={{color: '#FFFFFF', fontSize: 30}}
+        title={item.CatName}
+        //rightSubtitle={item.expdate}
+        />
+        </ImageBackground>
+        </TouchableOpacity>
+      )
     }
 
     renderItem = ({item, index}) => {
@@ -96,9 +138,9 @@ export default class SavedResultScreen extends React.Component {
                 size={30}/></Text>
 
               <FlatList
-              data={this.state.rows}
-              renderItem={this.renderItem}
-              keyExtractor={this.extractKey}
+              data={this.state.results}
+              renderItem={this.renderItem1}
+              keyExtractor={this.extractKey1}
               />
               </View>
 

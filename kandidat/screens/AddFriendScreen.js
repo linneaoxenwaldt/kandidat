@@ -55,7 +55,6 @@ getAllUsers() {
   var db = firebase.firestore();
   db.collection("Users").get().then(function(querySnapshot) {
       querySnapshot.forEach(function(doc) {
-          // doc.data() is never undefined for query doc snapshots
           const name = doc.get('Username');
           const id = doc.id;
           that.setState(prevState => ({
@@ -63,12 +62,7 @@ getAllUsers() {
           }))
       });
   });
- // var index = this.props.navigation.state.params.currentRows.length
- // var newIDnum = parseInt(this.props.navigation.state.params.currentRows[index-1].id, 10) + 1
- // var newID = newIDnum.toString()
- // var newFriend = {id: newID, text: this.state.text, img: require('../assets/images/robot-dev.png')}
- // this.props.navigation.state.params.currentRows.push(newFriend)
- }
+}
 
  getYourFriends() {
    var that = this
@@ -77,7 +71,6 @@ getAllUsers() {
    var db = firebase.firestore();
    db.collection("Users").doc(userID).collection("Friends").get().then(function(querySnapshot) {
        querySnapshot.forEach(function(doc) {
-           // doc.data() is never undefined for query doc snapshots
            const name = doc.get('Username');
            const id = doc.id;
            that.setState(prevState => ({
@@ -94,7 +87,6 @@ getAllUsers() {
    var db = firebase.firestore();
    db.collection("Users").doc(userID).collection("PendingFriendRequests").get().then(function(querySnapshot) {
        querySnapshot.forEach(function(doc) {
-           // doc.data() is never undefined for query doc snapshots
            const name = doc.get('Username');
            const id = doc.id;
            that.setState(prevState => ({
@@ -118,9 +110,6 @@ getAllUsers() {
    else {
    var existFriend = false
    for (let i=0; i< this.state.users.length; i++) {
-     // console.log(this.state.users[i].userName)
-     // console.log(this.state.users[i].id)
-     // console.log(this.state.text)
      if (myFriendSearch == everyoneArray[i]) {
        existFriend = true
        var friend = this.state.users[i]
@@ -188,7 +177,6 @@ else {
 })
 .then(function() {
 console.log("Document written with ID: ");
-//var currentRows = that.props.navigation.state.params
 var docRef = db.collection('Users').doc(friendID);
 docRef.get().then(function(doc) {
   if (doc.exists) {
@@ -217,14 +205,14 @@ sendFriendRequest(friendID, userID) {
       <Text style={styles.descriptionText}>{data.friendUsername}</Text>
       <TextInput
       style={styles.textInfo}
-      placeholder="Friends user name"
+      placeholder={data.username}
       onChangeText={(text) => this.setState({text})}
       />
       <TouchableOpacity
       style = {styles.addButton}
         onPress={() => this.checkUsername()}
         >
-        <Text style={styles.addText}>Add</Text>
+        <Text style={styles.addText}>{data.add}</Text>
        </TouchableOpacity>
        </View>
     );
@@ -252,6 +240,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     padding: 10,
     color: '#FFFFFF',
+    borderWidth: 4,
+    borderColor: "#3BCDFD",
   },
   descriptionText: {
     marginTop:20,
