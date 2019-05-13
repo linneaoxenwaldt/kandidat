@@ -72,7 +72,6 @@ export default class NewVoteScreen extends React.Component {
       var userID = user.uid;
       var db = firebase.firestore();
       db.collection("Users").doc(userID).collection('Category').doc(delItem.id).delete().then(function() {
-        console.log("Document successfully deleted!");
       }).catch(function(error) {
         console.error("Error removing document: ", error);
       });

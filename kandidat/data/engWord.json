@@ -67,5 +67,12 @@
   "cancel": "Cancel",
   "ok": "OK",
   "votes": "Votes",
+  "emailsDoNotMatch": "Emails do not match!",
+  "emailIsChanged": "Email is changed",
+  "error": "Error",
+  "invalidInput": "Error: Invalid inut!",
+  "passwDoNotMatch": "Passwords do not match!",
+  "changedPassword": "Password is changed",
+
 
 }
