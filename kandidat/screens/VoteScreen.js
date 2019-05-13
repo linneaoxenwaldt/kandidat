@@ -462,10 +462,10 @@ deleteVote() {
             </Animated.View>
 
           <Animated.View style={{ opacity: 0, transform: [{ rotate: '-30deg' }], position: 'absolute', top: 50, left: 40, zIndex: 1000 }}>
-          <Text style={styles.likeText}>YES</Text>
+          <Text style={styles.likeText}>{data.yes}</Text>
           </Animated.View>
           <Animated.View style={{ opacity: 0, transform: [{ rotate: '30deg' }], position: 'absolute', top: 50, right: 40, zIndex: 1000 }}>
-          <Text style={styles.dislikeText}>NO</Text>
+          <Text style={styles.dislikeText}>{data.no}</Text>
           </Animated.View>
 
           <Text style={styles.alternativeText}>{item.Name}</Text>
