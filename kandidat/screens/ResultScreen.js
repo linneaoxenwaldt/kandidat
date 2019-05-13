@@ -119,41 +119,6 @@ docRef.collection("Alternatives").onSnapshot(function(querySnapshot) {
 }
 
 
-// renderWinner = ({item, index}) => {
-//   console.log("efter " + this.state.result[0].Name)
-//   if(item.AltID === this.state.result[0].AltID) {
-//   return (
-// <Text style={styles.firstText}>{item.Name}</Text>
-// )
-// }
-// }
-//
-// renderSecond = ({item, index}) => {
-//   if(item.AltID === this.state.result[1].AltID) {
-//   return (
-// <Text style={styles.secondText}>{item.Name}</Text>
-// )
-// }
-// }
-//
-// renderThird = ({item, index}) => {
-//   console.log(item.AltID)
-//   console.log(this.state.result[2].AltID)
-//   if(item.AltID === this.state.result[2].AltID) {
-//   return (
-// <Text style={styles.thirdText}>{item.Name}</Text>
-// )
-// }
-// }
-//
-// <FlatList
-// extraData = {this.state}
-// data={this.state.result}
-// renderItem={this.renderWinner}
-// keyExtractor={this.extractKey}
-// />
-
-
     render() {
       return (
         <View style={styles.container}>

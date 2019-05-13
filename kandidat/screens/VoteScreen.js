@@ -56,10 +56,12 @@ export default class VoteScreen extends React.Component {
       partFinished: [],
       allParticipants: [{ParticipantID: userID}],
       result: [],
-      currentIndex: 0
+      currentIndex: 0,
+      CatName: [],
     };
     this.getAllAlt()
     this.getFinishedAnswers()
+    this.getCatName()
 
     this.rotate = this.position.x.interpolate({
       inputRange: [-150, 0, 150],
@@ -96,6 +98,26 @@ export default class VoteScreen extends React.Component {
     extrapolate: 'clamp'
   })
   }
+
+getCatName() {
+  var that = this
+  var user = firebase.auth().currentUser;
+  var userID = user.uid;
+  var db = firebase.firestore();
+  var voteID = this.props.navigation.state.params.VoteID
+  var docRef = db.collection('Users').doc(userID).collection('Votes').doc(voteID)
+  docRef.get().then(function(doc) {
+    if (doc.exists) {
+      var catName = doc.get('CatName')
+        that.setState({CatName: catName})
+    } else {
+        // doc.data() will be undefined in this case
+        console.log("No such document!");
+    }
+}).catch(function(error) {
+    console.log("Error getting document:", error);
+});
+}
 
 getAllAlt(){
   var that = this
@@ -325,14 +347,12 @@ deleteVote() {
   var participants = this.state.allParticipants
   var voteID = this.props.navigation.state.params.VoteID
   for(let m=0; m < participants.length; m++){
-    var partID = participants[m].ParticipantID
-    //var docRef = db.collection("Users").doc(participants[m].ParticipantID).collection("Votes").doc(voteID)
     db.collection("Users").doc(participants[m].ParticipantID).collection("Votes").doc(voteID).collection('Alternatives').get().then(function(querySnapshot) {
         querySnapshot.forEach(function(doc) {
             // doc.data() is never undefined for query doc snapshots
             const id = doc.id
             db.collection("Users").doc(participants[m].ParticipantID).collection("Votes").doc(voteID).collection('Alternatives').doc(id).delete().then(function() {
-              console.log("delete alternatives " + id + " " + partID);
+              console.log("delete alternatives ");
             }).catch(function(error) {
               console.error("delete alternatives ", error);
             });
@@ -343,7 +363,7 @@ deleteVote() {
           // doc.data() is never undefined for query doc snapshots
           const id = doc.id
           db.collection("Users").doc(participants[m].ParticipantID).collection("Votes").doc(voteID).collection('Participants').doc(id).delete().then(function() {
-            console.log("delete participant " + id + " " + partID);
+            console.log("delete participant " + id);
           }).catch(function(error) {
             console.error("delete participant ", error);
           });
