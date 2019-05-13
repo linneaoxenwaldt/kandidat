@@ -1,7 +1,7 @@
 {
   "createNewVote": "Create new vote",
-  "ongoingVotes": "Ongoing votes ",
-  "requests": "Requests",
+  "ongoingVotes": "Ongoing votes  ",
+  "requests": "Requests  ",
   "currentPassword": "Enter your current password",
   "newPassword": "New password",
   "confirmPassword": "Confirm password",
@@ -44,7 +44,7 @@
   "participants":"Participants:",
   "accept":"ACCEPT",
   "decline":"DECLINE",
-  "results":"Results",
+  "results":"Results  ",
   "yes":"YES",
   "no":"NO",
   "result":"Result",
