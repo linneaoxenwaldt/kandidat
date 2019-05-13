@@ -79,6 +79,8 @@
   "invalidInput": "Error: Invalid inut!",
   "passwDoNotMatch": "Passwords do not match!",
   "changedPassword": "Password is changed",
+  "unchecked": "Unchecked Results",
+  "savedResults":"Saved Results",
 
 
 }

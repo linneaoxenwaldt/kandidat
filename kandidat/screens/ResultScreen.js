@@ -25,16 +25,7 @@ export default class ResultScreen extends React.Component {
           height: 70,
           marginLeft: 10,
         },
-        headerLeft: (
-          <TouchableOpacity
-          onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
-          >
-          <Icon
-          name={Platform.OS === "ios" ? "ios-menu" : "md-menu"}
-          size={40}
-          color='#FFFFFF'/>
-          </TouchableOpacity>
-        ),
+        
       };
     };
 
@@ -129,7 +120,7 @@ checkSaved() {
     return(
       <View style = {styles.buttonContainer}>
       <TouchableOpacity
-      style = {styles.saveResult}
+      style = {styles.deleteResult}
       underlayColor='#fff'
       onPress={() => Alert.alert(
         data.deleteResult,
@@ -285,8 +276,23 @@ checkSaved() {
       buttonContainer:{
         flexDirection:'row',
         justifyContent: 'space-between',
+        //width: 100,
+        marginTop:20,
         marginLeft: 10,
         marginRight: 10,
+
+      },
+      deleteResult:{
+        justifyContent: 'center',
+        width: 130,
+        height: 70,
+        margin: 10,
+        padding: 10,
+        //marginTop:100,
+        backgroundColor:'#6BCDFD',
+        borderRadius:20,
+        borderWidth: 1,
+        borderColor: '#fff'
       },
       saveResult: {
         justifyContent: 'center',
@@ -313,11 +319,18 @@ checkSaved() {
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 20,
-        marginBottom:10,
+
       },
       deleteText:{
         fontSize:20,
         color:'white',
         fontFamily: "Roboto-Light",
+      },
+      buttonBottomContainer:{
+        flexDirection:'row',
+        justifyContent: 'space-between',
+        width: 350,
+        marginTop:50
+
       },
     });

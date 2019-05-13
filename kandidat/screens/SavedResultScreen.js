@@ -201,12 +201,16 @@ getSavedResults(){
           render() {
             return (
               <View style={styles.container}>
+              <Text style={styles.resultLabel}> {data.results} </Text>
               <View style={styles.resultContainer}>
-              <Text style={styles.savedResultLabel}>Results
+              <Text style={styles.savedResultLabel}>{data.unchecked}
               <Text> </Text>
-              <Icon
-                name={Platform.OS === "ios" ? "ios-stats" : "md-stats"}
-                size={30}/></Text>
+            </Text>
+                <View
+                style={{
+                  borderBottomColor: '#94B4C1',
+                  borderBottomWidth: 3 }}
+                  />
 
               <FlatList
               data={this.state.results}
@@ -216,12 +220,15 @@ getSavedResults(){
               </View>
 
               <View style={styles.savedesultContainer}>
-              <Text style={styles.savedResultLabel}>Saved Results
+              <Text style={styles.savedResultLabel}>{data.savedResults}
               <Text> </Text>
-              <Icon
-                name={Platform.OS === "ios" ? "ios-save" : "md-save"}
-                size={30}/>
+              
                 </Text>
+                <View
+                style={{
+                  borderBottomColor: '#94B4C1',
+                  borderBottomWidth: 3 }}
+                  />
 
                 <FlatList
                 data={this.state.savedResults}
@@ -241,6 +248,13 @@ getSavedResults(){
             paddingTop: 15,
             backgroundColor: '#FFFFFF',
           },
+          resultLabel: {
+            fontSize: 40,
+            color: '#000000',
+            textAlign: 'center',
+            fontFamily: "Roboto-Light",
+            marginTop: 15,
+          },
           resultContainer:{
             height: '50%'
           },
@@ -250,11 +264,11 @@ getSavedResults(){
           },
 
           savedResultLabel: {
+            marginTop: 20,
             fontSize: 25,
             color: '#000000',
             textAlign: 'center',
             fontFamily: "Roboto-Light",
-            padding: 20,
           },
 
           row: {
