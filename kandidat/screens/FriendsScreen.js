@@ -151,7 +151,7 @@ export default class FriendsScreen extends React.Component {
               onPress={() => this.props.navigation.navigate('AddFriend', { updateFriends: this.updateFriends.bind(this) })}
               underlayColor='#fff'>
               <Text style={styles.addFriendsText}>{data.addFriend} <Icon
-              name={Platform.OS === "ios" ? "ios-person-add" : "md-add-person-add"}
+              name={Platform.OS === "ios" ? "ios-person-add" : "md-add"}
               size={25}
               /></Text>
               </TouchableOpacity>

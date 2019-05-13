@@ -56,14 +56,17 @@ export default class HomeScreen extends React.Component {
       var userID = user.uid;
       var db = firebase.firestore();
       db.collection('Users').doc(userID)
-       .get().then(
+       .onSnapshot(
        doc => {
          if (doc.exists) {
-           db.collection('Users').doc(userID).collection('Votes').where("Finished", "==", "No").get().
-             then(sub => {
+           db.collection('Users').doc(userID).collection('Votes').where("Finished", "==", "No").onSnapshot(sub => {
                if (sub.docs.length > 0) {
                  that.setState({
                    notificationOngoingVotes: true,
+                 })
+               }else{
+                 that.setState({
+                   notificationOngoingVotes: false,
                  })
                }
              });
@@ -82,12 +85,13 @@ export default class HomeScreen extends React.Component {
     }
 
     getnotificationRequests() {
+      var requestBoolean = true
       var that = this
       var user = firebase.auth().currentUser;
       var userID = user.uid;
       var db = firebase.firestore();
       db.collection('Users').doc(userID)
-       .get().then(
+       .onSnapshot(
        doc => {
          if (doc.exists) {
            db.collection('Users').doc(userID).collection('VoteRequests').get().
@@ -96,19 +100,26 @@ export default class HomeScreen extends React.Component {
                  that.setState({
                    notificationRequests: true,
                  })
+               }else if (sub.docs.length == 0 ){
+                 that.setState({
+                   notificationRequests: false,
+                 })
                }
              });
          }
        });
        db.collection('Users').doc(userID)
-        .get().then(
+        .onSnapshot(
         doc => {
           if (doc.exists) {
-            db.collection('Users').doc(userID).collection('FriendRequests').get().
-              then(sub => {
+            db.collection('Users').doc(userID).collection('FriendRequests').onSnapshot(sub => {
                 if (sub.docs.length > 0) {
                   that.setState({
                     notificationRequests: true,
+                  })
+                }else{
+                  that.setState({
+                    notificationRequests: false,
                   })
                 }
               });
