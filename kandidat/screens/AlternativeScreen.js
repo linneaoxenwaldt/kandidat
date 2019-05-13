@@ -124,7 +124,6 @@ export default class AlternativeScreen extends React.Component {
       var userID = user.uid;
       var db = firebase.firestore();
       db.collection("Users").doc(userID).collection("Category").doc(catID).collection("Alternative").doc(delItem.id).delete().then(function() {
-        console.log("Document successfully deleted!");
       }).catch(function(error) {
         console.error("Error removing document: ", error);
       });
@@ -133,7 +132,6 @@ export default class AlternativeScreen extends React.Component {
 
     checkPrePage() {
       var prePage = this.props.navigation.state.params.prePage
-      console.log(prePage)
       if (prePage === "New") {
         this.props.navigation.navigate('NewCategory')
       }
@@ -157,8 +155,8 @@ export default class AlternativeScreen extends React.Component {
           data.deleteAlternative,
           msg,
           [
-            {text: 'Cancel', onPress: () => this.props.navigation.navigate('AlternativeScreen')},
-            {text: 'OK', onPress: () => this.deleteAlternative(item)},
+            {text: data.cancel, onPress: () => this.props.navigation.navigate('AlternativeScreen')},
+            {text: data.ok, onPress: () => this.deleteAlternative(item)},
           ],
           { cancelable: false })}/>}
           />)

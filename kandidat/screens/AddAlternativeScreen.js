@@ -128,7 +128,6 @@ export default class AddAlternativeScreen extends React.Component {
           Votes: this.state.newAlternatives[i].votes,
         })
         .then(function(docRef) {
-          console.log("AddAlt: Document written with ID: ", );
         })
         .catch(function(error) {
           console.error("AddAlt: Error adding document: ", error);
@@ -141,7 +140,7 @@ export default class AddAlternativeScreen extends React.Component {
             var getDoc = docRef.get()
             .then(doc => {
               if (!doc.exists) {
-                console.log("no doc")
+                console.log("No such document")
               } else {
                 docRef.doc(this.state.newAlternatives[i].id).set({
                   Name: this.state.newAlternatives[i].text,
@@ -233,7 +232,6 @@ export default class AddAlternativeScreen extends React.Component {
             querySnapshot.forEach(function(doc) {
               const id = doc.id
               docRef2.collection('Alternatives').doc(id).delete().then(function() {
-                console.log("deletePendingVoteFromFriend: Alt successfully deleted!" + id);
               }).catch(function(error) {
                 console.error("deletePendingVoteFromFriend: Alt Error removing document: ", error);
               });
@@ -243,14 +241,12 @@ export default class AddAlternativeScreen extends React.Component {
             querySnapshot.forEach(function(doc) {
               const id = doc.id
               docRef2.collection('Participants').doc(id).delete().then(function() {
-                console.log("deletePendingVoteFromFriend: Alt successfully deleted!" + id);
               }).catch(function(error) {
                 console.error("deletePendingVoteFromFriend: Alt Error removing document: ", error);
               });
             });
           });
           docRef2.delete().then(function() {
-            console.log("pendingVotes - startVote: Document successfully deleted!" + voteID);
           }).catch(function(error) {
             console.error("pendingVotes - startVote: Error removing document: ", error);
           });
@@ -291,7 +287,6 @@ export default class AddAlternativeScreen extends React.Component {
             querySnapshot.forEach(function(doc) {
               const id = doc.id
               docRef2.collection('Alternatives').doc(id).delete().then(function() {
-                console.log("deletePendingVoteFromFriend: Alt successfully deleted!" + id);
               }).catch(function(error) {
                 console.error("deletePendingVoteFromFriend: Alt Error removing document: ", error);
               });
@@ -301,14 +296,12 @@ export default class AddAlternativeScreen extends React.Component {
             querySnapshot.forEach(function(doc) {
               const id = doc.id
               docRef2.collection('Participants').doc(id).delete().then(function() {
-                console.log("deletePendingVoteFromFriend: Alt successfully deleted!" + id);
               }).catch(function(error) {
                 console.error("deletePendingVoteFromFriend: Alt Error removing document: ", error);
               });
             });
           });
           docRef2.delete().then(function() {
-            console.log("pendingVotes - startVote: Document successfully deleted!" + voteID);
           }).catch(function(error) {
             console.error("pendingVotes - startVote: Error removing document: ", error);
           });
@@ -321,13 +314,10 @@ export default class AddAlternativeScreen extends React.Component {
           var createrID = vote.sentFromID
           var user = firebase.auth().currentUser;
           var userID = user.uid;
-          console.log("alla " + participants)
           var db = firebase.firestore();
-          console.log("längd " + participants.length)
           for(let i=0; i< participants.length; i++) {
             if(voteID === participants[i].VoteID) {
               var participantID = participants[i].ParticipantID
-              console.log("id " + participantID)
               var docRef = db.collection("Users").doc(participantID).collection("Votes").doc(voteID)
               docRef.set({
                 CatName: vote.CatName,
@@ -359,7 +349,6 @@ export default class AddAlternativeScreen extends React.Component {
                 querySnapshot.forEach(function(doc) {
                   const id = doc.id
                   docRef2.collection('Alternatives').doc(id).delete().then(function() {
-                    console.log("deletePendingVoteFromFriend: Alt successfully deleted!" + id);
                   }).catch(function(error) {
                     console.error("deletePendingVoteFromFriend: Alt Error removing document: ", error);
                   });
@@ -369,14 +358,12 @@ export default class AddAlternativeScreen extends React.Component {
                 querySnapshot.forEach(function(doc) {
                   const id = doc.id
                   docRef2.collection('Participants').doc(id).delete().then(function() {
-                    console.log("deletePendingVoteFromFriend: Alt successfully deleted!" + id);
                   }).catch(function(error) {
                     console.error("deletePendingVoteFromFriend: Alt Error removing document: ", error);
                   });
                 });
               });
               docRef2.delete().then(function() {
-                console.log("pendingVotes - startVote: Document successfully deleted!" + voteID);
               }).catch(function(error) {
                 console.error("pendingVotes - startVote: Error removing document: ", error);
               });
@@ -400,8 +387,8 @@ export default class AddAlternativeScreen extends React.Component {
                 data.deleteAlternative,
                 msg,
                 [
-                  {text: 'Cancel', onPress: () => this.props.navigation.navigate('AddAlternative')},
-                  {text: 'OK', onPress: () => this.deleteAlternative(item)},
+                  {text: data.cancel, onPress: () => this.props.navigation.navigate('AddAlternative')},
+                  {text: data.ok, onPress: () => this.deleteAlternative(item)},
                 ],
                 { cancelable: false })}/>}
                 />)
