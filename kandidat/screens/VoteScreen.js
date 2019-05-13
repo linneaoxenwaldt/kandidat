@@ -276,7 +276,7 @@ checkFinishedAnswers(){
   if(allAnswerYes === true) {
     this.createResult()
     console.log(this.state.partFinished)
-    this.props.navigation.navigate('ResultScreen', {VoteID: voteID})
+    this.props.navigation.navigate('ResultScreen', {VoteID: voteID, saved: false})
     //this.getResults()
   }
   else if(allAnswerYes === false) {
