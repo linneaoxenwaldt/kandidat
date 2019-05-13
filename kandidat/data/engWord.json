@@ -44,7 +44,7 @@
   "participants":"Participants:",
   "accept":"ACCEPT",
   "decline":"DECLINE",
-  "results":"Results",
+  "result":"Result",
   "addNew": "Add new...",
   "username": "Username...",
   "add": "Add",
@@ -66,5 +66,6 @@
   "yourNewCat": "Your new category: ",
   "cancel": "Cancel",
   "ok": "OK",
+  "votes": "Votes",
 
 }
