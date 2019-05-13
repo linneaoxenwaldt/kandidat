@@ -94,6 +94,7 @@ saveResult() {
   docRef.update({
     Saved: true
   })
+  
 }
 
 deleteResult() {
@@ -157,13 +158,15 @@ deleteResult() {
 
           <TouchableOpacity
           style = {styles.saveResult}
-          underlayColor='#fff'>
+          underlayColor='#fff'
+            onPress={() => this.saveResult()}>
           <Text style= {styles.saveResultText}>{data.delete} </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
           style = {styles.saveResult}
-          underlayColor='#fff'>
+          underlayColor='#fff'
+          onPress={() => this.deleteResult()}>
           <Text style= {styles.saveResultText}>{data.save}{data.result}</Text>
           </TouchableOpacity>
           </View>
