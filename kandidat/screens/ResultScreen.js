@@ -64,7 +64,7 @@ export default class ResultScreen extends React.Component {
     var db = firebase.firestore();
     var voteID = this.props.navigation.state.params.VoteID
     var docRef = db.collection("Users").doc(userID).collection("Result").doc(voteID)
-docRef.collection("Alternatives").onSnapshot(function(querySnapshot) {
+    docRef.collection("Alternatives").onSnapshot(function(querySnapshot) {
   that.setState({ result: [] })
     querySnapshot.forEach(function(doc) {
       const altID = doc.id;
@@ -88,93 +88,89 @@ docRef.collection("Alternatives").onSnapshot(function(querySnapshot) {
   })
 }
 
-saveResult() {
-  //var that = this;
-  var user = firebase.auth().currentUser;
-  var userID = user.uid;
-  var db = firebase.firestore();
-  var voteID = this.props.navigation.state.params.VoteID
-  var docRef = db.collection('Users').doc(userID).collection('Result').doc(voteID)
-  docRef.update({
-    Saved: true
-  })
-  this.props.navigation.navigate('SavedResult')
-}
+    saveResult() {
+      var user = firebase.auth().currentUser;
+      var userID = user.uid;
+      var db = firebase.firestore();
+      var voteID = this.props.navigation.state.params.VoteID
+      var docRef = db.collection('Users').doc(userID).collection('Result').doc(voteID)
+      docRef.update({
+        Saved: true
+      })
+      this.props.navigation.navigate('SavedResult')
+    }
 
-deleteResult() {
-  var that = this;
-  var user = firebase.auth().currentUser;
-  var userID = user.uid;
-  var db = firebase.firestore();
-  var voteID = this.props.navigation.state.params.VoteID
-  var docRef = db.collection('Users').doc(userID).collection('Result').doc(voteID)
-  docRef.collection('Alternatives').get().then(function(querySnapshot) {
-      querySnapshot.forEach(function(doc) {
-          // doc.data() is never undefined for query doc snapshots
+    deleteResult() {
+      var that = this;
+      var user = firebase.auth().currentUser;
+      var userID = user.uid;
+      var db = firebase.firestore();
+      var voteID = this.props.navigation.state.params.VoteID
+      var docRef = db.collection('Users').doc(userID).collection('Result').doc(voteID)
+      docRef.collection('Alternatives').get().then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
           const id = doc.id
           docRef.collection('Alternatives').doc(id).delete().then(function() {
             console.log("delete alternatives ");
           }).catch(function(error) {
             console.error("delete alternatives ", error);
           });
+        });
       });
-  });
-  docRef.delete().then(function() {
-  console.log("delete vote " + voteID);
-  }).catch(function(error) {
-  console.error("delete vote ", error);
-  });
-  this.props.navigation.navigate('SavedResult')
-}
+      docRef.delete().then(function() {
+      }).catch(function(error) {
+        console.error("delete vote ", error);
+      });
+      this.props.navigation.navigate('SavedResult')
+    }
 
-checkSaved() {
-  if(this.state.saved === false){
-    return(
-      <View style = {styles.buttonContainer}>
-      <TouchableOpacity
-      style = {styles.saveResult}
-      underlayColor='#fff'
-      onPress={() => Alert.alert(
-        data.deleteResult,
-        `${data.sureMsg}?` ,
-        [
-          {text: data.cancel, onPress: () => this.props.navigation.navigate('ResultScreen')},
-          {text: data.ok, onPress: () => this.deleteResult()},
-        ],
-        { cancelable: false })}>
-      <Text style= {styles.saveResultText}>{data.delete} </Text>
-      </TouchableOpacity>
+    checkSaved() {
+      if(this.state.saved === false){
+        return(
+          <View style = {styles.buttonContainer}>
+          <TouchableOpacity
+          style = {styles.saveResult}
+          underlayColor='#fff'
+          onPress={() => Alert.alert(
+            data.deleteResult,
+            `${data.sureMsg}?` ,
+            [
+              {text: data.cancel, onPress: () => this.props.navigation.navigate('ResultScreen')},
+              {text: data.ok, onPress: () => this.deleteResult()},
+            ],
+            { cancelable: false })}>
+            <Text style= {styles.saveResultText}>{data.delete} </Text>
+            </TouchableOpacity>
 
-      <TouchableOpacity
-      style = {styles.saveResult}
-      underlayColor='#fff'
-      onPress={() => this.saveResult()}>
-      <Text style= {styles.saveResultText}>{data.save}{data.result}</Text>
-      </TouchableOpacity>
-      </View>
-    )
-  }
-  else if(this.state.saved === true){
-    return(
-      <View style={styles.buttonBottomContainer}>
-      <TouchableOpacity
-      onPress={() => this.props.navigation.navigate('SavedResult')}
-      >
-      <Icon
-      name={Platform.OS === "ios" ? "ios-arrow-back" : "md-arrow-back"}
-      size={55}
-      color="#A9A9A9"/>
-      </TouchableOpacity>
-      <TouchableOpacity
-      style = {styles.deleteButton}
-      onPress={() => this.deleteResult()}>
-      <Text style={styles.deleteText}>{data.delete}</Text>
-      </TouchableOpacity>
-      </View>
-    )
-  }
-}
-
+            <TouchableOpacity
+            style = {styles.saveResult}
+            underlayColor='#fff'
+            onPress={() => this.saveResult()}>
+            <Text style= {styles.saveResultText}>{data.save}{data.result}</Text>
+            </TouchableOpacity>
+            </View>
+          )
+        }
+        else if(this.state.saved === true){
+          return(
+            <View style={styles.buttonBottomContainer}>
+            <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('SavedResult')}
+            >
+            <Icon
+            name={Platform.OS === "ios" ? "ios-arrow-back" : "md-arrow-back"}
+            size={55}
+            color="#A9A9A9"/>
+            </TouchableOpacity>
+            <TouchableOpacity
+            style = {styles.deleteButton}
+            onPress={() => this.deleteResult()}>
+            <Text style={styles.deleteText}>{data.delete}</Text>
+            </TouchableOpacity>
+            </View>
+          )
+        }
+      }
       render() {
         return (
           <View style={styles.container}>
@@ -222,9 +218,6 @@ checkSaved() {
       medalPic: {
         height: 120,
         width: 120,
-        //borderRadius: 100,
-        //borderWidth: 2,
-        //borderColor: 'white',
       },
       resultLabel:{
         fontFamily: 'Roboto-Light',
@@ -297,7 +290,6 @@ checkSaved() {
         height: 70,
         margin: 10,
         padding: 10,
-        //marginTop:100,
         backgroundColor:'#BA55B3',
         borderRadius:20,
         borderWidth: 1,
