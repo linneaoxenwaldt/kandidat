@@ -311,7 +311,7 @@ export default class ProfileScreen extends React.Component {
           justifyContent:'center',
         },
         closeContainer: {
-          marginBottom: 30,
+          marginBottom: 20,
           marginTop: 20,
           backgroundColor: '#CBA3D5',
           alignItems: 'center',
@@ -328,8 +328,8 @@ export default class ProfileScreen extends React.Component {
           alignItems: 'center',
           justifyContent: 'center',
           borderRadius: 20,
-          marginBottom:10,
-          margin: 20,
+          marginBottom: 8,
+          marginTop: 8,
         },
         logOutText:{
           textAlign: 'center',

@@ -7,15 +7,9 @@ import { ScrollView,
   Platform,
   View,
   Text,
-  FlatList,
-  Alert,
-  TextInput,
-  Modal,
 } from 'react-native';
-import { ListItem } from 'react-native-elements';
 import { DrawerActions } from 'react-navigation';
 import Icon from "react-native-vector-icons/Ionicons";
-import Icon2 from "react-native-vector-icons/MaterialCommunityIcons";
 import data from '../data/engWord.json';
 
 export default class SettingsScreen extends React.Component {
@@ -47,76 +41,54 @@ export default class SettingsScreen extends React.Component {
       }
     }
 
-      render() {
-        return (
-          <View style={styles.container}>
-          <Text style={styles.settingsLabel}>{data.info}</Text>
-          <View style={styles.modalView}>
-          <Text style={styles.modalText}>{data.infoText}</Text>
-          </View>
-          </View>
-
-        );
-      }
+    render() {
+      return (
+        <View style={styles.container}>
+        <Text style={styles.infoLabel}>{data.info}</Text>
+        <Text style={styles.infoText}>{data.infoText}</Text>
+        <TouchableOpacity style={styles.startButton} onPress={() => this.props.navigation.navigate('HomeScreen')}>
+        <Text style={styles.startText}>{data.start}</Text>
+        </TouchableOpacity>
+        </View>
+      );
     }
+  }
 
-    const styles = StyleSheet.create({
-      container: {
-        flex: 1,
-        paddingTop: 15,
-        backgroundColor: '#FFFFFF',
-      },
-      settingsLabel: {
-        fontSize: 40,
-        color: '#000000',
-        textAlign: 'center',
-        fontFamily: "Roboto-Light",
-        padding: 20,
-      },
-      row: {
-        fontFamily: "Roboto-Light",
-        color: '#FFFFFF',
-        padding: 15,
-        marginBottom: 5,
-        fontSize: 20,
-        justifyContent: 'center',
-      },
-      modalView: {
-        alignItems: 'center',
-        padding: 10,
-        //marginTop: 5,
-        marginLeft: 20,
-        marginRight: 20,
-        borderWidth: 5,
-        borderColor: "#6ACCCB",
-      },
-      modalText: {
-        textAlign: 'center',
-        fontFamily: "Roboto-Light",
-        fontSize: 20,
-      },
-      closeIcon: {
-        marginTop: 30,
-        alignItems: 'center',
-      },
-      saveResult: {
-        alignItems:'center',
-        justifyContent: 'center',
-        width: 200,
-        height: 70,
-        margin: 10,
-        padding: 10,
-        marginTop:10,
-        backgroundColor:'#BA55B3',
-        borderRadius:20,
-        borderWidth: 1,
-        borderColor: '#fff'
-      },
-      saveResultText:{
-        alignItems:'center',
-        fontSize:25,
-        textAlign:'center',
-        alignItems:'center',
-        color: '#fff',
-      },
-    });
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      margin: 5,
+      backgroundColor: '#FFFFFF',
+      borderWidth: 5,
+      borderColor: "#6ACCCB",
+    },
+    infoLabel: {
+      fontSize: 40,
+      color: '#000000',
+      textAlign: 'center',
+      fontFamily: "Roboto-Light",
+      marginTop: 30,
+    },
+    infoText: {
+      textAlign: 'center',
+      fontFamily: "Roboto-Light",
+      fontSize: 20,
+      margin: 20,
+    },
+    startButton: {
+      backgroundColor: "#BA55B3",
+      width: 150,
+      height: 70,
+      borderRadius: 20,
+      justifyContent: 'center',
+      marginLeft: 100,
+      marginBottom: 20,
+      marginTop: 20,
+    },
+    startText: {
+      color: "#FFFFFF",
+      fontSize: 25,
+      fontFamily: 'Roboto-Light',
+      textAlign: 'center',
+    },
+  });
