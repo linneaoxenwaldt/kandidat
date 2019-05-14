@@ -25,6 +25,8 @@ export default class OngoingVoteScreen extends React.Component {
       yourTurn: [],
       yourFriendsTurn: [],
       notification: false,
+      pendingArray : [],
+      finishedArray : [],
     }
     this.getYourFriendsTurn()
     this.getYourTurn()
@@ -75,24 +77,27 @@ export default class OngoingVoteScreen extends React.Component {
       var db = firebase.firestore();
       db.collection("Users").doc(userID).collection("PendingVotes").onSnapshot(function(querySnapshot)
       {
-        that.setState({ yourFriendsTurn: []})
+        that.setState({ pendingArray: []})
             querySnapshot.forEach(function(doc)
-            {   const name = doc.get('CatName');
+            {
+                 const name = doc.get('CatName');
                 const img = doc.get('CatImg');
                 that.setState(prevState => (
                   {
-                  yourFriendsTurn: [...prevState.yourFriendsTurn, {VoteID: doc.id, CatName: name, CatImg: img}]
+                  pendingArray: [...prevState.yourFriendsTurn, {VoteID: doc.id, CatName: name, CatImg: img}],
+                  yourFriensTurn : [...prevState.pendingArray,...that.state.pendingArray,...that.state.finishedArray]
                 }))
             });
         });
 
         db.collection("Users").doc(userID).collection("Votes").where("Finished", "==", "Yes").onSnapshot(function(querySnapshot) {
-          //that.setState({ yourFriendsTurn: []})
+          that.setState({ finishedArray: []})
           querySnapshot.forEach(function(doc) {
             const name = doc.get('CatName');
             const img = doc.get('CatImg');
             that.setState(prevState => ({
-              yourFriendsTurn: [...prevState.yourFriendsTurn, {VoteID: doc.id, CatName: name, CatImg: img}]
+              finishedArray: [...prevState.yourFriendsTurn, {VoteID: doc.id, CatName: name, CatImg: img}],
+              yourFriensTurn : [...prevState.finishedArray,...that.state.finishedArray, ...that.state.pendingArray]
             }))
           });
         });
