@@ -21,6 +21,9 @@ export default class NewVoteScreen extends React.Component {
   constructor(props){
     super(props)
     this.colors = ['#6ACCCB', '#94B4C1', '#8FBC8F', '#CBA3D5', '#689999']
+    this.db = firebase.firestore();
+    this.user = firebase.auth().currentUser;
+    this.userID = this.user.uid;
     this.extractKey = ({id}) => id
     this.state = {
       rows: [],
@@ -52,10 +55,7 @@ export default class NewVoteScreen extends React.Component {
 
     getReadyMadeCat() {
       var that = this
-      var user = firebase.auth().currentUser;
-      var userID = user.uid;
-      var db = firebase.firestore();
-      db.collection("Users").doc(userID).collection('Category').get().then(function(querySnapshot) {
+      this.db.collection("Users").doc(this.userID).collection('Category').get().then(function(querySnapshot) {
         querySnapshot.forEach(function(doc) {
           const value = doc.get('CatName');
           const img = doc.get('CatImg');
@@ -68,10 +68,7 @@ export default class NewVoteScreen extends React.Component {
 
     deleteCategory(delItem) {
       var that = this
-      var user = firebase.auth().currentUser;
-      var userID = user.uid;
-      var db = firebase.firestore();
-      var docRef = db.collection("Users").doc(userID).collection('Category').doc(delItem.id)
+      var docRef = this.db.collection("Users").doc(this.userID).collection('Category').doc(delItem.id)
       docRef.collection('Alternative').get().then(function(querySnapshot) {
           querySnapshot.forEach(function(doc) {
               // doc.data() is never undefined for query doc snapshots
@@ -93,12 +90,8 @@ export default class NewVoteScreen extends React.Component {
     }
 
     addToCategoryList(newCat) {
-      var db = firebase.firestore();
-      var that = this
-      var user = firebase.auth().currentUser;
-      var userID = user.uid;
       var catID = newCat.id
-      var docRef = db.collection('Users').doc(userID).collection('Category').doc(catID);
+      var docRef = this.db.collection('Users').doc(this.userID).collection('Category').doc(catID);
       docRef.get().then(function(doc) {
         if (doc.exists) {
           const catName = doc.data().CatName
