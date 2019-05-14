@@ -79,6 +79,7 @@
   "invalidInput": "Error: Invalid inut!",
   "passwDoNotMatch": "Passwords do not match!",
   "changedPassword": "Password is changed",
+  "noAlternatives": "You must create at least one alternative",
   "info": "Info",
   "sound": "Sound",
   "notifications": "Notifications",
@@ -90,5 +91,7 @@
   "cannotRegret": "You cannot regret this!",
   "sureLogOut": "Are you sure you want to log out?",
   "settings": "Settings",
+  "unchecked": "Unchecked Results",
+  "savedResults":"Saved Results",
 
 }

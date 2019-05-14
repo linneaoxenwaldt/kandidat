@@ -25,16 +25,7 @@ export default class ResultScreen extends React.Component {
           height: 70,
           marginLeft: 10,
         },
-        headerLeft: (
-          <TouchableOpacity
-          onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
-          >
-          <Icon
-          name={Platform.OS === "ios" ? "ios-menu" : "md-menu"}
-          size={40}
-          color='#FFFFFF'/>
-          </TouchableOpacity>
-        ),
+
       };
     };
 
@@ -56,33 +47,37 @@ export default class ResultScreen extends React.Component {
       this.getResult()
     }
 
-    getResult() {
-      var that = this;
-      var user = firebase.auth().currentUser;
-      var userID = user.uid;
-      var db = firebase.firestore();
-      var voteID = this.props.navigation.state.params.VoteID
-      var docRef = db.collection("Users").doc(userID).collection("Result").doc(voteID)
-      docRef.collection("Alternatives").onSnapshot(function(querySnapshot) {
-        that.setState({result: []})
-        querySnapshot.forEach(function(doc) {
-          const altID = doc.id;
-          const name = doc.get('Name')
-          const votes = doc.get('Votes')
-          that.setState(prevState => ({
-            result: [...prevState.result, {AltID: altID, Name: name, Votes: votes}]
-          }))
-          that.state.result.sort((a, b) => (a.Votes < b.Votes) ? 1 : -1)
-          that.setState({winner: that.state.result[0].Name})
-          if(that.state.result.length > 1){
-            that.setState({second: that.state.result[1].Name})
-          }
-          if(that.state.result.length > 2){
-            that.setState({third: that.state.result[2].Name})
-          }
-        })
-      })
-    }
+
+  getResult() {
+    var that = this;
+    var user = firebase.auth().currentUser;
+    var userID = user.uid;
+    var db = firebase.firestore();
+    var voteID = this.props.navigation.state.params.VoteID
+    var docRef = db.collection("Users").doc(userID).collection("Result").doc(voteID)
+    docRef.collection("Alternatives").onSnapshot(function(querySnapshot) {
+  that.setState({ result: [] })
+    querySnapshot.forEach(function(doc) {
+      const altID = doc.id;
+      const name = doc.get('Name')
+      const votes = doc.get('Votes')
+    //  console.log(that.state.result)
+      that.setState(prevState => ({
+        result: [...prevState.result, {AltID: altID, Name: name, Votes: votes}]
+      }))
+      that.state.result.sort((a, b) => (a.Votes < b.Votes) ? 1 : -1)
+      if(that.state.result.length > 0) {
+      that.setState({winner: that.state.result[0].Name})
+      }
+      if(that.state.result.length > 1){
+        that.setState({second: that.state.result[1].Name})
+      }
+      if(that.state.result.length > 2){
+          that.setState({third: that.state.result[2].Name})
+      }
+    })
+  })
+}
 
     saveResult() {
       var user = firebase.auth().currentUser;
@@ -277,8 +272,23 @@ export default class ResultScreen extends React.Component {
       buttonContainer:{
         flexDirection:'row',
         justifyContent: 'space-between',
+        //width: 100,
+        marginTop:20,
         marginLeft: 10,
         marginRight: 10,
+
+      },
+      deleteResult:{
+        justifyContent: 'center',
+        width: 130,
+        height: 70,
+        margin: 10,
+        padding: 10,
+        //marginTop:100,
+        backgroundColor:'#6BCDFD',
+        borderRadius:20,
+        borderWidth: 1,
+        borderColor: '#fff'
       },
       saveResult: {
         justifyContent: 'center',
@@ -304,11 +314,18 @@ export default class ResultScreen extends React.Component {
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 20,
-        marginBottom:10,
+
       },
       deleteText:{
         fontSize:20,
         color:'white',
         fontFamily: "Roboto-Light",
+      },
+      buttonBottomContainer:{
+        flexDirection:'row',
+        justifyContent: 'space-between',
+        width: 350,
+        marginTop:50
+
       },
     });

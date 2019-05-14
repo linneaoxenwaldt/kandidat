@@ -140,6 +140,18 @@ export default class AlternativeScreen extends React.Component {
       }
     }
 
+
+    createAlternatives() {
+      if(this.state.rows.length == 0) {
+        Alert.alert(
+          data.noAlternatives,
+        )
+      }
+      else {
+        this.props.navigation.navigate('VoteAddFriends', {category: this.state.category, alternatives: this.state.rows})
+      }
+    }
+
     renderItem = ({item, index}) => {
       var msg = `${data.sureMsg} ${item.text}?`
       return (
@@ -201,7 +213,7 @@ export default class AlternativeScreen extends React.Component {
             color="#A9A9A9"/>
             </TouchableOpacity>
             <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('VoteAddFriends', {category: this.state.category, alternatives: this.state.rows})}
+            onPress={() => this.createAlternatives()}
             >
             <Icon
             name={Platform.OS === "ios" ? "ios-arrow-forward" : "md-arrow-forward"}
