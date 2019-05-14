@@ -102,6 +102,22 @@ export default class ProfileScreen extends React.Component {
       )
     }
 
+  logOut() {
+      Alert.alert(
+      data.logOut,
+      data.sureLogOut,
+      [
+        {
+          text: data.cancel,
+        },
+        {
+          text: data.ok,
+          onPress: () => firebase.auth().signOut()
+        },
+      ]
+    )
+  }
+
     render() {
       return (
         <View style={styles.container}>
@@ -146,6 +162,14 @@ export default class ProfileScreen extends React.Component {
           <Icon name={Platform.OS === "ios" ? "ios-create" : "md-create"}
           size={30}
           color='#FFFFFF'/>
+          </TouchableOpacity>
+          </View>
+          <View style={styles.buttonBottomContainer}>
+          <TouchableOpacity
+          onPress={() => this.logOut()}
+          style = {styles.logOutButton}
+          >
+          <Text style={styles.logOutText}>{data.logOut}</Text>
           </TouchableOpacity>
           </View>
 
@@ -296,5 +320,27 @@ export default class ProfileScreen extends React.Component {
           height: 50,
           alignItems:'center',
           justifyContent:'center',
+        },
+        logOutButton:{
+          backgroundColor: "#6BCDFD",
+          width: 150,
+          height: 55,
+          alignItems: 'center',
+          justifyContent: 'center',
+          borderRadius: 20,
+          marginBottom:10,
+          margin: 20,
+        },
+        logOutText:{
+          textAlign: 'center',
+          fontSize: 20,
+          color:'white',
+          fontFamily: "Roboto-Light",
+        },
+        buttonBottomContainer: {
+          flexDirection:'row',
+          justifyContent: 'center',
+          marginLeft: 10,
+          marginRight: 10,
         },
       });

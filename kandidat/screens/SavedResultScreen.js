@@ -132,7 +132,7 @@ getSavedResults(){
 
 
     renderItem1 = ({item, index}) => {
-      console.log(item)
+      //console.log(item)
       return (
         <TouchableOpacity
         onPress={() => this.props.navigation.navigate('ResultScreen', {VoteID: item.VoteID, saved: false})}>
@@ -149,7 +149,7 @@ getSavedResults(){
     }
 
     renderItem2 = ({item, index}) => {
-      console.log(item)
+      //console.log(item)
       return (
         <TouchableOpacity
         onPress={() => this.props.navigation.navigate('ResultScreen', {VoteID: item.VoteID, saved: true})}>
@@ -224,7 +224,7 @@ getSavedResults(){
               <View style={styles.savedesultContainer}>
               <Text style={styles.savedResultLabel}>{data.savedResults}
               <Text> </Text>
-              
+
                 </Text>
                 <View
                 style={{

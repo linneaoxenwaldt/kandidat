@@ -47,6 +47,13 @@ export default class ResultScreen extends React.Component {
       this.getResult()
     }
 
+    componentDidMount() {
+  this._ismounted = true;
+}
+
+componentWillUnmount() {
+   this._ismounted = false;
+}
 
   getResult() {
     var that = this;
@@ -56,7 +63,8 @@ export default class ResultScreen extends React.Component {
     var voteID = this.props.navigation.state.params.VoteID
     var docRef = db.collection("Users").doc(userID).collection("Result").doc(voteID)
     docRef.collection("Alternatives").onSnapshot(function(querySnapshot) {
-  that.setState({ result: [] })
+      if(that._ismounted === true){
+        that.setState({ result: [] })
     querySnapshot.forEach(function(doc) {
       const altID = doc.id;
       const name = doc.get('Name')
@@ -76,6 +84,7 @@ export default class ResultScreen extends React.Component {
           that.setState({third: that.state.result[2].Name})
       }
     })
+  }
   })
 }
 
