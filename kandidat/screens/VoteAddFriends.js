@@ -32,6 +32,7 @@ export default class VoteAddFriends extends React.Component {
       choosenFriends: [],
       checked: [],
       showMe: false,
+      text: "",
     }
     this.getYourFriends()
   }
@@ -259,6 +260,8 @@ export default class VoteAddFriends extends React.Component {
               <View style ={styles.textInput}>
               <TextInput
               placeholder="Write a message..."
+              value={this.state.text}
+              onChangeText={(text) => this.setState({text})}
               />
               </View>
               <TouchableOpacity style={styles.closeContainer}onPress={()=>{
