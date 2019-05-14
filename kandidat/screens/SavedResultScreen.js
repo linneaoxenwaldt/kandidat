@@ -8,7 +8,6 @@ import { ScrollView,
   Text,
   FlatList,
   Alert,
-  TextInput,
   ImageBackground,
 } from 'react-native';
 import { ListItem } from 'react-native-elements';
@@ -111,7 +110,6 @@ export default class SavedResultScreen extends React.Component {
     }
 
     renderItem1 = ({item, index}) => {
-      //console.log(item)
       return (
         <TouchableOpacity
         onPress={() => this.props.navigation.navigate('ResultScreen', {VoteID: item.VoteID, saved: false})}>
@@ -127,7 +125,6 @@ export default class SavedResultScreen extends React.Component {
     }
 
     renderItem2 = ({item, index}) => {
-      //console.log(item)
       return (
         <TouchableOpacity
         onPress={() => this.props.navigation.navigate('ResultScreen', {VoteID: item.VoteID, saved: true})}>
@@ -158,8 +155,8 @@ export default class SavedResultScreen extends React.Component {
           return (
             <View style={styles.container}>
             <Text style={styles.resultLabel}> {data.results} </Text>
-            <View style={styles.resultContainer}>
-            <Text style={styles.savedResultLabel}>{data.unchecked}
+            <View style={styles.flatlistContain}>
+            <Text style={styles.miniResultLabel}>{data.unchecked}
             <Text> </Text>
             </Text>
             <View
@@ -175,8 +172,8 @@ export default class SavedResultScreen extends React.Component {
               />
               </View>
 
-              <View style={styles.savedesultContainer}>
-              <Text style={styles.savedResultLabel}>{data.savedResults}
+              <View style={styles.flatlistContain}>
+              <Text style={styles.miniResultLabel}>{data.savedResults}
               </Text>
               <View
               style={{
@@ -208,25 +205,15 @@ export default class SavedResultScreen extends React.Component {
               fontFamily: "Roboto-Light",
               marginTop: 15,
             },
-            contain:{
-              height: '50%'
+            flatlistContain: {
+              height: 240,
             },
-            savedResultLabelresultContainer:{
-              height: '50%'
-            },
-            savedResultLabel: {
+            miniResultLabel: {
               marginTop: 20,
+              marginBottom: 10,
               fontSize: 25,
               color: '#000000',
               textAlign: 'center',
               fontFamily: "Roboto-Light",
-            },
-            row: {
-              fontFamily: "Roboto-Light",
-              color: '#FFFFFF',
-              padding: 15,
-              marginBottom: 5,
-              fontSize: 20,
-              justifyContent: 'center',
             },
           });

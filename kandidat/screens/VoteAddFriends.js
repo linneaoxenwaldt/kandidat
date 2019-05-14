@@ -116,7 +116,8 @@ export default class VoteAddFriends extends React.Component {
           var db = firebase.firestore();
           db.collection("Users").doc(userID).collection("PendingVotes").add({
             CatName: catName,
-            CatImg: catImg
+            CatImg: catImg,
+            Msg: this.state.text,
           })
           .then(function(docRef) {
             console.log("Document written with ID: ", docRef.id);

@@ -53,6 +53,9 @@ export default class ProfileScreen extends React.Component {
         {id: '9', img: 'https://firebasestorage.googleapis.com/v0/b/swipesolver.appspot.com/o/Profile%20Image%2Fuggla.png?alt=media&token=2c009f52-f1e8-4dc0-a2f7-9f9b8faf8b79'},
         {id: '10', img: 'https://firebasestorage.googleapis.com/v0/b/swipesolver.appspot.com/o/Profile%20Image%2Fzebra.png?alt=media&token=bb4fbd39-0873-4c9e-9540-40e84b11b16d'},
       ]
+      this.db = firebase.firestore();
+      this.user = firebase.auth().currentUser;
+      this.userID = this.user.uid;
       this.extractKey = ({id}) => id
       this.state = {
         username: "",
@@ -66,10 +69,7 @@ export default class ProfileScreen extends React.Component {
 
     getUser() {
       var that = this
-      var db = firebase.firestore();
-      var user = firebase.auth().currentUser;
-      var userID = user.uid;
-      var docRef = db.collection('Users').doc(userID);
+      var docRef = this.db.collection('Users').doc(this.userID);
       docRef.onSnapshot(function(doc) {
         if (doc.exists) {
           that.setState({username: doc.data().Username, email : doc.data().Email, profilePic: doc.data().ProfilePic})
@@ -82,10 +82,7 @@ export default class ProfileScreen extends React.Component {
 
     changeProfilePic(item){
       this.state.profilePic = item.img
-      var db = firebase.firestore();
-      var user = firebase.auth().currentUser;
-      var userID = user.uid;
-      var docRef = db.collection('Users').doc(userID).update({
+      var docRef = this.db.collection('Users').doc(this.userID).update({
         "ProfilePic": item.img
       });
       this.setState({
@@ -311,7 +308,7 @@ export default class ProfileScreen extends React.Component {
           justifyContent:'center',
         },
         closeContainer: {
-          marginBottom: 30,
+          marginBottom: 20,
           marginTop: 20,
           backgroundColor: '#CBA3D5',
           alignItems: 'center',
@@ -328,8 +325,8 @@ export default class ProfileScreen extends React.Component {
           alignItems: 'center',
           justifyContent: 'center',
           borderRadius: 20,
-          marginBottom:10,
-          margin: 20,
+          marginBottom: 8,
+          marginTop: 8,
         },
         logOutText:{
           textAlign: 'center',
