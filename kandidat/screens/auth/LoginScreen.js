@@ -1,47 +1,41 @@
 import React from 'react';
 import {StyleSheet, View, Text, TextInput, Button, Alert, Image, TouchableOpacity} from 'react-native';
-import { DrawerActions, NavigationActions } from 'react-navigation';
 import Icon from "react-native-vector-icons/Ionicons";
-import { ExpoLinksView } from '@expo/samples';
 import * as firebase from 'firebase';
 
 export default class LoginScreen extends React.Component{
   static navigationOptions = {
-      header: null
+    header: null
   }
 
   constructor(props){
     super(props);
     this.state ={
-email:'',
-password:'',
-
-     };
+      email:'',
+      password:'',
+    };
   }
 
   onLoginPress = () => {
-firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
-  .then(() => {
-
-  }, (error) => {
-    Alert.alert(error.message);
-  });
-
+    firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
+    .then(() => {
+    }, (error) => {
+      Alert.alert(error.message);
+    });
   }
+
   onCreateAccountPress = () => {
     this.props.navigation.navigate('Signup')
   }
+
   onForgotPasswordPress = () => {
     this.props.navigation.navigate('ForgotPassword')
   }
 
-    render(){
-      return(
+  render(){
+    return(
       <View style = {styles.container}>
       <Image source={{uri: 'https://firebasestorage.googleapis.com/v0/b/swipesolver.appspot.com/o/100whitte.png?alt=media&token=46064aae-8998-4a9e-81fe-0af7174862fa'}} style={{width: 300, height: 80, marginBottom: 50, marginTop: 50}}/>
-
-
-
       <TextInput style = {styles.textInputContainer}
       style={styles.textInput}
       placeholder="Email"
@@ -58,33 +52,21 @@ firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password
       />
 
       <TouchableOpacity
-                style = {styles.createOwnCategoryContainer}
-                onPress={this.onLoginPress}
-                underlayColor='#fff'>
-                <Text style= {styles.logInText}>Log in </Text>
-       </TouchableOpacity>
-       <Button title = 'Forgot password?' onPress = {this.onForgotPasswordPress} color = 'white'/>
+      style = {styles.createOwnCategoryContainer}
+      onPress={this.onLoginPress}
+      underlayColor='#fff'>
+      <Text style= {styles.logInText}>Log in </Text>
+      </TouchableOpacity>
+      <Button title = 'Forgot password?' onPress = {this.onForgotPasswordPress} color = '#fff'/>
 
-
-
-       <TouchableOpacity
-                 style = {styles.createAccount}
-                 onPress={this.onCreateAccountPress}
-                 underlayColor='#fff'>
-                 <Text style= {styles.logInText}>Create account </Text>
-        </TouchableOpacity>
-
-
-
-
-
-
-
-
+      <TouchableOpacity
+      style = {styles.createAccount}
+      onPress={this.onCreateAccountPress}
+      underlayColor='#fff'>
+      <Text style= {styles.logInText}>Create account </Text>
+      </TouchableOpacity>
       </View>
     );
-      //return <Text style = {{paddingTop:20}}>LoginScreen</Text>
-
   }
 }
 
@@ -92,16 +74,12 @@ const styles = StyleSheet.create({
   container:{
     height:'100%',
     backgroundColor: '#008080',
-
     alignItems:'center',
-
   },
-
   textInputContainer: {
     width: 350,
     height: 70,
     backgroundColor: '#94B4C1',
-    //alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 50,
     marginTop: 40,
@@ -122,7 +100,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: 350,
     height: 70,
-    //backgroundColor: '#8FBC8F',
     borderRadius: 50,
     marginBottom: 10,
     marginTop:10,
@@ -164,10 +141,5 @@ const styles = StyleSheet.create({
     marginRight: 10,
     marginBottom:10,
     alignItems: 'center',
-
   },
-
-
-
-
 });
