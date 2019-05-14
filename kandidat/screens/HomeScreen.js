@@ -60,11 +60,14 @@ export default class HomeScreen extends React.Component {
        .get().then(
        doc => {
          if (doc.exists) {
-           db.collection('Users').doc(userID).collection('Result').where("Saved", "==", false).get().
-             then(sub => {
+           db.collection('Users').doc(userID).collection('Result').where("Saved", "==", false).onSnapshot(sub => {
                if (sub.docs.length > 0) {
                  that.setState({
                    notificationResults: true,
+                 })
+               }else {
+                 that.setState({
+                   notificationResults : false,
                  })
                }
              });
