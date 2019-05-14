@@ -591,6 +591,7 @@ export default class RequestScreen extends React.Component {
                     color: '#000000',
                     textAlign: 'center',
                     fontFamily: "Roboto-Light",
+                    margin: 10,
                   },
                   miniTextview: {
                     marginLeft: 5,
