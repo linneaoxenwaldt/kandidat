@@ -18,6 +18,9 @@ import FriendsScreen from '../screens/FriendsScreen';
 export default class AddFriendsScreen extends React.Component {
   constructor(props){
     super(props);
+    this.db = firebase.firestore();
+    this.user = firebase.auth().currentUser;
+    this.userID = this.user.uid;
     this.state = {
       text: '',
       users: [],
@@ -52,8 +55,7 @@ export default class AddFriendsScreen extends React.Component {
 
     getAllUsers() {
       var that = this
-      var db = firebase.firestore();
-      db.collection("Users").get().then(function(querySnapshot) {
+      this.db.collection("Users").get().then(function(querySnapshot) {
         querySnapshot.forEach(function(doc) {
           const name = doc.get('Username');
           const id = doc.id;
@@ -66,10 +68,7 @@ export default class AddFriendsScreen extends React.Component {
 
     getYourFriends() {
       var that = this
-      var user = firebase.auth().currentUser;
-      var userID = user.uid;
-      var db = firebase.firestore();
-      db.collection("Users").doc(userID).collection("Friends").get().then(function(querySnapshot) {
+      this.db.collection("Users").doc(this.userID).collection("Friends").get().then(function(querySnapshot) {
         querySnapshot.forEach(function(doc) {
           const name = doc.get('Username');
           const id = doc.id;
@@ -82,10 +81,7 @@ export default class AddFriendsScreen extends React.Component {
 
     getPendingFriends() {
       var that = this
-      var user = firebase.auth().currentUser;
-      var userID = user.uid;
-      var db = firebase.firestore();
-      db.collection("Users").doc(userID).collection("PendingFriendRequests").get().then(function(querySnapshot) {
+      this.db.collection("Users").doc(this.userID).collection("PendingFriendRequests").get().then(function(querySnapshot) {
         querySnapshot.forEach(function(doc) {
           const name = doc.get('Username');
           const id = doc.id;
@@ -163,27 +159,24 @@ export default class AddFriendsScreen extends React.Component {
 
     addUser(friend){
       var that = this
-      var user = firebase.auth().currentUser;
-      var userID = user.uid;
       var friendID = friend.id
-      var db = firebase.firestore();
-      if (userID == friendID) {
+      if (this.userID == friendID) {
         Alert.alert(
           data.noAddYourself,
         )
       }
       else {
-        db.collection("Users").doc(userID).collection("PendingFriendRequests").doc(friendID).set({
+        this.db.collection("Users").doc(this.userID).collection("PendingFriendRequests").doc(friendID).set({
         })
         .then(function() {
           console.log("Document written with ID: ");
-          var docRef = db.collection('Users').doc(friendID);
+          var docRef = that.db.collection('Users').doc(friendID);
           docRef.get().then(function(doc) {
             if (doc.exists) {
               const username = doc.data().Username
               const profilePic = doc.data().ProfilePic
               var newFriend = {id: friendID, username: username, profilePic: profilePic}
-              that.sendFriendRequest(friendID, userID)
+              that.sendFriendRequest(friendID, that.userID)
               that.props.navigation.navigate('Friends')
             }})
             .catch(function(error) {
@@ -194,8 +187,7 @@ export default class AddFriendsScreen extends React.Component {
       }
 
       sendFriendRequest(friendID, userID) {
-        var db = firebase.firestore();
-        db.collection("Users").doc(friendID).collection("FriendRequests").doc(userID).set({
+        this.db.collection("Users").doc(friendID).collection("FriendRequests").doc(userID).set({
         })
       }
 

@@ -21,6 +21,10 @@ export default class AlternativeScreen extends React.Component {
   constructor(props){
     super(props);
     this.colors = ['#6ACCCB', '#94B4C1', '#8FBC8F', '#CBA3D5', '#689999']
+    this.db = firebase.firestore();
+    this.user = firebase.auth().currentUser;
+    this.userID = this.user.uid;
+    this.catID = this.props.navigation.state.params.CatID
     this.extractKey = ({id}) => id
     this.state = {
       rows: [],
@@ -45,17 +49,13 @@ export default class AlternativeScreen extends React.Component {
 
     getCategory() {
       var that = this
-      var catID = this.props.navigation.state.params.CatID
-      var user = firebase.auth().currentUser;
-      var userID = user.uid;
-      var db = firebase.firestore();
-      var docRef = db.collection('Users').doc(userID).collection('Category').doc(catID);
+      var docRef = this.db.collection('Users').doc(this.userID).collection('Category').doc(this.catID);
       docRef.get().then(function(doc) {
         if (doc.exists) {
           const value = doc.get('CatName');
           const img = doc.get('CatImg');
           that.setState(prevState => ({
-            category: [...prevState.category, {catID: catID, catName: value, catImg: img}]
+            category: [...prevState.category, {catID: that.catID, catName: value, catImg: img}]
           }))
         } else {
           console.log("No such document!");
@@ -68,11 +68,7 @@ export default class AlternativeScreen extends React.Component {
     getReadyMadeAlt() {
       var that = this
       if(this.props.navigation.state.params !== undefined) {
-        var catID = this.props.navigation.state.params.CatID
-        var user = firebase.auth().currentUser;
-        var userID = user.uid;
-        var db = firebase.firestore();
-        db.collection("Users").doc(userID).collection("Category").doc(catID).collection('Alternative').get().then(function(querySnapshot) {
+        this.db.collection("Users").doc(this.userID).collection("Category").doc(this.catID).collection('Alternative').get().then(function(querySnapshot) {
           querySnapshot.forEach(function(doc) {
             const name = doc.get('Name');
             const votes = doc.get('Votes')
@@ -89,17 +85,13 @@ export default class AlternativeScreen extends React.Component {
 
     addNewAlternative() {
       var that = this
-      var catID = this.props.navigation.state.params.CatID
       if(this.state.text == "") {
         Alert.alert(
           data.missingAltName,
         )
       }
       else {
-        var user = firebase.auth().currentUser;
-        var userID = user.uid;
-        var db = firebase.firestore();
-        db.collection("Users").doc(userID).collection("Category").doc(catID).collection('Alternative').add({
+        this.db.collection("Users").doc(this.userID).collection("Category").doc(this.catID).collection('Alternative').add({
           Name: this.state.text,
           Votes: 0,
         })
@@ -119,11 +111,7 @@ export default class AlternativeScreen extends React.Component {
 
     deleteAlternative(delItem) {
       var that = this
-      var catID = this.props.navigation.state.params.CatID
-      var user = firebase.auth().currentUser;
-      var userID = user.uid;
-      var db = firebase.firestore();
-      db.collection("Users").doc(userID).collection("Category").doc(catID).collection("Alternative").doc(delItem.id).delete().then(function() {
+      this.db.collection("Users").doc(this.userID).collection("Category").doc(this.catID).collection("Alternative").doc(delItem.id).delete().then(function() {
       }).catch(function(error) {
         console.error("Error removing document: ", error);
       });
