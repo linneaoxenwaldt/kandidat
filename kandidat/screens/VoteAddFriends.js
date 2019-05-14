@@ -8,6 +8,8 @@ import { ScrollView,
   Text,
   FlatList,
   Alert,
+  Modal,
+  TextInput,
 } from 'react-native';
 import { ListItem, CheckBox } from 'react-native-elements';
 import { DrawerActions } from 'react-navigation';
@@ -29,6 +31,8 @@ export default class VoteAddFriends extends React.Component {
       date: [] ,
       choosenFriends: [],
       checked: [],
+      showMe: false,
+      text: "",
     }
     this.getYourFriends()
   }
@@ -112,7 +116,8 @@ export default class VoteAddFriends extends React.Component {
           var db = firebase.firestore();
           db.collection("Users").doc(userID).collection("PendingVotes").add({
             CatName: catName,
-            CatImg: catImg
+            CatImg: catImg,
+            Msg: this.state.text,
           })
           .then(function(docRef) {
             console.log("Document written with ID: ", docRef.id);
@@ -224,7 +229,15 @@ export default class VoteAddFriends extends React.Component {
               <Text style={styles.friendLabel}>{data.invitefriends}</Text>
               <View style= {styles.buttonContainer}>
               <TouchableOpacity
-              style={styles.addFriendsContainer}
+              style={styles.messageContainer}
+              underlayColor='#fff'
+              onPress={()=>{
+                this.setState({
+                  showMe: true})}}>
+              <Text style={styles.addFriendsText}> Message</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+              style={styles.expireDateContainer}
               onPress={this.showDateTimePicker}
               underlayColor='#fff'>
               <DateTimePicker
@@ -234,13 +247,12 @@ export default class VoteAddFriends extends React.Component {
               mode={"time"}
               titleIOS={data.pickTime}
               />
-              <Text style={styles.addFriendsText}> {data.expireDate} <Icon
-              name={Platform.OS === "ios" ? "ios-calendar" : "md-calendar"}
-              size={25}
-              /></Text>
+              <Text style={styles.addFriendsText}> {data.expireDate}</Text>
               <Text>{[this.state.date]}</Text>
               </TouchableOpacity>
               </View>
+
+
               <View style={styles.myFriendsContainer}>
               <Text style={styles.myFriendsText}>{data.myFriends}</Text>
               </View>
@@ -265,7 +277,37 @@ export default class VoteAddFriends extends React.Component {
               <Text style={styles.sendText}>{data.start}{data.vote}</Text>
               </TouchableOpacity>
               </View>
+
+
+
+              <Modal visible={this.state.showMe}
+              style={styles.modalView}
+              transparent={true}
+              animationType='fade'
+              onRequestClose = {() => {this.setState({ showMe : false })}}>
+              <View style={styles.modalView}>
+              <Text style={styles.modalText}> Message</Text>
+              <View style ={styles.textInput}>
+              <TextInput
+              multiline={true}
+              placeholder="Write a message..."
+              value={this.state.text}
+              onChangeText={(text) => this.setState({text})}
+              />
               </View>
+              <TouchableOpacity style={styles.addContainer}onPress={()=>{
+                this.setState({
+                  showMe: false
+                })}}>
+
+                <Text style={styles.addText}> Add message </Text>
+                </TouchableOpacity>
+
+                </View>
+                </Modal>
+
+                </View>
+
             );
           }
         }
@@ -276,7 +318,12 @@ export default class VoteAddFriends extends React.Component {
             backgroundColor: '#FFFFFF',
           },
           buttonContainer:{
-            alignItems:'center',
+            //alignItems:'center',
+            flexDirection:'row',
+            justifyContent: 'space-between',
+            //width: 350,
+            //marginTop:50
+            margin: 10,
           },
           friendLabel: {
             fontSize: 40,
@@ -285,17 +332,28 @@ export default class VoteAddFriends extends React.Component {
             fontFamily: "Roboto-Light",
             margin: 20,
           },
-          addFriendsContainer: {
+          expireDateContainer: {
             justifyContent: 'center',
-            width: 350,
+            width: 170,
             height: 70,
             margin: 0,
             padding: 10,
             backgroundColor:'#BA55B3',
-            borderRadius:50,
+            borderRadius:20,
             borderWidth: 1,
             borderColor: '#fff'
           },
+          messageContainer:{
+          justifyContent: 'center',
+          width: 170,
+          height: 70,
+          margin: 0,
+          padding: 10,
+          backgroundColor:'#BA55B3',
+          borderRadius:20,
+          borderWidth: 1,
+          borderColor: '#fff'},
+
           addFriendsText: {
             fontFamily: "Roboto-Light",
             color:'#fff',
@@ -303,6 +361,7 @@ export default class VoteAddFriends extends React.Component {
             textAlign:'center',
             paddingLeft : 1,
             paddingRight : 1,
+            justifyContent: 'center',
           },
           myFriendsContainer: {
             marginTop: 0,
@@ -346,5 +405,59 @@ export default class VoteAddFriends extends React.Component {
           },
           checkbox:{
             alignItems: 'flex-end'
+          },
+          modalView:{
+            justifyContent:'center',
+            textAlign:'center',
+            alignItems: 'center',
+            flex: 0,
+            marginRight:50,
+            backgroundColor: '#689999',
+            height:400,
+            width: 300,
+            borderRadius: 20,
+            borderColor: 'white',
+            borderWidth: 2,
+            marginLeft:40,
+            marginTop:100,
+
+
+          },
+          modalText: {
+            paddingTop: 20,
+            fontFamily: 'Roboto-Light',
+            fontSize: 25,
+            color: 'white',
+            paddingBottom: 10,
+          },
+
+
+          textInput:{
+            width: 250,
+            height: 200,
+            backgroundColor:'white',
+            borderRadius:20,
+            padding: 20,
+
+
+          },
+          addContainer: {
+            marginTop: 30,
+            marginBottom: 10,
+            backgroundColor: '#BA55B3',
+            alignItems: 'center',
+            borderRadius: 20,
+            width:220,
+            height: 50,
+            alignItems:'center',
+            justifyContent:'center',
+
+          },
+          addText:{
+            fontSize: 20,
+            color: 'white',
+            fontFamily: 'Roboto-Light',
+            padding: 10,
+
           }
         });

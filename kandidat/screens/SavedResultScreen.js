@@ -111,7 +111,7 @@ export default class SavedResultScreen extends React.Component {
     }
 
     renderItem1 = ({item, index}) => {
-      console.log(item)
+      //console.log(item)
       return (
         <TouchableOpacity
         onPress={() => this.props.navigation.navigate('ResultScreen', {VoteID: item.VoteID, saved: false})}>
@@ -127,7 +127,7 @@ export default class SavedResultScreen extends React.Component {
     }
 
     renderItem2 = ({item, index}) => {
-      console.log(item)
+      //console.log(item)
       return (
         <TouchableOpacity
         onPress={() => this.props.navigation.navigate('ResultScreen', {VoteID: item.VoteID, saved: true})}>

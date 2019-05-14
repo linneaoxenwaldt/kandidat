@@ -32,7 +32,6 @@ import ResultScreen from '../screens/ResultScreen';
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
 });
-
 HomeStack.navigationOptions = {
   drawerIcon: ({ focused }) => (
     <Icon
@@ -44,7 +43,6 @@ HomeStack.navigationOptions = {
 const SettingsStack = createStackNavigator({
   Settings: SettingsScreen,
 });
-
 SettingsStack.navigationOptions = {
   tabBarLabel: 'Settings',
   tabBarIcon: ({ focused }) => (
@@ -54,16 +52,15 @@ SettingsStack.navigationOptions = {
     />
   ),
   drawerIcon: ({ focused }) => (
-    <Icon
-      name={Platform.OS === "ios" ? "ios-settings" : "md-settings"}
-      size={25}
-    />),
+<Icon
+name={Platform.OS === "ios" ? "ios-information-circle" : "md-information-circle"}
+size={25}
+/>),
 };
 
 const ProfileStack = createStackNavigator({
   Profile: ProfileScreen,
 });
-
 ProfileStack.navigationOptions = {
   tabBarLabel: 'My Profile',
   tabBarIcon: ({ focused }) => (
@@ -82,7 +79,6 @@ ProfileStack.navigationOptions = {
 const FriendsStack = createStackNavigator({
   Friends: FriendsScreen,
 });
-
 FriendsStack.navigationOptions = {
   tabBarLabel: 'My Friends',
   tabBarIcon: ({ focused }) => (
@@ -101,7 +97,6 @@ FriendsStack.navigationOptions = {
 const NewVoteStack = createStackNavigator({
   NewVote: NewVoteScreen,
 });
-
 NewVoteStack.navigationOptions = {
   tabBarLabel: 'My Friends',
   tabBarIcon: ({ focused }) => (
@@ -120,7 +115,6 @@ NewVoteStack.navigationOptions = {
 const OngoingVoteStack = createStackNavigator({
   OngoingVote: OngoingVoteScreen,
 });
-
 OngoingVoteStack.navigationOptions = {
   tabBarLabel: 'My Friends',
   tabBarIcon: ({ focused }) => (
@@ -139,7 +133,6 @@ OngoingVoteStack.navigationOptions = {
 const SavedResultStack = createStackNavigator({
   SavedResult: SavedResultScreen,
 });
-
 SavedResultStack.navigationOptions = {
   tabBarLabel: 'My Friends',
   tabBarIcon: ({ focused }) => (
@@ -155,8 +148,6 @@ SavedResultStack.navigationOptions = {
     />),
 };
 
-
-
 const LoginStack = createStackNavigator({
   LoginScreen: LoginScreen,
 });
@@ -164,37 +155,18 @@ const LoginStack = createStackNavigator({
 const ChangePasswordStack = createStackNavigator({
   ChangePassword: ChangePasswordScreen,
 });
-
 ChangePasswordStack.navigationOptions = {
 };
 
 const ChangeEmailStack = createStackNavigator({
   ChangeEmail: ChangeEmailScreen,
 });
-
 ChangeEmailStack.navigationOptions = {
 };
 
 const AddFriendStack = createStackNavigator({
   AddFriend: AddFriendScreen,
 });
-
-ChangeEmailStack.navigationOptions = {
-};
-
-// const LinksStack = createStackNavigator({
-//   Links: LinksScreen,
-// });
-//
-// LinksStack.navigationOptions = {
-//   tabBarLabel: 'Links',
-//   tabBarIcon: ({ focused }) => (
-//     <TabBarIcon
-//       focused={focused}
-//       name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
-//     />
-//   ),
-// };
 
 const NewCategoryStack = createStackNavigator({
   newCategory: NewCategory,
@@ -233,7 +205,6 @@ const VoteAddFriendsStack = createStackNavigator({
 const RequestStack = createStackNavigator({
   RequestScreen: RequestScreen,
 });
-
 RequestStack.navigationOptions = {
   tabBarLabel: 'Requests',
   tabBarIcon: ({ focused }) => (
@@ -249,6 +220,7 @@ RequestStack.navigationOptions = {
     />),
 };
 
+
 const DrawerComponent = createDrawerNavigator(
   {
     'Home ': HomeStack,
@@ -258,7 +230,7 @@ const DrawerComponent = createDrawerNavigator(
     'Ongoing votes ': OngoingVoteStack,
     'Requests ': RequestStack,
     'Results ': SavedResultStack,
-    'Settings ': SettingsStack,
+    'Info ': SettingsStack,
   },
 );
 

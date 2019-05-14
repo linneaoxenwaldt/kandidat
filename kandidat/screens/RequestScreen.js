@@ -211,8 +211,9 @@ export default class RequestScreen extends React.Component {
                                 if (doc.exists) {
                                   const catName = doc.get('CatName');
                                   const catImg = doc.get('CatImg');
+                                  const msg = doc.get('Msg');
                                   that.setState(prevState => ({
-                                    voteReq: [...prevState.voteReq, {VoteID: voteID, sentFromID: sentFromID, sentFromUsername: username, sentFromProfilePic: profilePic, CatName: catName, CatImg: catImg}]
+                                    voteReq: [...prevState.voteReq, {VoteID: voteID, sentFromID: sentFromID, sentFromUsername: username, sentFromProfilePic: profilePic, CatName: catName, CatImg: catImg, Msg: msg}]
                                   }))
                                 }})
                               }});
@@ -507,7 +508,7 @@ export default class RequestScreen extends React.Component {
                   onRequestClose = {() => {this.setState({ showMe : false })}}>
                   <View style={styles.modalView}>
                   <Text style={styles.modalText}> {this.state.currentVote.CatName}</Text>
-
+                  <Text style={styles.textLabel}> {this.state.currentVote.Msg} </Text>
                   <Text style={styles.textLabel}> {data.invited} </Text>
                   <View style={styles.invitedContainer}>
                   <Image style={styles.  profilePicContainer}

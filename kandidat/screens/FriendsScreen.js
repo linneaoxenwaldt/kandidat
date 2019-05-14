@@ -19,6 +19,9 @@ import * as firebase from 'firebase';
 export default class FriendsScreen extends React.Component {
   constructor(props){
     super(props);
+    this.db = firebase.firestore();
+    this.user = firebase.auth().currentUser;
+    this.userID = this.user.uid;
     this.colors = ['#6ACCCB', '#94B4C1', '#8FBC8F', '#CBA3D5', '#689999']
     this.extractKey = ({id}) => id
     this.state = {
@@ -51,26 +54,25 @@ export default class FriendsScreen extends React.Component {
 
     deleteFriend(delItem) {
       var that = this
-      var user = firebase.auth().currentUser;
-      var userID = user.uid;
-      var db = firebase.firestore();
-      db.collection("Users").doc(userID).collection("Friends").doc(delItem.id).delete().then(function() {
+      // var user = firebase.auth().currentUser;
+      // var userID = user.uid;
+      // var db = firebase.firestore();
+      this.db.collection("Users").doc(this.userID).collection("Friends").doc(delItem.id).delete().then(function() {
       }).catch(function(error) {
         console.error("Error removing document: ", error);
       });
       this.setState(prevState => ({friendsInfo: prevState.friendsInfo.filter(item => item !== delItem) }));
 
-      db.collection("Users").doc(delItem.id).collection("Friends").doc(userID).delete().then(function() {
+      this.db.collection("Users").doc(delItem.id).collection("Friends").doc(this.userID).delete().then(function() {
       }).catch(function(error) {
         console.error("Error removing document: ", error);
       });
     }
 
     updateFriends(friend) {
-      var db = firebase.firestore();
       var that = this
       var friendID = friend.id
-      var docRef = db.collection('Users').doc(friendID);
+      var docRef = this.db.collection('Users').doc(friendID);
       docRef.get().then(function(doc) {
         if (doc.exists) {
           const username = doc.data().Username
@@ -88,15 +90,12 @@ export default class FriendsScreen extends React.Component {
 
   getYourFriends() {
     var that = this
-    var user = firebase.auth().currentUser;
-    var userID = user.uid;
-    var db = firebase.firestore();
-    db.collection("Users").doc(userID).collection("Friends").onSnapshot(function(querySnapshot) {
+    this.db.collection("Users").doc(this.userID).collection("Friends").onSnapshot(function(querySnapshot) {
       that.setState({friendsInfo:[] })
 
         querySnapshot.forEach(function(doc) {
           const id = doc.id;
-          var docRef = db.collection('Users').doc(id);
+          var docRef = that.db.collection('Users').doc(id);
           docRef.get().then(function(doc) {
             if (doc.exists) {
               const username = doc.data().Username

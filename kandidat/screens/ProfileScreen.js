@@ -53,6 +53,9 @@ export default class ProfileScreen extends React.Component {
         {id: '9', img: 'https://firebasestorage.googleapis.com/v0/b/swipesolver.appspot.com/o/Profile%20Image%2Fuggla.png?alt=media&token=2c009f52-f1e8-4dc0-a2f7-9f9b8faf8b79'},
         {id: '10', img: 'https://firebasestorage.googleapis.com/v0/b/swipesolver.appspot.com/o/Profile%20Image%2Fzebra.png?alt=media&token=bb4fbd39-0873-4c9e-9540-40e84b11b16d'},
       ]
+      this.db = firebase.firestore();
+      this.user = firebase.auth().currentUser;
+      this.userID = this.user.uid;
       this.extractKey = ({id}) => id
       this.state = {
         username: "",
@@ -66,10 +69,7 @@ export default class ProfileScreen extends React.Component {
 
     getUser() {
       var that = this
-      var db = firebase.firestore();
-      var user = firebase.auth().currentUser;
-      var userID = user.uid;
-      var docRef = db.collection('Users').doc(userID);
+      var docRef = this.db.collection('Users').doc(this.userID);
       docRef.onSnapshot(function(doc) {
         if (doc.exists) {
           that.setState({username: doc.data().Username, email : doc.data().Email, profilePic: doc.data().ProfilePic})
@@ -82,10 +82,7 @@ export default class ProfileScreen extends React.Component {
 
     changeProfilePic(item){
       this.state.profilePic = item.img
-      var db = firebase.firestore();
-      var user = firebase.auth().currentUser;
-      var userID = user.uid;
-      var docRef = db.collection('Users').doc(userID).update({
+      var docRef = this.db.collection('Users').doc(this.userID).update({
         "ProfilePic": item.img
       });
       this.setState({
@@ -101,6 +98,22 @@ export default class ProfileScreen extends React.Component {
         </TouchableOpacity>
       )
     }
+
+  logOut() {
+      Alert.alert(
+      data.logOut,
+      data.sureLogOut,
+      [
+        {
+          text: data.cancel,
+        },
+        {
+          text: data.ok,
+          onPress: () => firebase.auth().signOut()
+        },
+      ]
+    )
+  }
 
     render() {
       return (
@@ -146,6 +159,14 @@ export default class ProfileScreen extends React.Component {
           <Icon name={Platform.OS === "ios" ? "ios-create" : "md-create"}
           size={30}
           color='#FFFFFF'/>
+          </TouchableOpacity>
+          </View>
+          <View style={styles.buttonBottomContainer}>
+          <TouchableOpacity
+          onPress={() => this.logOut()}
+          style = {styles.logOutButton}
+          >
+          <Text style={styles.logOutText}>{data.logOut}</Text>
           </TouchableOpacity>
           </View>
 
@@ -296,5 +317,27 @@ export default class ProfileScreen extends React.Component {
           height: 50,
           alignItems:'center',
           justifyContent:'center',
+        },
+        logOutButton:{
+          backgroundColor: "#6BCDFD",
+          width: 150,
+          height: 55,
+          alignItems: 'center',
+          justifyContent: 'center',
+          borderRadius: 20,
+          marginBottom:10,
+          margin: 20,
+        },
+        logOutText:{
+          textAlign: 'center',
+          fontSize: 20,
+          color:'white',
+          fontFamily: "Roboto-Light",
+        },
+        buttonBottomContainer: {
+          flexDirection:'row',
+          justifyContent: 'center',
+          marginLeft: 10,
+          marginRight: 10,
         },
       });
