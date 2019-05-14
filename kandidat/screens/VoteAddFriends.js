@@ -252,34 +252,6 @@ export default class VoteAddFriends extends React.Component {
               </TouchableOpacity>
               </View>
 
-              <Modal visible={this.state.showMe}
-              style={styles.modalView}
-              transparent={true}
-              onRequestClose = {() => {this.setState({ showMe : false })}}>
-              <View style={styles.modalView}>
-              <Text style={styles.myFriendsText}> Message</Text>
-              <View style ={styles.textInput}>
-              <TextInput
-              placeholder="Write a message..."
-              value={this.state.text}
-              onChangeText={(text) => this.setState({text})}
-              />
-              </View>
-              <TouchableOpacity style={styles.closeContainer}onPress={()=>{
-                this.setState({
-                  showMe: false
-                })}}>
-
-                <Text style={styles.closeText}> {data.closeWindow} </Text>
-                </TouchableOpacity>
-
-                </View>
-                </Modal>
-
-
-
-
-
 
               <View style={styles.myFriendsContainer}>
               <Text style={styles.myFriendsText}>{data.myFriends}</Text>
@@ -305,7 +277,37 @@ export default class VoteAddFriends extends React.Component {
               <Text style={styles.sendText}>{data.start}{data.vote}</Text>
               </TouchableOpacity>
               </View>
+
+
+
+              <Modal visible={this.state.showMe}
+              style={styles.modalView}
+              transparent={true}
+              animationType='fade'
+              onRequestClose = {() => {this.setState({ showMe : false })}}>
+              <View style={styles.modalView}>
+              <Text style={styles.modalText}> Message</Text>
+              <View style ={styles.textInput}>
+              <TextInput
+              multiline={true}
+              placeholder="Write a message..."
+              value={this.state.text}
+              onChangeText={(text) => this.setState({text})}
+              />
               </View>
+              <TouchableOpacity style={styles.addContainer}onPress={()=>{
+                this.setState({
+                  showMe: false
+                })}}>
+
+                <Text style={styles.addText}> Add message </Text>
+                </TouchableOpacity>
+
+                </View>
+                </Modal>
+
+                </View>
+
             );
           }
         }
@@ -409,40 +411,53 @@ export default class VoteAddFriends extends React.Component {
             textAlign:'center',
             alignItems: 'center',
             flex: 0,
-            margin: 70,
-            backgroundColor: '#94B4C1',
-            alignItems: 'center',
+            marginRight:50,
+            backgroundColor: '#689999',
             height:400,
             width: 300,
             borderRadius: 20,
-            borderColor: 'grey',
+            borderColor: 'white',
             borderWidth: 2,
+            marginLeft:40,
+            marginTop:100,
+
 
           },
           modalText: {
-            paddingTop: 50,
+            paddingTop: 20,
             fontFamily: 'Roboto-Light',
-            fontSize: 40,
+            fontSize: 25,
+            color: 'white',
             paddingBottom: 10,
           },
+
+
           textInput:{
-            width: 200,
+            width: 250,
             height: 200,
             backgroundColor:'white',
             borderRadius:20,
+            padding: 20,
 
 
           },
-          closeContainer: {
+          addContainer: {
             marginTop: 30,
             marginBottom: 10,
-            backgroundColor: '#6BCDFD',
+            backgroundColor: '#BA55B3',
             alignItems: 'center',
             borderRadius: 20,
-            width:120,
+            width:220,
             height: 50,
             alignItems:'center',
             justifyContent:'center',
-            fontSize: 10
+
           },
+          addText:{
+            fontSize: 20,
+            color: 'white',
+            fontFamily: 'Roboto-Light',
+            padding: 10,
+
+          }
         });
