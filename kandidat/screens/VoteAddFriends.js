@@ -233,7 +233,7 @@ export default class VoteAddFriends extends React.Component {
               onPress={()=>{
                 this.setState({
                   showMe: true})}}>
-              <Text style={styles.addFriendsText}> Message</Text>
+              <Text style={styles.addFriendsText}> {data.message}</Text>
               </TouchableOpacity>
               <TouchableOpacity
               style={styles.expireDateContainer}
@@ -285,7 +285,7 @@ export default class VoteAddFriends extends React.Component {
               animationType='fade'
               onRequestClose = {() => {this.setState({ showMe : false })}}>
               <View style={styles.modalView}>
-              <Text style={styles.modalText}> Message</Text>
+              <Text style={styles.modalText}> {data.message}</Text>
               <View style ={styles.textInput}>
               <TextInput
               multiline={true}
@@ -299,7 +299,7 @@ export default class VoteAddFriends extends React.Component {
                   showMe: false
                 })}}>
 
-                <Text style={styles.addText}> Add message </Text>
+                <Text style={styles.addText}> {data.add} {data.message} </Text>
                 </TouchableOpacity>
 
                 </View>
