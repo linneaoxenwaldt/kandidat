@@ -84,8 +84,8 @@ export default class OngoingVoteScreen extends React.Component {
                 const img = doc.get('CatImg');
                 that.setState(prevState => (
                   {
-                  pendingArray: [...prevState.yourFriendsTurn, {VoteID: doc.id, CatName: name, CatImg: img}],
-                  yourFriensTurn : [...prevState.pendingArray,...that.state.pendingArray,...that.state.finishedArray]
+                  pendingArray: [...prevState.pendingArray, {VoteID: doc.id, CatName: name, CatImg: img}],
+                  //yourFriensTurn : [...that.state.pendingArray,...that.state.finishedArray]
                 }))
             });
         });
@@ -96,11 +96,16 @@ export default class OngoingVoteScreen extends React.Component {
             const name = doc.get('CatName');
             const img = doc.get('CatImg');
             that.setState(prevState => ({
-              finishedArray: [...prevState.yourFriendsTurn, {VoteID: doc.id, CatName: name, CatImg: img}],
-              yourFriensTurn : [...prevState.finishedArray,...that.state.finishedArray, ...that.state.pendingArray]
+              finishedArray: [...prevState.finishedArray, {VoteID: doc.id, CatName: name, CatImg: img}],
+              //yourFriensTurn : [...that.state.finishedArray, ...that.state.pendingArray]
             }))
           });
         });
+        that.mergeArray()
+      }
+
+      mergeArray(){
+        this.setState({yourFriensTurn : [...this.state.finishedArray, ...this.state.pendingArray]})
       }
 
       renderItem1 = ({item, index}) => {
@@ -123,7 +128,7 @@ export default class OngoingVoteScreen extends React.Component {
           <ImageBackground source={{uri: item.CatImg}} style={{width: '100%', height: 100}}>
           <ListItem
           containerStyle={{ backgroundColor: 'transparent'}}
-          titleStyle={{color: '#FFFFFF', fontSize: 30}}
+          titleStyle={{color: '#000000', fontSize: 30}}
           title={item.CatName}
           />
           </ImageBackground>
@@ -153,20 +158,24 @@ export default class OngoingVoteScreen extends React.Component {
           </View>
 
           <View style={styles.votePenContainer}>
+
           <Text style={styles.voteLabel}>
           {data.yourFriensTurn}
           </Text>
+
           <View style={{
             borderBottomColor: '#94B4C1',
             borderBottomWidth: 3,
           }}
           />
+
           <FlatList
           extraData={this.state}
-          data={this.state.yourFriendsTurn}
+          data={this.state.yourFriensTurn}
           renderItem={this.renderItem2}
           keyExtractor={this.extractKey2}
           />
+
           </View>
           </View>
         );
