@@ -19,6 +19,9 @@ import * as firebase from 'firebase';
 export default class HomeScreen extends React.Component {
   constructor(props){
     super(props);
+    this.db = firebase.firestore();
+    this.user = firebase.auth().currentUser;
+    this.userID = this.user.uid;
     this.state = {
       notificationOngoingVotes: false,
       notificationRequests: false,
@@ -53,14 +56,11 @@ export default class HomeScreen extends React.Component {
 
     getnotificationResults() {
       var that = this
-      var user = firebase.auth().currentUser;
-      var userID = user.uid;
-      var db = firebase.firestore();
-      db.collection('Users').doc(userID)
+      this.db.collection('Users').doc(this.userID)
        .get().then(
        doc => {
          if (doc.exists) {
-           db.collection('Users').doc(userID).collection('Result').where("Saved", "==", false).onSnapshot(sub => {
+           that.db.collection('Users').doc(that.userID).collection('Result').where("Saved", "==", false).onSnapshot(sub => {
                if (sub.docs.length > 0) {
                  that.setState({
                    notificationResults: true,
@@ -89,14 +89,11 @@ export default class HomeScreen extends React.Component {
 
     getnotificationOngoingVotes() {
       var that = this
-      var user = firebase.auth().currentUser;
-      var userID = user.uid;
-      var db = firebase.firestore();
-      db.collection('Users').doc(userID)
+      this.db.collection('Users').doc(this.userID)
        .onSnapshot(
        doc => {
          if (doc.exists) {
-           db.collection('Users').doc(userID).collection('Votes').where("Finished", "==", "No").onSnapshot(sub => {
+           that.db.collection('Users').doc(that.userID).collection('Votes').where("Finished", "==", "No").onSnapshot(sub => {
                if (sub.docs.length > 0) {
                  that.setState({
                    notificationOngoingVotes: true,
@@ -123,15 +120,12 @@ export default class HomeScreen extends React.Component {
 
     getnotificationRequests() {
       var that = this
-      var user = firebase.auth().currentUser;
-      var userID = user.uid;
-      var db = firebase.firestore();
-      db.collection('Users').doc(userID).onSnapshot(
+      this.db.collection('Users').doc(this.userID).onSnapshot(
        doc =>
        {
          if (doc.exists)
          {
-           db.collection('Users').doc(userID).collection('VoteRequests').get().
+           that.db.collection('Users').doc(that.userID).collection('VoteRequests').get().
              then(sub =>
                {
                if (sub.docs.length > 0)
@@ -142,7 +136,7 @@ export default class HomeScreen extends React.Component {
                    })
                }else
                {
-                 db.collection('Users').doc(userID).collection('FriendRequests').onSnapshot(sub =>
+                 that.db.collection('Users').doc(that.userID).collection('FriendRequests').onSnapshot(sub =>
                    {
                      if (sub.docs.length > 0)
                      {
@@ -161,17 +155,17 @@ export default class HomeScreen extends React.Component {
          }
        });
      }})
-       db.collection('Users').doc(userID)
+       this.db.collection('Users').doc(this.userID)
         .onSnapshot(
         doc => {
           if (doc.exists) {
-            db.collection('Users').doc(userID).collection('FriendRequests').onSnapshot(sub => {
+            that.db.collection('Users').doc(that.userID).collection('FriendRequests').onSnapshot(sub => {
                 if (sub.docs.length > 0) {
                   that.setState({
                     notificationRequests: true,
                   })
                 }else {
-                  db.collection('Users').doc(userID).collection('VoteRequests').onSnapshot(sub => {
+                  that.db.collection('Users').doc(that.userID).collection('VoteRequests').onSnapshot(sub => {
                     if (sub.docs.length > 0) {
                       that.setState({
                         notificationRequests: true,

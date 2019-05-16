@@ -23,6 +23,9 @@ export default class SavedResultScreen extends React.Component {
     this.extractKey = ({id}) => id
     this.extractKey1 = ({VoteID}) => VoteID
     this.extractKey2 = ({VoteID}) => VoteID
+    this.db = firebase.firestore();
+    this.user = firebase.auth().currentUser;
+    this.userID = this.user.uid;
     this.state = {
       results:[],
       savedResults: [],
@@ -55,10 +58,7 @@ export default class SavedResultScreen extends React.Component {
 
     getResults() {
       var that = this
-      var user = firebase.auth().currentUser;
-      var userID = user.uid;
-      var db = firebase.firestore();
-      db.collection("Users").doc(userID).collection("Result").where("Saved", "==", false).onSnapshot(function(querySnapshot) {
+      this.db.collection("Users").doc(this.userID).collection("Result").where("Saved", "==", false).onSnapshot(function(querySnapshot) {
         that.setState({results: []})
         querySnapshot.forEach(function(doc) {
           const name = doc.get('CatName');
@@ -72,10 +72,7 @@ export default class SavedResultScreen extends React.Component {
 
     getSavedResults(){
       var that = this
-      var user = firebase.auth().currentUser;
-      var userID = user.uid;
-      var db = firebase.firestore();
-      db.collection("Users").doc(userID).collection("Result").where("Saved", "==", true).onSnapshot(function(querySnapshot) {
+      this.db.collection("Users").doc(this.userID).collection("Result").where("Saved", "==", true).onSnapshot(function(querySnapshot) {
         that.setState({savedResults: []})
         querySnapshot.forEach(function(doc) {
           const name = doc.get('CatName');
@@ -89,11 +86,8 @@ export default class SavedResultScreen extends React.Component {
 
     deleteResult(delItem) {
       var that = this;
-      var user = firebase.auth().currentUser;
-      var userID = user.uid;
-      var db = firebase.firestore();
       var voteID = delItem.VoteID
-      var docRef = db.collection('Users').doc(userID).collection('Result').doc(voteID)
+      var docRef = this.db.collection('Users').doc(this.userID).collection('Result').doc(voteID)
       docRef.collection('Alternatives').get().then(function(querySnapshot) {
         querySnapshot.forEach(function(doc) {
           const id = doc.id

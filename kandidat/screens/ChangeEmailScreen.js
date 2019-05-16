@@ -39,6 +39,9 @@ export default class ChangeEmailScreen extends React.Component {
 
     constructor(props){
       super(props);
+      this.db = firebase.firestore();
+      this.user = firebase.auth().currentUser;
+      this.userID = this.user.uid;
       this.state ={
         currentEmail : '',
         newEmail : '',
@@ -48,17 +51,13 @@ export default class ChangeEmailScreen extends React.Component {
     }
 
     reauthenticate = (currentPassword) => {
-      var user = firebase.auth().currentUser;
-      var cred = firebase.auth.EmailAuthProvider.credential(user.email, this.state.currentPassword)
-      return user.reauthenticateAndRetrieveDataWithCredential(cred);
+      var cred = firebase.auth.EmailAuthProvider.credential(this.user.email, this.state.currentPassword)
+      return this.user.reauthenticateAndRetrieveDataWithCredential(cred);
     }
 
     updateNewEmail(){
-      var user = firebase.auth().currentUser;
-      var userID = user.uid;
       var that = this
-      var db = firebase.firestore();
-      db.collection("Users").doc(userID).update({
+      this.db.collection("Users").doc(this.userID).update({
         Email: this.state.newEmail,
       })
       .then(function() {
@@ -83,6 +82,7 @@ export default class ChangeEmailScreen extends React.Component {
       }).catch((error)=>{
         Alert.alert(data.invalidInput)
       })
+      //Vet ej om denna måste ligga här?
       var user = firebase.auth().currentUser;
     }
 
