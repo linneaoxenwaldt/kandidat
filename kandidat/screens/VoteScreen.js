@@ -35,14 +35,16 @@ export default class VoteScreen extends React.Component {
       super(props);
       this.position = new Animated.ValueXY()
       this.extractKey = ({AltID}) => AltID
-      var user = firebase.auth().currentUser;
-      var userID = user.uid;
+      this.db = firebase.firestore();
+      this.user = firebase.auth().currentUser;
+      this.userID = this.user.uid;
+      this.voteID = this.props.navigation.state.params.VoteID
       this.colors = ['#6ACCCB', '#94B4C1', '#8FBC8F', '#CBA3D5', '#689999']
       this.state = {
         alternatives: [],
         currentNumber: 0,
         partFinished: [],
-        allParticipants: [{ParticipantID: userID}],
+        allParticipants: [{ParticipantID: this.userID}],
         result: [],
         currentIndex: 0,
         CatName: [],
@@ -89,11 +91,7 @@ export default class VoteScreen extends React.Component {
 
   getCatName() {
     var that = this
-    var user = firebase.auth().currentUser;
-    var userID = user.uid;
-    var db = firebase.firestore();
-    var voteID = this.props.navigation.state.params.VoteID
-    var docRef = db.collection('Users').doc(userID).collection('Votes').doc(voteID)
+    var docRef = this.db.collection('Users').doc(this.userID).collection('Votes').doc(this.voteID)
     docRef.get().then(function(doc) {
       if (doc.exists) {
         var catName = doc.get('CatName')
@@ -108,11 +106,7 @@ export default class VoteScreen extends React.Component {
 
   getAllAlt(){
     var that = this
-    var user = firebase.auth().currentUser;
-    var userID = user.uid;
-    var db = firebase.firestore();
-    var voteID = this.props.navigation.state.params.VoteID
-    db.collection("Users").doc(userID).collection("Votes").doc(voteID).collection('Alternatives').get().then(function(querySnapshot) {
+    this.db.collection("Users").doc(this.userID).collection("Votes").doc(this.voteID).collection('Alternatives').get().then(function(querySnapshot) {
       querySnapshot.forEach(function(doc) {
         const altID = doc.id;
         const name = doc.get('Name');
@@ -160,11 +154,7 @@ export default class VoteScreen extends React.Component {
 
       giveLike(altID, origin){
         var that = this
-        var user = firebase.auth().currentUser;
-        var userID = user.uid;
-        var db = firebase.firestore();
-        var voteID = this.props.navigation.state.params.VoteID
-        db.collection("Users").doc(userID).collection("Votes").doc(voteID).collection('Alternatives').doc(altID).update({
+        this.db.collection("Users").doc(this.userID).collection("Votes").doc(this.voteID).collection('Alternatives').doc(altID).update({
           "Votes": 1,
         })
         .then(function() {
@@ -194,17 +184,13 @@ export default class VoteScreen extends React.Component {
 
         getFinishedAnswers(){
           var that = this
-          var user = firebase.auth().currentUser;
-          var userID = user.uid;
-          var db = firebase.firestore();
-          var voteID = this.props.navigation.state.params.VoteID
-          db.collection("Users").doc(userID).collection("Votes").doc(voteID).collection('Participants').get().then(function(querySnapshot) {
+          this.db.collection("Users").doc(this.userID).collection("Votes").doc(this.voteID).collection('Participants').get().then(function(querySnapshot) {
             querySnapshot.forEach(function(doc) {
               const participantID = doc.id;
               that.setState(prevState => ({
                 allParticipants: [...prevState.allParticipants, {ParticipantID: participantID}]
               }))
-              var docRef = db.collection('Users').doc(participantID).collection('Votes').doc(voteID).get().then(function(doc) {
+              var docRef = that.db.collection('Users').doc(participantID).collection('Votes').doc(that.voteID).get().then(function(doc) {
                 if (doc.exists) {
                   const finished = doc.get("Finished")
                   that.setState(prevState => ({
@@ -222,18 +208,13 @@ export default class VoteScreen extends React.Component {
 
         finishVote(){
           var that = this
-          var user = firebase.auth().currentUser;
-          var userID = user.uid;
-          var db = firebase.firestore();
-          var voteID = this.props.navigation.state.params.VoteID
-          db.collection("Users").doc(userID).collection("Votes").doc(voteID).update({
+          this.db.collection("Users").doc(this.userID).collection("Votes").doc(this.voteID).update({
             "Finished": "Yes",
           })
           this.checkFinishedAnswers()
         }
 
         checkFinishedAnswers(){
-          var voteID = this.props.navigation.state.params.VoteID
           var allAnswerYes = true
           for(let i=0; i < this.state.partFinished.length; i++){
             if(this.state.partFinished[i].Finished === "No") {
@@ -242,7 +223,7 @@ export default class VoteScreen extends React.Component {
           }
           if(allAnswerYes === true) {
             this.createResult()
-            this.props.navigation.navigate('ResultScreen', {VoteID: voteID, saved: false})
+            this.props.navigation.navigate('ResultScreen', {VoteID: this.voteID, saved: false})
           }
           else if(allAnswerYes === false) {
             this.props.navigation.navigate('OngoingVote')
@@ -251,19 +232,15 @@ export default class VoteScreen extends React.Component {
 
         createResult(){
           var that = this;
-          var user = firebase.auth().currentUser;
-          var userID = user.uid;
-          var db = firebase.firestore();
           var alternatives = this.state.alternatives
           var participants = this.state.allParticipants
-          var voteID = this.props.navigation.state.params.VoteID
-          var docRef1 = db.collection("Users").doc(userID).collection("Votes").doc(voteID)
+          var docRef1 = this.db.collection("Users").doc(this.userID).collection("Votes").doc(this.voteID)
           docRef1.get().then(function(doc) {
             if (doc.exists) {
               var catName = doc.get('CatName')
               var catImg = doc.get('CatImg')
               for(let k=0; k < participants.length; k++){
-                var docRef = db.collection("Users").doc(participants[k].ParticipantID).collection("Result").doc(voteID)
+                var docRef = that.db.collection("Users").doc(participants[k].ParticipantID).collection("Result").doc(that.voteID)
                 docRef.set({
                   CatName: catName,
                   CatImg: catImg,
@@ -278,14 +255,14 @@ export default class VoteScreen extends React.Component {
               }
               for(let j=0; j< participants.length; j++){
                 var partID = participants[j].ParticipantID
-                docRef2 = db.collection("Users").doc(partID).collection("Votes").doc(voteID)
+                docRef2 = that.db.collection("Users").doc(partID).collection("Votes").doc(that.voteID)
                 docRef2.collection('Alternatives').get().then(function(querySnapshot) {
                   querySnapshot.forEach(function(doc) {
                     const altID = doc.id;
                     const votes = doc.get('Votes')
                     if(votes === 1) {
                       for(let h=0; h < participants.length; h++) {
-                        db.collection("Users").doc(participants[h].ParticipantID).collection("Result").doc(voteID).collection('Alternatives').doc(altID).update({
+                        that.db.collection("Users").doc(participants[h].ParticipantID).collection("Result").doc(that.voteID).collection('Alternatives').doc(altID).update({
                           Votes: firebase.firestore.FieldValue.increment(1)
                         })
                       }
@@ -302,32 +279,28 @@ export default class VoteScreen extends React.Component {
 
         deleteVote() {
           var that = this;
-          var user = firebase.auth().currentUser;
-          var userID = user.uid;
-          var db = firebase.firestore();
           var alternatives = this.state.alternatives
           var participants = this.state.allParticipants
-          var voteID = this.props.navigation.state.params.VoteID
           for(let m=0; m < participants.length; m++){
-            db.collection("Users").doc(participants[m].ParticipantID).collection("Votes").doc(voteID).collection('Alternatives').get().then(function(querySnapshot) {
+            this.db.collection("Users").doc(participants[m].ParticipantID).collection("Votes").doc(this.voteID).collection('Alternatives').get().then(function(querySnapshot) {
               querySnapshot.forEach(function(doc) {
                 const id = doc.id
-                db.collection("Users").doc(participants[m].ParticipantID).collection("Votes").doc(voteID).collection('Alternatives').doc(id).delete().then(function() {
+                that.db.collection("Users").doc(participants[m].ParticipantID).collection("Votes").doc(that.voteID).collection('Alternatives').doc(id).delete().then(function() {
                 }).catch(function(error) {
                   console.error("delete alternatives ", error);
                 });
               });
             });
-            db.collection("Users").doc(participants[m].ParticipantID).collection("Votes").doc(voteID).collection('Participants').get().then(function(querySnapshot) {
+            this.db.collection("Users").doc(participants[m].ParticipantID).collection("Votes").doc(this.voteID).collection('Participants').get().then(function(querySnapshot) {
               querySnapshot.forEach(function(doc) {
                 const id = doc.id
-                db.collection("Users").doc(participants[m].ParticipantID).collection("Votes").doc(voteID).collection('Participants').doc(id).delete().then(function() {
+                that.db.collection("Users").doc(participants[m].ParticipantID).collection("Votes").doc(that.voteID).collection('Participants').doc(id).delete().then(function() {
                 }).catch(function(error) {
                   console.error("delete participant ", error);
                 });
               });
             });
-            db.collection("Users").doc(participants[m].ParticipantID).collection("Votes").doc(voteID).delete().then(function() {
+            this.db.collection("Users").doc(participants[m].ParticipantID).collection("Votes").doc(this.voteID).delete().then(function() {
             }).catch(function(error) {
               console.error("delete vote ", error);
             });

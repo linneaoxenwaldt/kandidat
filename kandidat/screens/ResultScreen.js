@@ -32,8 +32,10 @@ export default class ResultScreen extends React.Component {
     constructor(props) {
       super(props);
       this.extractKey = ({AltID}) => AltID
-      var user = firebase.auth().currentUser;
-      var userID = user.uid;
+      this.db = firebase.firestore();
+      this.user = firebase.auth().currentUser;
+      this.userID = this.user.uid;
+      this.voteID = this.props.navigation.state.params.VoteID
       this.state = {
         myResult: [],
         result: [],
@@ -57,11 +59,7 @@ componentWillUnmount() {
 
   getResult() {
     var that = this;
-    var user = firebase.auth().currentUser;
-    var userID = user.uid;
-    var db = firebase.firestore();
-    var voteID = this.props.navigation.state.params.VoteID
-    var docRef = db.collection("Users").doc(userID).collection("Result").doc(voteID)
+    var docRef = this.db.collection("Users").doc(this.userID).collection("Result").doc(this.voteID)
     docRef.collection("Alternatives").onSnapshot(function(querySnapshot) {
       if(that._ismounted === true){
         that.setState({ result: [] })
@@ -89,11 +87,7 @@ componentWillUnmount() {
 }
 
     saveResult() {
-      var user = firebase.auth().currentUser;
-      var userID = user.uid;
-      var db = firebase.firestore();
-      var voteID = this.props.navigation.state.params.VoteID
-      var docRef = db.collection('Users').doc(userID).collection('Result').doc(voteID)
+      var docRef = this.db.collection('Users').doc(this.userID).collection('Result').doc(this.voteID)
       docRef.update({
         Saved: true
       })
@@ -102,11 +96,7 @@ componentWillUnmount() {
 
     deleteResult() {
       var that = this;
-      var user = firebase.auth().currentUser;
-      var userID = user.uid;
-      var db = firebase.firestore();
-      var voteID = this.props.navigation.state.params.VoteID
-      var docRef = db.collection('Users').doc(userID).collection('Result').doc(voteID)
+      var docRef = this.db.collection('Users').doc(this.userID).collection('Result').doc(this.voteID)
       docRef.collection('Alternatives').get().then(function(querySnapshot) {
         querySnapshot.forEach(function(doc) {
           const id = doc.id

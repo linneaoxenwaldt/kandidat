@@ -26,10 +26,12 @@ export default class AddFriendsScreen extends React.Component {
       users: [],
       friends: [],
       pendingFriends: [],
+      friendReq: [],
     }
     this.getAllUsers()
     this.getYourFriends()
     this.getPendingFriends()
+    this.getFriendReq()
   }
   static navigationOptions = ({ navigation }) => {
     return {
@@ -92,6 +94,19 @@ export default class AddFriendsScreen extends React.Component {
       });
     }
 
+    getFriendReq() {
+      var that = this
+      this.db.collection("Users").doc(this.userID).collection("FriendRequests").get().then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+          const name = doc.get('Username');
+          const id = doc.id;
+          that.setState(prevState => ({
+            friendReq: [...prevState.friendReq, {id: id, userName: name}]
+          }))
+        });
+      });
+    }
+
     checkUsername() {
       var myFriendSearch = this.state.text.toUpperCase()
       var everyoneArray = []
@@ -148,12 +163,35 @@ export default class AddFriendsScreen extends React.Component {
         }
       }
       if (pendingFriend == false) {
-        this.addUser(friend)
+        this.checkIfFriendReq(friend)
       }
       else {
         Alert.alert(
           data.alreadyFriendReq,
         )
+      }
+    }
+
+    checkIfFriendReq(friend) {
+      var friendReq = false
+      for (let i=0; i< this.state.friendReq.length; i++) {
+        if (friend.id == this.state.friendReq[i].id) {
+          friendReq = true
+        }
+      }
+      if (friendReq == false) {
+        this.addUser(friend)
+      }
+      else {
+        Alert.alert(
+          data.haveAFriendReq,
+          undefined,
+          [
+            {text: data.ok,
+              onPress: () => this.props.navigation.navigate('RequestScreen')
+            },
+          ],
+          { cancelable: false })
       }
     }
 
