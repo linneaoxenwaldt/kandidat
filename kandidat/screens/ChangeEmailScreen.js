@@ -72,8 +72,8 @@ export default class ChangeEmailScreen extends React.Component {
           Alert.alert(data.emailsDoNotMatch)
           return;
         } else{
-          this.updateNewEmail()
           user.updateEmail(this.state.newEmail).then(function() {
+            this.updateNewEmail()
             Alert.alert(
               data.emailIsChanged,
               undefined,
@@ -84,7 +84,7 @@ export default class ChangeEmailScreen extends React.Component {
               ],
               { cancelable: false })
           }).catch(function(error) {
-            Alert.alert(data.error)
+            Alert.alert('Error, Email adress invalid or already in use')
           });
         } (error) =>{
         };
@@ -103,9 +103,9 @@ export default class ChangeEmailScreen extends React.Component {
         <Text style={styles.descriptionText}>{data.newEmail}</Text>
         <TextInput
         style={styles.textInfo}
-        backgroundColor='#8FBC8F'
+        //backgroundColor='#8FBC8F'
         borderColor='#6f936f'
-        borderWidth= '4'
+        //borderWidth= '4'
         placeholder={data.enterEmail}
         value = {this.state.newEmail}
         onChangeText = {(text) => {this.setState({ newEmail : text}) }}
@@ -114,9 +114,9 @@ export default class ChangeEmailScreen extends React.Component {
         <Text style={styles.descriptionText}>{data.confirmEmail}</Text>
         <TextInput
         style={styles.textInfo}
-        backgroundColor='#6ACCCB'
+        //backgroundColor='#6ACCCB'
         borderColor='#5db3b2'
-        borderWidth= '4'
+        //borderWidth= '4'
         placeholder={data.newEmailAgain}
         value = {this.state.confirmNewEmail}
         onChangeText = {(text) => {this.setState({ confirmNewEmail : text}) }}
@@ -126,8 +126,8 @@ export default class ChangeEmailScreen extends React.Component {
         <TextInput
         style={styles.textInfo}
         borderColor='#758e99'
-        borderWidth= '4'
-        backgroundColor='#94B4C1'
+        //borderWidth= '4'
+        //backgroundColor='#94B4C1'
         secureTextEntry={true}
         placeholder={data.password}
         value = {this.state.currentPassword}
