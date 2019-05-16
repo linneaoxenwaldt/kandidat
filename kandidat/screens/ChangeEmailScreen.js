@@ -102,10 +102,7 @@ export default class ChangeEmailScreen extends React.Component {
 
         <Text style={styles.descriptionText}>{data.newEmail}</Text>
         <TextInput
-        style={styles.textInfo}
-        //backgroundColor='#8FBC8F'
-        borderColor='#6f936f'
-        //borderWidth= '4'
+        style={styles.textNewEmail}
         placeholder={data.enterEmail}
         value = {this.state.newEmail}
         onChangeText = {(text) => {this.setState({ newEmail : text}) }}
@@ -113,10 +110,7 @@ export default class ChangeEmailScreen extends React.Component {
 
         <Text style={styles.descriptionText}>{data.confirmEmail}</Text>
         <TextInput
-        style={styles.textInfo}
-        //backgroundColor='#6ACCCB'
-        borderColor='#5db3b2'
-        //borderWidth= '4'
+        style={styles.textConfirmEmail}
         placeholder={data.newEmailAgain}
         value = {this.state.confirmNewEmail}
         onChangeText = {(text) => {this.setState({ confirmNewEmail : text}) }}
@@ -124,10 +118,7 @@ export default class ChangeEmailScreen extends React.Component {
 
         <Text style={styles.descriptionText}>{data.confirmChanges}</Text>
         <TextInput
-        style={styles.textInfo}
-        borderColor='#758e99'
-        //borderWidth= '4'
-        //backgroundColor='#94B4C1'
+        style={styles.textPassword}
         secureTextEntry={true}
         placeholder={data.password}
         value = {this.state.currentPassword}
@@ -158,13 +149,43 @@ export default class ChangeEmailScreen extends React.Component {
       textAlign: 'center',
       flex: 1,
     },
-    textInfo: {
+    textNewEmail: {
+      backgroundColor:'#8FBC8F',
+      borderColor:'#6f936f',
+      borderWidth: '4',
       fontSize: 25,
       textAlign:'center',
       alignItems: 'center',
       width: 350,
       height: 70,
-      backgroundColor: '#8FBC8F',
+      borderRadius: 30,
+      marginBottom: 10,
+      padding: 10,
+      color: '#FFFFFF',
+    },
+    textConfirmEmail: {
+      backgroundColor:'#6ACCCB',
+      borderColor:'#5db3b2',
+      borderWidth: '4',
+      fontSize: 25,
+      textAlign:'center',
+      alignItems: 'center',
+      width: 350,
+      height: 70,
+      borderRadius: 30,
+      marginBottom: 10,
+      padding: 10,
+      color: '#FFFFFF',
+    },
+    textPassword: {
+      borderColor:'#758e99',
+      borderWidth: '4',
+      backgroundColor:'#94B4C1',
+      fontSize: 25,
+      textAlign:'center',
+      alignItems: 'center',
+      width: 350,
+      height: 70,
       borderRadius: 30,
       marginBottom: 10,
       padding: 10,

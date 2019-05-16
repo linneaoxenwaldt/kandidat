@@ -93,10 +93,7 @@ export default class ChangePasswordScreen extends React.Component {
 
         <Text style={styles.descriptionText}>{data.newPassword}</Text>
         <TextInput
-        style={styles.textInfo}
-        backgroundColor='#8FBC8F'
-        borderColor='#6f936f'
-        borderWidth= '4'
+        style={styles.textNew}
         secureTextEntry={true}
         placeholder={data.enterNewPass}
         value = {this.state.newPassword}
@@ -105,10 +102,7 @@ export default class ChangePasswordScreen extends React.Component {
 
         <Text style={styles.descriptionText}>{data.confirmPassword}</Text>
         <TextInput
-        style={styles.textInfo}
-        backgroundColor='#6ACCCB'
-        borderColor='#5db3b2'
-        borderWidth= '4'
+        style={styles.textConfirm}
         secureTextEntry={true}
         placeholder={data.confirmNewPass}
         value = {this.state.newPasswordConfirm}
@@ -117,10 +111,7 @@ export default class ChangePasswordScreen extends React.Component {
 
         <Text style={styles.descriptionText}>{data.currentPassword}</Text>
         <TextInput
-        style={styles.textInfo}
-        backgroundColor='#94B4C1'
-        borderColor='#758e99'
-        borderWidth= '4'
+        style={styles.textCurrent}
         secureTextEntry={true}
         placeholder={data.password}
         value = {this.state.currentPassword}
@@ -151,13 +142,45 @@ export default class ChangePasswordScreen extends React.Component {
       textAlign: 'center',
       flex: 1,
     },
-    textInfo: {
+    textNew: {
+      backgroundColor:'#8FBC8F',
+      borderColor:'#6f936f',
+      borderWidth: '4',
       fontSize: 25,
       textAlign:'center',
       alignItems: 'center',
       width: 350,
       height: 70,
-      backgroundColor: '#8FBC8F',
+      borderRadius: 30,
+      borderWidth: 4,
+      marginBottom: 10,
+      padding: 10,
+      color: '#FFFFFF',
+    },
+    textConfirm: {
+      backgroundColor:'#6ACCCB',
+      borderColor:'#5db3b2',
+      borderWidth: '4',
+      fontSize: 25,
+      textAlign:'center',
+      alignItems: 'center',
+      width: 350,
+      height: 70,
+      borderRadius: 30,
+      borderWidth: 4,
+      marginBottom: 10,
+      padding: 10,
+      color: '#FFFFFF',
+    },
+    textCurrent: {
+      backgroundColor:'#94B4C1',
+      borderColor:'#758e99',
+      borderWidth: '4',
+      fontSize: 25,
+      textAlign:'center',
+      alignItems: 'center',
+      width: 350,
+      height: 70,
       borderRadius: 30,
       borderWidth: 4,
       marginBottom: 10,
