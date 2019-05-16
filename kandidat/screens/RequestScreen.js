@@ -9,6 +9,7 @@ import { ScrollView,
   Text,
   Modal,
   ImageBackground,
+
 } from 'react-native';
 import { DrawerActions } from 'react-navigation';
 import Icon from "react-native-vector-icons/Ionicons";
@@ -508,13 +509,19 @@ export default class RequestScreen extends React.Component {
                   onRequestClose = {() => {this.setState({ showMe : false })}}>
                   <View style={styles.modalView}>
                   <Text style={styles.modalText}> {this.state.currentVote.CatName}</Text>
-                  <Text style={styles.textLabel}> {this.state.currentVote.Msg} </Text>
-                  <Text style={styles.textLabel}> {data.invited} </Text>
+
                   <View style={styles.invitedContainer}>
-                  <Image style={styles.  profilePicContainer}
+                  <Text style={styles.textLabel}> {data.invited} </Text>
+                  <Image style={styles.profilePicContainer}
                   source={{uri: this.state.currentVote.sentFromProfilePic}}/>
                   <Text style={styles.invitedByText}>{this.state.currentVote.sentFromUsername}</Text>
+                  </View>
+                  <Text style={styles.miniTextview}> {data.message}: </Text>
 
+                  <View style={styles.message}>
+                  <ScrollView>
+                  <Text style={styles.messageText}> {this.state.currentVote.Msg} </Text>
+                  </ScrollView>
                   </View>
 
                   <Text style={styles.miniTextview}> {data.participants} </Text>
@@ -577,6 +584,7 @@ export default class RequestScreen extends React.Component {
                   container: {
                     flex: 1,
                     backgroundColor: '#FFFFFF',
+
                   },
                   requestLabel: {
                     fontSize: 40,
@@ -586,7 +594,7 @@ export default class RequestScreen extends React.Component {
                     marginTop: 15,
                   },
                   textLabel: {
-                    marginTop: 20,
+                    marginTop: 10,
                     fontSize: 25,
                     color: '#000000',
                     textAlign: 'center',
@@ -616,12 +624,13 @@ export default class RequestScreen extends React.Component {
                     marginTop: 10,
                     backgroundColor: '#FFFFFF',
                     alignItems: 'center',
+              
                   },
                   modalText: {
                     paddingTop: 50,
                     fontFamily: 'Roboto-Light',
                     fontSize: 40,
-                    paddingBottom: 10,
+                    paddingBottom: 0,
                   },
                   invitedByText: {
                     fontFamily: 'Roboto-Light',
@@ -650,7 +659,7 @@ export default class RequestScreen extends React.Component {
                   },
                   declineButt: {
                     color:'white',
-                    marginBottom: 10,
+                    marginBottom: 0,
                     marginTop: 10,
                     backgroundColor: '#CBA3D5',
                     alignItems: 'center',
@@ -662,7 +671,7 @@ export default class RequestScreen extends React.Component {
                   },
                   acceptButt: {
                     color:'white',
-                    marginBottom: 10,
+                    marginBottom: 0,
                     marginTop: 10,
                     backgroundColor: '#8FBC8F',
                     alignItems: 'center',
@@ -676,13 +685,28 @@ export default class RequestScreen extends React.Component {
                     flexDirection:'row',
                     justifyContent: 'space-between',
                     width: 340,
-                    margin: 30,
+                    margin: 10,
                     marginTop:10
                   },
+                  message:{
+                    marginBottom: 20,
+                    height: 100,
+                    width: '100%',
+                    backgroundColor:'#689999',
+                    //borderWidth: 3,
+                  },
+                  messageText:{
+                    fontSize: 20,
+                    color: 'white',
+                    fontFamily: 'Roboto-Light',
+                    padding: 10,
+
+                  },
+
                   modalList: {
                     marginBottom:0,
                     width: '100%',
-                    height: 170,
+                    height: 150,
                   },
                   friendReqButton:{
                     flexDirection:'row',
@@ -692,10 +716,10 @@ export default class RequestScreen extends React.Component {
                   invitedContainer:{
                     flexDirection:'row',
                     alignItems:'center',
-                    borderRadius: 20,
+                    borderRadius: 10,
                     justifyContent: 'center',
-                    width:120,
-                    height:120,
+                    width:'100%',
+                    margin: 20
                   },
                   profilePicContainer: {
                     height: 50,
@@ -703,6 +727,6 @@ export default class RequestScreen extends React.Component {
                     borderRadius: 25,
                     borderWidth: 2,
                     borderColor: '#689999',
-                    margin: 10,
+                    margin: 5,
                   },
                 });
