@@ -23,7 +23,7 @@
   "friendUsername": "Enter your friends username: ",
   "save": "Save",
   "yourTurn": "Your turn to vote",
-  "yourFriensTurn": "Your friends turn",
+  "yourFriendsTurn": "Your friends turn",
   "missingCatName": "Enter a category name first!",
   "missingAltName": "You have not entered a name for your alternative",
   "alternatives": "ALTERNATIVES",

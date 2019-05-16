@@ -77,7 +77,7 @@ export default class OngoingVoteScreen extends React.Component {
       var db = firebase.firestore();
       db.collection("Users").doc(userID).collection("PendingVotes").onSnapshot(function(querySnapshot)
       {
-        that.setState({ pendingArray: []})
+        that.setState({ pendingArray: [], yourFriendsTurn : []})
             querySnapshot.forEach(function(doc)
             {
                  const name = doc.get('CatName');
@@ -87,11 +87,15 @@ export default class OngoingVoteScreen extends React.Component {
                   pendingArray: [...prevState.pendingArray, {VoteID: doc.id, CatName: name, CatImg: img}],
                   //yourFriensTurn : [...that.state.pendingArray,...that.state.finishedArray]
                 }))
+
             });
+            that.setState({
+              yourFriendsTurn : [...that.state.pendingArray,...that.state.finishedArray]
+            })
         });
 
         db.collection("Users").doc(userID).collection("Votes").where("Finished", "==", "Yes").onSnapshot(function(querySnapshot) {
-          that.setState({ finishedArray: []})
+          that.setState({ finishedArray: [],yourFriendsTurn : []})
           querySnapshot.forEach(function(doc) {
             const name = doc.get('CatName');
             const img = doc.get('CatImg');
@@ -99,16 +103,15 @@ export default class OngoingVoteScreen extends React.Component {
               finishedArray: [...prevState.finishedArray, {VoteID: doc.id, CatName: name, CatImg: img}],
               //yourFriensTurn : [...that.state.finishedArray, ...that.state.pendingArray]
             }))
+
           });
+          that.setState({
+            yourFriendsTurn : [...that.state.finishedArray,...that.state.pendingArray]
+          })
         });
-        if(that._ismounted === true){
-        that.mergeArray()
-      }
       }
 
-      mergeArray(){
-        this.setState({yourFriensTurn : [...this.state.finishedArray, ...this.state.pendingArray]})
-      }
+      //mergeArray(){that.setState({yourFriensTurn : [...this.state.finishedArray, ...this.state.pendingArray]})}
 
       componentDidMount() {
     this._ismounted = true;
@@ -138,7 +141,7 @@ export default class OngoingVoteScreen extends React.Component {
           <ImageBackground source={{uri: item.CatImg}} style={{width: '100%', height: 100}}>
           <ListItem
           containerStyle={{ backgroundColor: 'transparent'}}
-          titleStyle={{color: '#000000', fontSize: 30}}
+          titleStyle={{color: '#FFFFFF', fontSize: 30}}
           title={item.CatName}
           />
           </ImageBackground>
@@ -170,7 +173,7 @@ export default class OngoingVoteScreen extends React.Component {
           <View style={styles.votePenContainer}>
 
           <Text style={styles.voteLabel}>
-          {data.yourFriensTurn}
+          {data.yourFriendsTurn}
           </Text>
 
           <View style={{
@@ -181,7 +184,7 @@ export default class OngoingVoteScreen extends React.Component {
 
           <FlatList
           extraData={this.state}
-          data={this.state.yourFriensTurn}
+          data={this.state.yourFriendsTurn}
           renderItem={this.renderItem2}
           keyExtractor={this.extractKey2}
           />
@@ -206,11 +209,10 @@ export default class OngoingVoteScreen extends React.Component {
         marginBottom: 30,
       },
       voteLabel: {
-        fontSize: 25,
+        fontSize: 30,
         color: '#000000',
         textAlign: 'center',
         fontFamily: "Roboto-Light",
-        marginBottom: 10,
       },
       voteActContainer: {
         marginTop: 5,
