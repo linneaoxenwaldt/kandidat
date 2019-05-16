@@ -26,6 +26,9 @@ export default class RequestScreen extends React.Component {
     this.extractKey1 = ({VoteID}) => VoteID
     this.extractKey2 = ({id}) => id
     this.extractKey3 = ({ParticipantID, VoteID}) => ParticipantID+VoteID
+    this.db = firebase.firestore();
+    this.user = firebase.auth().currentUser;
+    this.userID = this.user.uid;
     this.state = {
       friendReq: [],
       showMe: false,
@@ -119,15 +122,11 @@ export default class RequestScreen extends React.Component {
 
                 getFriendReq() {
                   var that = this
-                  var user = firebase.auth().currentUser;
-                  var userID = user.uid;
-                  var db = firebase.firestore();
-
-                  db.collection("Users").doc(userID).collection("FriendRequests").onSnapshot(function(querySnapshot) {
+                  this.db.collection("Users").doc(this.userID).collection("FriendRequests").onSnapshot(function(querySnapshot) {
                     that.setState({friendReq: []})
                     querySnapshot.forEach(function(doc) {
                       const id = doc.id;
-                      var docRef = db.collection('Users').doc(id);
+                      var docRef = that.db.collection('Users').doc(id);
                       docRef.get().then(function(doc) {
                         if (doc.exists) {
                           const username = doc.data().Username
@@ -146,37 +145,29 @@ export default class RequestScreen extends React.Component {
                 }
 
                 acceptFriend(friendItem) {
-                  var that = this
-                  var user = firebase.auth().currentUser;
-                  var userID = user.uid;
-                  var db = firebase.firestore();
-                  db.collection("Users").doc(userID).collection("Friends").doc(friendItem.id).set({
+                  this.db.collection("Users").doc(this.userID).collection("Friends").doc(friendItem.id).set({
                   })
-                  db.collection("Users").doc(userID).collection("FriendRequests").doc(friendItem.id).delete().then(function() {
+                  this.db.collection("Users").doc(this.userID).collection("FriendRequests").doc(friendItem.id).delete().then(function() {
                   }).catch(function(error) {
                     console.error("acceptFriend: Error removing document: ", error);
                   });
                   this.setState(prevState => ({friendReq: prevState.friendReq.filter(item => item !== friendItem) }));
 
-                  db.collection("Users").doc(friendItem.id).collection("Friends").doc(userID).set({
+                  this.db.collection("Users").doc(friendItem.id).collection("Friends").doc(this.userID).set({
                   })
-                  db.collection("Users").doc(friendItem.id).collection("PendingFriendRequests").doc(userID).delete().then(function() {
+                  this.db.collection("Users").doc(friendItem.id).collection("PendingFriendRequests").doc(this.userID).delete().then(function() {
                   }).catch(function(error) {
                     console.error("acceptFriend: Error removing document: ", error);
                   });
                 }
 
                 declineFriend(friendItem) {
-                  var that = this
-                  var user = firebase.auth().currentUser;
-                  var userID = user.uid;
-                  var db = firebase.firestore();
-                  db.collection("Users").doc(userID).collection("FriendRequests").doc(friendItem.id).delete().then(function() {
+                  this.db.collection("Users").doc(this.userID).collection("FriendRequests").doc(friendItem.id).delete().then(function() {
                   }).catch(function(error) {
                   });
                   this.setState(prevState => ({friendReq: prevState.friendReq.filter(item => item !== friendItem) }));
 
-                  db.collection("Users").doc(friendItem.id).collection("PendingFriendRequests").doc(userID).delete().then(function() {
+                  this.db.collection("Users").doc(friendItem.id).collection("PendingFriendRequests").doc(this.userID).delete().then(function() {
                   }).catch(function(error) {
                     console.error("declineFriend: Error removing document: ", error);
                   });
@@ -184,10 +175,7 @@ export default class RequestScreen extends React.Component {
 
                 getVoteReq() {
                   var that = this
-                  var user = firebase.auth().currentUser;
-                  var userID = user.uid;
-                  var db = firebase.firestore();
-                  var docRef = db.collection("Users").doc(userID).collection("VoteRequests")
+                  var docRef = this.db.collection("Users").doc(this.userID).collection("VoteRequests")
                   docRef.onSnapshot(function(querySnapshot) {
                     that.setState({ voteReq: [] })
                     querySnapshot.forEach(function(doc) {
@@ -195,19 +183,19 @@ export default class RequestScreen extends React.Component {
                       docRef.doc(voteID).collection('Participants').get().then(function(querySnapshot) {
                         querySnapshot.forEach(function(doc) {
                           var participantID = doc.id;
-                          if(participantID !== userID) {
+                          if(participantID !== that.userID) {
                             that.setState(prevState => ({
                               otherParticipants: [...prevState.otherParticipants, {VoteID: voteID, ParticipantID: participantID}]
                             }))
                           }})})
                           var sentFromID = doc.get("SentFrom")
-                          var docRef2 = db.collection('Users').doc(sentFromID);
+                          var docRef2 = that.db.collection('Users').doc(sentFromID);
                           docRef2.get().then(function(doc) {
                             if (doc.exists) {
                               const username = doc.data().Username
                               const profilePic = doc.data().ProfilePic
 
-                              var docRef2 = db.collection('Users').doc(sentFromID).collection("PendingVotes").doc(voteID);
+                              var docRef2 = that.db.collection('Users').doc(sentFromID).collection("PendingVotes").doc(voteID);
                               docRef2.get().then(function(doc) {
                                 if (doc.exists) {
                                   const catName = doc.get('CatName');
@@ -224,17 +212,14 @@ export default class RequestScreen extends React.Component {
 
   getParticipants() {
     var localID = 0
-    var user = firebase.auth().currentUser;
-    var userID = user.uid;
     var that = this
-    var db = firebase.firestore();
-    db.collection("Users").doc(userID).collection("VoteRequests").get().then(function(querySnapshot) {
+    this.db.collection("Users").doc(this.userID).collection("VoteRequests").get().then(function(querySnapshot) {
       querySnapshot.forEach(function(doc) {
         var voteID = doc.id;
-        db.collection("Users").doc(userID).collection("VoteRequests").doc(voteID).collection('Participants').get().then(function(querySnapshot) {
+        that.db.collection("Users").doc(that.userID).collection("VoteRequests").doc(voteID).collection('Participants').get().then(function(querySnapshot) {
           querySnapshot.forEach(function(doc) {
             var partcipantID = doc.id;
-            db.collection('Users').doc(partcipantID).get().then(function(doc){
+            that.db.collection('Users').doc(partcipantID).get().then(function(doc){
               if(doc.exists) {
                 const username = doc.data().Username
                 const profilePic = doc.data().ProfilePic
@@ -249,32 +234,29 @@ export default class RequestScreen extends React.Component {
           })})})})
         }
 
-        acceptVote() {
-          var that = this
-          var user = firebase.auth().currentUser;
-          var userID = user.uid;
-          var db = firebase.firestore();
-          var vote = this.state.currentVote
-          var user = firebase.auth().currentUser;
-          var userID = user.uid;
-          this.setUpPendingVote()
-        }
+        // acceptVote() {
+        //   var that = this
+        //   var user = firebase.auth().currentUser;
+        //   var userID = user.uid;
+        //   var db = firebase.firestore();
+        //   var vote = this.state.currentVote
+        //   var user = firebase.auth().currentUser;
+        //   var userID = user.uid;
+        //   this.setUpPendingVote()
+        // }
 
         setUpPendingVote(){
           var that = this
-          var user = firebase.auth().currentUser;
-          var userID = user.uid;
-          var db = firebase.firestore();
           var vote = this.state.currentVote
-          db.collection("Users").doc(userID).collection("PendingVotes").doc(vote.VoteID).set({
+          this.db.collection("Users").doc(this.userID).collection("PendingVotes").doc(vote.VoteID).set({
             CatName: vote.CatName,
             CatImg: vote.CatImg,
           })
-          db.collection("Users").doc(vote.sentFromID).collection("PendingVotes").doc(vote.VoteID).collection('Alternatives').get().then(function(querySnapshot) {
+          this.db.collection("Users").doc(vote.sentFromID).collection("PendingVotes").doc(vote.VoteID).collection('Alternatives').get().then(function(querySnapshot) {
             querySnapshot.forEach(function(doc) {
               const name = doc.get('Name');
               const votes = doc.get('Votes')
-              db.collection("Users").doc(userID).collection("PendingVotes").doc(vote.VoteID).collection('Alternatives').doc(doc.id).set({
+              that.db.collection("Users").doc(that.userID).collection("PendingVotes").doc(vote.VoteID).collection('Alternatives').doc(doc.id).set({
                 Name: name,
                 Votes: votes,
               })
@@ -283,10 +265,10 @@ export default class RequestScreen extends React.Component {
               }))
             });
           });
-          db.collection("Users").doc(vote.sentFromID).collection("PendingVotes").doc(vote.VoteID).collection('Participants').get().then(function(querySnapshot) {
+          this.db.collection("Users").doc(vote.sentFromID).collection("PendingVotes").doc(vote.VoteID).collection('Participants').get().then(function(querySnapshot) {
             querySnapshot.forEach(function(doc) {
               const answer = doc.get('Answer');
-              db.collection("Users").doc(userID).collection("PendingVotes").doc(vote.VoteID).collection('Participants').doc(doc.id).set({
+              that.db.collection("Users").doc(that.userID).collection("PendingVotes").doc(vote.VoteID).collection('Participants').doc(doc.id).set({
                 Answer: answer,
               })
             });
@@ -296,24 +278,21 @@ export default class RequestScreen extends React.Component {
 
         giveAcceptAnswer() {
           var that = this
-          var user = firebase.auth().currentUser;
-          var userID = user.uid;
-          var db = firebase.firestore();
           var vote = this.state.currentVote
-          db.collection("Users").doc(userID).collection("PendingVotes").doc(vote.VoteID).collection('Participants').doc(userID).set({
+          this.db.collection("Users").doc(this.userID).collection("PendingVotes").doc(vote.VoteID).collection('Participants').doc(this.userID).set({
             Answer: "Yes",
           })
-          db.collection("Users").doc(vote.sentFromID).collection("PendingVotes").doc(vote.VoteID).collection('Participants').doc(userID).update({
+          this.db.collection("Users").doc(vote.sentFromID).collection("PendingVotes").doc(vote.VoteID).collection('Participants').doc(this.userID).update({
             Answer: "Yes",
           })
           for(let i=0; i < this.state.otherParticipants.length; i++){
             if(this.state.otherParticipants[i].VoteID === vote.VoteID) {
               var participantID = this.state.otherParticipants[i].ParticipantID
-              var docRef = db.collection('Users').doc(participantID).collection('PendingVotes').doc(vote.VoteID).collection('Participants').doc(userID);
+              var docRef = this.db.collection('Users').doc(participantID).collection('PendingVotes').doc(vote.VoteID).collection('Participants').doc(this.userID);
               var getDoc = docRef.get()
               .then(doc => {
                 if (!doc.exists) {
-                  db.collection('Users').doc(participantID).collection('VoteRequests').doc(vote.VoteID).collection('Participants').doc(userID).update({
+                  that.db.collection('Users').doc(participantID).collection('VoteRequests').doc(vote.VoteID).collection('Participants').doc(that.userID).update({
                     Answer: "Yes",
                   })
                 } else {
@@ -332,22 +311,18 @@ export default class RequestScreen extends React.Component {
 
           deleteVoteReq() {
             var that = this
-            var user = firebase.auth().currentUser;
-            var userID = user.uid;
-            var db = firebase.firestore();
             var vote = this.state.currentVote
-
-            db.collection("Users").doc(userID).collection("VoteRequests").doc(vote.VoteID).collection('Participants').get().then(function(querySnapshot) {
+            this.db.collection("Users").doc(this.userID).collection("VoteRequests").doc(vote.VoteID).collection('Participants').get().then(function(querySnapshot) {
               querySnapshot.forEach(function(doc) {
                 const id = doc.id
-                db.collection("Users").doc(userID).collection("VoteRequests").doc(vote.VoteID).collection('Participants').doc(id).delete().then(function() {
+                that.db.collection("Users").doc(that.userID).collection("VoteRequests").doc(vote.VoteID).collection('Participants').doc(id).delete().then(function() {
                 }).catch(function(error) {
                   console.error("deleteVoteReq - participants: Alt Error removing document: ", error);
                 });
               });
             });
 
-            db.collection("Users").doc(userID).collection("VoteRequests").doc(vote.VoteID).delete().then(function() {
+            this.db.collection("Users").doc(this.userID).collection("VoteRequests").doc(vote.VoteID).delete().then(function() {
             }).catch(function(error) {
               console.error("deleteVoteReq - voteReq: Error removing document: ", error);
             });
@@ -361,12 +336,8 @@ export default class RequestScreen extends React.Component {
 
           declineVote() {
             var that = this
-            var user = firebase.auth().currentUser;
-            var userID = user.uid;
-            var db = firebase.firestore();
             var vote = this.state.currentVote
-            var docRef = db.collection("Users").doc(userID).collection("VoteRequests").doc(vote.VoteID)
-
+            var docRef = this.db.collection("Users").doc(this.userID).collection("VoteRequests").doc(vote.VoteID)
             docRef.collection('Participants').get().then(function(querySnapshot) {
               querySnapshot.forEach(function(doc) {
                 const id = doc.id
@@ -376,23 +347,18 @@ export default class RequestScreen extends React.Component {
                 });
               });
             });
-
             docRef.delete().then(function() {
             }).catch(function(error) {
               console.error("declineVote: Error removing document: ", error);
             });
             this.setState(prevState => ({voteReq: prevState.voteReq.filter(item => item !== vote) }));
-
             this.declineVoteCreator()
           }
 
           declineVoteCreator() {
             var that = this
-            var user = firebase.auth().currentUser;
-            var userID = user.uid;
-            var db = firebase.firestore();
             var vote = this.state.currentVote
-            var docRef = db.collection("Users").doc(vote.sentFromID).collection("PendingVotes").doc(vote.VoteID)
+            var docRef = this.db.collection("Users").doc(vote.sentFromID).collection("PendingVotes").doc(vote.VoteID)
             docRef.collection('Alternatives').get().then(function(querySnapshot) {
               querySnapshot.forEach(function(doc) {
                 const id = doc.id
@@ -402,7 +368,6 @@ export default class RequestScreen extends React.Component {
                 });
               });
             });
-
             docRef.collection('Participants').get().then(function(querySnapshot) {
               querySnapshot.forEach(function(doc) {
                 const id = doc.id
@@ -412,7 +377,6 @@ export default class RequestScreen extends React.Component {
                 });
               });
             });
-
             docRef.delete().then(function() {
             }).catch(function(error) {
               console.error("declineVote - pendingVote: Error removing document: ", error);
@@ -422,15 +386,12 @@ export default class RequestScreen extends React.Component {
 
           declineVoteParticipants() {
             var that = this
-            var user = firebase.auth().currentUser;
-            var userID = user.uid;
-            var db = firebase.firestore();
             var vote = this.state.currentVote
             for(let i=0; i < this.state.otherParticipants.length; i++){
               if(this.state.otherParticipants[i].VoteID === vote.VoteID) {
                 var participantID = this.state.otherParticipants[i].ParticipantID
-                var docRef = db.collection('Users').doc(participantID).collection('PendingVotes').doc(vote.VoteID);
-                var docRef2 = db.collection("Users").doc(participantID).collection("VoteRequests").doc(vote.VoteID)
+                var docRef = this.db.collection('Users').doc(participantID).collection('PendingVotes').doc(vote.VoteID);
+                var docRef2 = this.db.collection("Users").doc(participantID).collection("VoteRequests").doc(vote.VoteID)
                 var getDoc = docRef.get()
                 .then(doc => {
                   if (!doc.exists) {
@@ -443,7 +404,6 @@ export default class RequestScreen extends React.Component {
                         });
                       });
                     });
-
                     docRef2.delete().then(function() {
                     }).catch(function(error) {
                       console.error("declineVote: Error removing document: ", error);
@@ -458,7 +418,6 @@ export default class RequestScreen extends React.Component {
                         });
                       });
                     });
-
                     docRef.collection('Participants').get().then(function(querySnapshot) {
                       querySnapshot.forEach(function(doc) {
                         const id = doc.id
@@ -468,7 +427,6 @@ export default class RequestScreen extends React.Component {
                         });
                       });
                     });
-
                     docRef.delete().then(function() {
                     }).catch(function(error) {
                       console.error("declineVote - pendingVote: Error removing document: ", error);
@@ -542,7 +500,7 @@ export default class RequestScreen extends React.Component {
                   </TouchableOpacity>
 
                   <TouchableOpacity
-                  onPress={() => this.acceptVote()}
+                  onPress={() => this.setUpPendingVote()}
                   style={styles.acceptButt}>
                   <Text style={styles.closeText}>{data.accept} </Text>
                   </TouchableOpacity>
