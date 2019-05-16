@@ -21,6 +21,9 @@ export default class OngoingVoteScreen extends React.Component {
     this.colors = ['#6ACCCB', '#94B4C1', '#8FBC8F', '#CBA3D5', '#689999']
     this.extractKey1 = ({VoteID}) => VoteID
     this.extractKey2 = ({VoteID}) => VoteID
+    this.db = firebase.firestore();
+    this.user = firebase.auth().currentUser;
+    this.userID = this.user.uid;
     this.state = {
       yourTurn: [],
       yourFriendsTurn: [],
@@ -56,10 +59,7 @@ export default class OngoingVoteScreen extends React.Component {
 
     getYourTurn() {
       var that = this
-      var user = firebase.auth().currentUser;
-      var userID = user.uid;
-      var db = firebase.firestore();
-      db.collection("Users").doc(userID).collection("Votes").where("Finished", "==", "No").onSnapshot(function(querySnapshot) {
+      this.db.collection("Users").doc(this.userID).collection("Votes").where("Finished", "==", "No").onSnapshot(function(querySnapshot) {
         that.setState({ yourTurn: []})
             querySnapshot.forEach(function(doc) {
                 const name = doc.get('CatName');
@@ -72,15 +72,12 @@ export default class OngoingVoteScreen extends React.Component {
 
     getYourFriendsTurn() {
       var that = this
-      var user = firebase.auth().currentUser;
-      var userID = user.uid;
-      var db = firebase.firestore();
-      db.collection("Users").doc(userID).collection("PendingVotes").onSnapshot(function(querySnapshot)
+      this.db.collection("Users").doc(this.userID).collection("PendingVotes").onSnapshot(function(querySnapshot)
       {
         that.setState({ pendingArray: [], yourFriendsTurn : []})
             querySnapshot.forEach(function(doc)
             {
-                 const name = doc.get('CatName');
+                const name = doc.get('CatName');
                 const img = doc.get('CatImg');
                 that.setState(prevState => (
                   {
@@ -94,7 +91,7 @@ export default class OngoingVoteScreen extends React.Component {
             })
         });
 
-        db.collection("Users").doc(userID).collection("Votes").where("Finished", "==", "Yes").onSnapshot(function(querySnapshot) {
+        this.db.collection("Users").doc(this.userID).collection("Votes").where("Finished", "==", "Yes").onSnapshot(function(querySnapshot) {
           that.setState({ finishedArray: [],yourFriendsTurn : []})
           querySnapshot.forEach(function(doc) {
             const name = doc.get('CatName');
@@ -111,15 +108,6 @@ export default class OngoingVoteScreen extends React.Component {
         });
       }
 
-      //mergeArray(){that.setState({yourFriensTurn : [...this.state.finishedArray, ...this.state.pendingArray]})}
-
-      componentDidMount() {
-    this._ismounted = true;
-  }
-
-  componentWillUnmount() {
-     this._ismounted = false;
-  }
 
       renderItem1 = ({item, index}) => {
         return (
