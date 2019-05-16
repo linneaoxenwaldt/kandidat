@@ -66,6 +66,7 @@ export default class ChangeEmailScreen extends React.Component {
       });
     }
     newEmailFunc = () => {
+      var that = this
       this.reauthenticate(this.state.currentPassword).then(() => {
         if (this.state.newEmail !== this.state.confirmNewEmail){
           Alert.alert(data.emailsDoNotMatch)
@@ -73,7 +74,15 @@ export default class ChangeEmailScreen extends React.Component {
         } else{
           this.updateNewEmail()
           user.updateEmail(this.state.newEmail).then(function() {
-            Alert.alert(data.emailIsChanged)
+            Alert.alert(
+              data.emailIsChanged,
+              undefined,
+              [
+                {text: data.ok,
+                  onPress: () => that.props.navigation.navigate('Profile')
+                },
+              ],
+              { cancelable: false })
           }).catch(function(error) {
             Alert.alert(data.error)
           });

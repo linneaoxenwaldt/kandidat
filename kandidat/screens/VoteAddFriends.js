@@ -25,6 +25,9 @@ export default class VoteAddFriends extends React.Component {
     super(props);
     this.colors = ['#6ACCCB', '#94B4C1', '#8FBC8F', '#CBA3D5', '#689999']
     this.extractKey = ({id}) => id
+    this.db = firebase.firestore();
+    this.user = firebase.auth().currentUser;
+    this.userID = this.user.uid;
     this.state = {
       friends: [],
       isDateTimePickerVisible: false,
@@ -64,13 +67,10 @@ export default class VoteAddFriends extends React.Component {
     getYourFriends() {
       var localID = -1
       var that = this
-      var user = firebase.auth().currentUser;
-      var userID = user.uid;
-      var db = firebase.firestore();
-      db.collection("Users").doc(userID).collection("Friends").get().then(function(querySnapshot) {
+      this.db.collection("Users").doc(this.userID).collection("Friends").get().then(function(querySnapshot) {
         querySnapshot.forEach(function(doc) {
           const id = doc.id;
-          var docRef = db.collection('Users').doc(id);
+          var docRef = that.db.collection('Users').doc(id);
           docRef.get().then(function(doc) {
             if (doc.exists) {
               localID++
@@ -111,17 +111,14 @@ export default class VoteAddFriends extends React.Component {
           var catName = category[0].catName
           var catImg = category[0].catImg
           var that = this
-          var user = firebase.auth().currentUser;
-          var userID = user.uid;
-          var db = firebase.firestore();
-          db.collection("Users").doc(userID).collection("PendingVotes").add({
+          this.db.collection("Users").doc(this.userID).collection("PendingVotes").add({
             CatName: catName,
             CatImg: catImg,
             Msg: this.state.text,
           })
           .then(function(docRef) {
             console.log("Document written with ID: ", docRef.id);
-            that.createAlternatives(docRef.id, alternatives, userID)
+            that.createAlternatives(docRef.id, alternatives, that.userID)
           })
           .catch(function(error) {
             console.error("Error adding document: ", error);
@@ -131,9 +128,8 @@ export default class VoteAddFriends extends React.Component {
 
       createAlternatives(voteID, alternatives, userID) {
         var that = this
-        var db = firebase.firestore();
         for(let i=0; i < alternatives.length; i++) {
-          db.collection("Users").doc(userID).collection("PendingVotes").doc(voteID).collection("Alternatives").add({
+          this.db.collection("Users").doc(userID).collection("PendingVotes").doc(voteID).collection("Alternatives").add({
             Name: alternatives[i].text,
             Votes: 0,
           })
@@ -149,9 +145,8 @@ export default class VoteAddFriends extends React.Component {
       }
 
       getParticipants(voteID, userID) {
-        var db = firebase.firestore();
         for (let i=0; i<this.state.choosenFriends.length; i++) {
-          db.collection("Users").doc(userID).collection("PendingVotes").doc(voteID).collection('Participants').doc(this.state.choosenFriends[i].id).set({
+          this.db.collection("Users").doc(userID).collection("PendingVotes").doc(voteID).collection('Participants').doc(this.state.choosenFriends[i].id).set({
             Answer: "noAnswer",
           })
         }
@@ -159,14 +154,13 @@ export default class VoteAddFriends extends React.Component {
       }
 
       sendVoteRequest(voteID, userID) {
-        var db = firebase.firestore();
         for (let i=0; i<this.state.choosenFriends.length; i++) {
           var friendID = this.state.choosenFriends[i].id
-          db.collection("Users").doc(friendID).collection("VoteRequests").doc(voteID).set({
+          this.db.collection("Users").doc(friendID).collection("VoteRequests").doc(voteID).set({
             SentFrom: userID,
           })
           for (let i=0; i<this.state.choosenFriends.length; i++) {
-            db.collection("Users").doc(friendID).collection("VoteRequests").doc(voteID).collection('Participants').doc(this.state.choosenFriends[i].id).set({
+            this.db.collection("Users").doc(friendID).collection("VoteRequests").doc(voteID).collection('Participants').doc(this.state.choosenFriends[i].id).set({
               Answer: "noAnswer"
             })
           }

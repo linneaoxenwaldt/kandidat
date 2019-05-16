@@ -57,13 +57,22 @@ export default class ChangePasswordScreen extends React.Component {
     }
 
     newPasswordFunc = () => {
+      var that = this
       this.reauthenticate(this.state.currentPassword).then(() => {
         if (this.state.newPassword !== this.state.newPasswordConfirm){
           Alert.alert(data.passwDoNotMatch)
           return;
         } else{
           user.updatePassword(this.state.newPassword).then(function() {
-            Alert.alert(data.changedPassword)
+            Alert.alert(
+              data.changedPassword,
+              undefined,
+              [
+                {text: data.ok,
+                  onPress: () => that.props.navigation.navigate('Profile')
+                },
+              ],
+              { cancelable: false })
           }).catch(function(error) {
             Alert.alert(data.error)
           });
