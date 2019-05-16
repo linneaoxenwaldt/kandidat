@@ -22,6 +22,13 @@ export default class AddAlternativeScreen extends React.Component {
     super(props);
     this.colors = ['#6ACCCB', '#94B4C1', '#8FBC8F', '#CBA3D5', '#689999']
     this.extractKey = ({id}) => id
+    this.db = firebase.firestore();
+    this.user = firebase.auth().currentUser;
+    this.userID = this.user.uid;
+    this.vote = this.props.navigation.state.params.vote
+    this.VoteID = this.vote.VoteID
+    this.createrID = this.vote.sentFromID
+    this.participants = this.props.navigation.state.params.participants
     this.state = {
       rows: [],
       text: '',
@@ -46,12 +53,7 @@ export default class AddAlternativeScreen extends React.Component {
 
     getFriendsAlt() {
       var that = this
-      var vote = this.props.navigation.state.params.vote
-      var createrID = vote.sentFromID
-      var user = firebase.auth().currentUser;
-      var userID = user.uid;
-      var db = firebase.firestore();
-      var docRef = db.collection("Users").doc(createrID).collection("PendingVotes").doc(vote.VoteID).collection('Alternatives')
+      var docRef = this.db.collection("Users").doc(this.createrID).collection("PendingVotes").doc(this.vote.VoteID).collection('Alternatives')
       docRef.get().then(function(querySnapshot) {
         querySnapshot.forEach(function(doc) {
           const name = doc.get('Name');
@@ -65,17 +67,13 @@ export default class AddAlternativeScreen extends React.Component {
 
     addNewAlternative() {
       var that = this
-      var vote = this.props.navigation.state.params.vote
       if(this.state.text == "") {
         Alert.alert(
           data.missingAltName,
         )
       }
       else {
-        var user = firebase.auth().currentUser;
-        var userID = user.uid;
-        var db = firebase.firestore();
-        db.collection("Users").doc(userID).collection("PendingVotes").doc(vote.VoteID).collection('Alternatives').add({
+        this.db.collection("Users").doc(this.userID).collection("PendingVotes").doc(this.VoteID).collection('Alternatives').add({
           Name: this.state.text,
           Votes: 0,
         })
@@ -97,14 +95,8 @@ export default class AddAlternativeScreen extends React.Component {
     }
 
     deleteAlternative(delItem) {
-      var that = this
-      var vote = this.props.navigation.state.params.vote
-      var user = firebase.auth().currentUser;
-      var userID = user.uid;
-      var db = firebase.firestore();
-      var voteID = vote.VoteID
       var delItemID = delItem.id
-      db.collection("Users").doc(userID).collection("PendingVotes").doc(voteID).collection("Alternatives").doc(delItemID).delete().then(function() {
+      this.db.collection("Users").doc(this.userID).collection("PendingVotes").doc(this.voteID).collection("Alternatives").doc(delItemID).delete().then(function() {
         console.log("delAlt: Document successfully deleted!" + delItem.id);
       }).catch(function(error) {
         console.error("delAlt: Error removing document: ", error);
@@ -114,16 +106,8 @@ export default class AddAlternativeScreen extends React.Component {
     }
 
     addAlternativesToParticipants() {
-      var participants = this.props.navigation.state.params.participants
-      var vote = this.props.navigation.state.params.vote
-      var db = firebase.firestore();
-      var voteID = vote.VoteID
-      var createrID = vote.sentFromID
-      var user = firebase.auth().currentUser;
-      var userID = user.uid;
-
       for(let i=0; i<this.state.newAlternatives.length; i++) {
-        db.collection("Users").doc(createrID).collection("PendingVotes").doc(vote.VoteID).collection('Alternatives').doc(this.state.newAlternatives[i].id).set({
+        db.collection("Users").doc(this.createrID).collection("PendingVotes").doc(this.VoteID).collection('Alternatives').doc(this.state.newAlternatives[i].id).set({
           Name: this.state.newAlternatives[i].text,
           Votes: this.state.newAlternatives[i].votes,
         })
@@ -133,10 +117,10 @@ export default class AddAlternativeScreen extends React.Component {
           console.error("AddAlt: Error adding document: ", error);
         });
 
-        for(let i=0; i<participants.length; i++) {
-          if(voteID === participants[i].VoteID){
-            var participantID = participants[i].ParticipantID
-            var docRef = db.collection('Users').doc(participantID).collection('PendingVotes').doc(vote.VoteID);
+        for(let i=0; i < this.participants.length; i++) {
+          if(this.VoteID === this.participants[i].VoteID){
+            var participantID = this.participants[i].ParticipantID
+            var docRef = this.db.collection('Users').doc(participantID).collection('PendingVotes').doc(this.VoteID);
             var getDoc = docRef.get()
             .then(doc => {
               if (!doc.exists) {
@@ -158,13 +142,7 @@ export default class AddAlternativeScreen extends React.Component {
 
         getAnswers() {
           var that = this
-          var user = firebase.auth().currentUser;
-          var userID = user.uid;
-          var db = firebase.firestore();
-          var vote = this.props.navigation.state.params.vote
-          var createrID = vote.sentFromID
-
-          var docRef = db.collection("Users").doc(createrID).collection("PendingVotes").doc(vote.VoteID).collection('Participants')
+          var docRef = this.db.collection("Users").doc(this.createrID).collection("PendingVotes").doc(this.VoteID).collection('Participants')
           docRef.get().then(function(querySnapshot) {
             querySnapshot.forEach(function(doc) {
               const answer = doc.get('Answer');
@@ -198,17 +176,10 @@ export default class AddAlternativeScreen extends React.Component {
         }
 
         createVoteForUser(){
-          var participants = this.props.navigation.state.params.participants
-          var vote = this.props.navigation.state.params.vote
-          var db = firebase.firestore();
-          var voteID = vote.VoteID
-          var createrID = vote.sentFromID
-          var user = firebase.auth().currentUser;
-          var userID = user.uid;
-          var docRef = db.collection("Users").doc(userID).collection("Votes").doc(voteID)
+          var docRef = this.db.collection("Users").doc(this.userID).collection("Votes").doc(this.VoteID)
           docRef.set({
-            CatName: vote.CatName,
-            CatImg: vote.CatImg,
+            CatName: this.vote.CatName,
+            CatImg: this.vote.CatImg,
             Finished: "No",
           })
           for(let i=0; i<this.state.rows.length; i++) {
@@ -220,14 +191,14 @@ export default class AddAlternativeScreen extends React.Component {
               Votes: altVotes,
             })
           }
-          docRef.collection('Participants').doc(createrID).set({
+          docRef.collection('Participants').doc(this.createrID).set({
           })
-          for(let i=0; i< participants.length; i++) {
-            var partID = participants[i].ParticipantID;
+          for(let i=0; i < this.participants.length; i++) {
+            var partID = this.participants[i].ParticipantID;
             docRef.collection('Participants').doc(partID).set({
             })
           }
-          var docRef2 = db.collection("Users").doc(userID).collection("PendingVotes").doc(voteID)
+          var docRef2 = this.db.collection("Users").doc(this.userID).collection("PendingVotes").doc(this.VoteID)
           docRef2.collection('Alternatives').get().then(function(querySnapshot) {
             querySnapshot.forEach(function(doc) {
               const id = doc.id
@@ -253,17 +224,10 @@ export default class AddAlternativeScreen extends React.Component {
         }
 
         createVoteForCreater(){
-          var participants = this.props.navigation.state.params.participants
-          var vote = this.props.navigation.state.params.vote
-          var db = firebase.firestore();
-          var voteID = vote.VoteID
-          var createrID = vote.sentFromID
-          var user = firebase.auth().currentUser;
-          var userID = user.uid;
-          var docRef = db.collection("Users").doc(createrID).collection("Votes").doc(voteID)
+          var docRef = this.db.collection("Users").doc(this.createrID).collection("Votes").doc(this.VoteID)
           docRef.set({
-            CatName: vote.CatName,
-            CatImg: vote.CatImg,
+            CatName: this.vote.CatName,
+            CatImg: this.vote.CatImg,
             Finished: "No",
           })
           for(let i=0; i<this.state.rows.length; i++) {
@@ -275,14 +239,14 @@ export default class AddAlternativeScreen extends React.Component {
               Votes: altVotes,
             })
           }
-          docRef.collection('Participants').doc(userID).set({
+          docRef.collection('Participants').doc(this.userID).set({
           })
-          for(let i=0; i< participants.length; i++) {
-            var partID = participants[i].ParticipantID;
+          for(let i=0; i < this.participants.length; i++) {
+            var partID = this.participants[i].ParticipantID;
             docRef.collection('Participants').doc(partID).set({
             })
           }
-          var docRef2 = db.collection("Users").doc(createrID).collection("PendingVotes").doc(voteID)
+          var docRef2 = this.db.collection("Users").doc(this.createrID).collection("PendingVotes").doc(this.VoteID)
           docRef2.collection('Alternatives').get().then(function(querySnapshot) {
             querySnapshot.forEach(function(doc) {
               const id = doc.id
@@ -308,23 +272,16 @@ export default class AddAlternativeScreen extends React.Component {
         }
 
         createVoteForParticipants(){
-          var participants = this.props.navigation.state.params.participants
-          var vote = this.props.navigation.state.params.vote
-          var voteID = vote.VoteID
-          var createrID = vote.sentFromID
-          var user = firebase.auth().currentUser;
-          var userID = user.uid;
-          var db = firebase.firestore();
-          for(let i=0; i< participants.length; i++) {
-            if(voteID === participants[i].VoteID) {
-              var participantID = participants[i].ParticipantID
-              var docRef = db.collection("Users").doc(participantID).collection("Votes").doc(voteID)
+          for(let i=0; i < this.participants.length; i++) {
+            if(this.VoteID === this.participants[i].VoteID) {
+              var participantID = this.participants[i].ParticipantID
+              var docRef = this.db.collection("Users").doc(participantID).collection("Votes").doc(this.VoteID)
               docRef.set({
-                CatName: vote.CatName,
-                CatImg: vote.CatImg,
+                CatName: this.vote.CatName,
+                CatImg: this.vote.CatImg,
                 Finished: "No",
               })
-              for(let i=0; i<this.state.rows.length; i++) {
+              for(let i=0; i < this.state.rows.length; i++) {
                 var altID = this.state.rows[i].id;
                 var altName = this.state.rows[i].text
                 var altVotes = this.state.rows[i].votes
@@ -333,18 +290,18 @@ export default class AddAlternativeScreen extends React.Component {
                   Votes: altVotes,
                 })
               }
-              docRef.collection('Participants').doc(createrID).set({
+              docRef.collection('Participants').doc(this.createrID).set({
               })
-              docRef.collection('Participants').doc(userID).set({
+              docRef.collection('Participants').doc(this.userID).set({
               })
-              for(let i=0; i< participants.length; i++) {
-                var partID = participants[i].ParticipantID;
+              for(let i=0; i < this.participants.length; i++) {
+                var partID = this.participants[i].ParticipantID;
                 if(partID !== participantID){
                   docRef.collection('Participants').doc(partID).set({
                   })
                 }
               }
-              var docRef2 = db.collection("Users").doc(participantID).collection("PendingVotes").doc(voteID)
+              var docRef2 = this.db.collection("Users").doc(participantID).collection("PendingVotes").doc(this.VoteID)
               docRef2.collection('Alternatives').get().then(function(querySnapshot) {
                 querySnapshot.forEach(function(doc) {
                   const id = doc.id

@@ -54,6 +54,9 @@ export default class NewCategory extends React.Component {
         {id: '17', img: 'https://firebasestorage.googleapis.com/v0/b/swipesolver.appspot.com/o/Category%20Image%2FColor5.png?alt=media&token=a24c4f41-9995-4fb0-8d61-2a9987204a1d'},
       ]
       this.extractKey = ({id}) => id
+      this.db = firebase.firestore();
+      this.user = firebase.auth().currentUser;
+      this.userID = this.user.uid;
       this.state={
         showMe: false,
         borderSize: 0,
@@ -71,10 +74,7 @@ export default class NewCategory extends React.Component {
         )
       }
       else {
-        var user = firebase.auth().currentUser;
-        var userID = user.uid;
-        var db = firebase.firestore();
-        db.collection("Users").doc(userID).collection("Category").add({
+        this.db.collection("Users").doc(this.userID).collection("Category").add({
           CatName: this.state.text,
           CatImg: this.state.choosenImg,
         })

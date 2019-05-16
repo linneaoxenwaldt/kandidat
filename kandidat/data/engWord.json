@@ -38,7 +38,7 @@
   "missingFriends": "You have not choosen any friends",
   "sentFrom": "Sent from",
   "result": "Result",
-  "infoText":"To begin using the app you must first add friends so you have someone to vote with, if only one person can vote it’s a dictatorship! Go to the add friend screen and search for your friends username to add them. Once you have a friend you can go to the “Create new vote” screen in the sidebar. Once there you can create a new category to vote on or choose one of the premade ones. You can edit and customize all parts of the vote and once you are ready to proceed you simply invite your friends and begin the vote!",
+  "infoText": "Use SwipeSolver to make decisions faster, easier and more fun! Add one or several friends to start a vote where everybody will have the opportunity to add their alternatives before voting for the final decision. Vote by pressing the thumbs up/down or swipe right/left to like or dislike an alternative. The most liked alternative will be presented as the winner when all participants have voted and you can choose to save the result for later. Good Luck!",
   "noMoreAlt": "You are finished voting!",
   "invited":"You are invited by:",
   "participants":"Participants:",
@@ -80,7 +80,7 @@
   "passwDoNotMatch": "Passwords do not match!",
   "changedPassword": "Password is changed",
   "noAlternatives": "You must create at least one alternative",
-  "info": "Info",
+  "info": "INFO",
   "sound": "Sound",
   "notifications": "Notifications",
   "deleteAccount": "Account",
@@ -93,5 +93,6 @@
   "settings": "Settings",
   "unchecked": "Unchecked Results",
   "savedResults":"Saved Results",
+  "message":"Message",
 
 }

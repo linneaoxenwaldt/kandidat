@@ -41,6 +41,8 @@ export default class ChangePasswordScreen extends React.Component {
 
     constructor(props){
       super(props);
+      this.db = firebase.firestore();
+      this.user = firebase.auth().currentUser;
       this.state ={
         currentPassword : '',
         email : '',
@@ -50,9 +52,8 @@ export default class ChangePasswordScreen extends React.Component {
     }
 
     reauthenticate = (currentPassword) => {
-      var user = firebase.auth().currentUser;
-      var cred = firebase.auth.EmailAuthProvider.credential(user.email, this.state.currentPassword)
-      return user.reauthenticateAndRetrieveDataWithCredential(cred);
+      var cred = firebase.auth.EmailAuthProvider.credential(this.user.email, this.state.currentPassword)
+      return this.user.reauthenticateAndRetrieveDataWithCredential(cred);
     }
 
     newPasswordFunc = () => {

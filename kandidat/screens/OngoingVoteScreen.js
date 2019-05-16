@@ -206,10 +206,11 @@ export default class OngoingVoteScreen extends React.Component {
         marginBottom: 30,
       },
       voteLabel: {
-        fontSize: 30,
+        fontSize: 25,
         color: '#000000',
         textAlign: 'center',
         fontFamily: "Roboto-Light",
+        marginBottom: 10,
       },
       voteActContainer: {
         marginTop: 5,

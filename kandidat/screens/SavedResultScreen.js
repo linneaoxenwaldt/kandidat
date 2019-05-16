@@ -8,7 +8,6 @@ import { ScrollView,
   Text,
   FlatList,
   Alert,
-  TextInput,
   ImageBackground,
 } from 'react-native';
 import { ListItem } from 'react-native-elements';
@@ -24,6 +23,9 @@ export default class SavedResultScreen extends React.Component {
     this.extractKey = ({id}) => id
     this.extractKey1 = ({VoteID}) => VoteID
     this.extractKey2 = ({VoteID}) => VoteID
+    this.db = firebase.firestore();
+    this.user = firebase.auth().currentUser;
+    this.userID = this.user.uid;
     this.state = {
       results:[],
       savedResults: [],
@@ -56,10 +58,7 @@ export default class SavedResultScreen extends React.Component {
 
     getResults() {
       var that = this
-      var user = firebase.auth().currentUser;
-      var userID = user.uid;
-      var db = firebase.firestore();
-      db.collection("Users").doc(userID).collection("Result").where("Saved", "==", false).onSnapshot(function(querySnapshot) {
+      this.db.collection("Users").doc(this.userID).collection("Result").where("Saved", "==", false).onSnapshot(function(querySnapshot) {
         that.setState({results: []})
         querySnapshot.forEach(function(doc) {
           const name = doc.get('CatName');
@@ -73,10 +72,7 @@ export default class SavedResultScreen extends React.Component {
 
     getSavedResults(){
       var that = this
-      var user = firebase.auth().currentUser;
-      var userID = user.uid;
-      var db = firebase.firestore();
-      db.collection("Users").doc(userID).collection("Result").where("Saved", "==", true).onSnapshot(function(querySnapshot) {
+      this.db.collection("Users").doc(this.userID).collection("Result").where("Saved", "==", true).onSnapshot(function(querySnapshot) {
         that.setState({savedResults: []})
         querySnapshot.forEach(function(doc) {
           const name = doc.get('CatName');
@@ -90,11 +86,8 @@ export default class SavedResultScreen extends React.Component {
 
     deleteResult(delItem) {
       var that = this;
-      var user = firebase.auth().currentUser;
-      var userID = user.uid;
-      var db = firebase.firestore();
       var voteID = delItem.VoteID
-      var docRef = db.collection('Users').doc(userID).collection('Result').doc(voteID)
+      var docRef = this.db.collection('Users').doc(this.userID).collection('Result').doc(voteID)
       docRef.collection('Alternatives').get().then(function(querySnapshot) {
         querySnapshot.forEach(function(doc) {
           const id = doc.id
@@ -111,7 +104,6 @@ export default class SavedResultScreen extends React.Component {
     }
 
     renderItem1 = ({item, index}) => {
-      //console.log(item)
       return (
         <TouchableOpacity
         onPress={() => this.props.navigation.navigate('ResultScreen', {VoteID: item.VoteID, saved: false})}>
@@ -127,7 +119,6 @@ export default class SavedResultScreen extends React.Component {
     }
 
     renderItem2 = ({item, index}) => {
-      //console.log(item)
       return (
         <TouchableOpacity
         onPress={() => this.props.navigation.navigate('ResultScreen', {VoteID: item.VoteID, saved: true})}>
@@ -158,8 +149,8 @@ export default class SavedResultScreen extends React.Component {
           return (
             <View style={styles.container}>
             <Text style={styles.resultLabel}> {data.results} </Text>
-            <View style={styles.resultContainer}>
-            <Text style={styles.savedResultLabel}>{data.unchecked}
+            <View style={styles.flatlistContain}>
+            <Text style={styles.miniResultLabel}>{data.unchecked}
             <Text> </Text>
             </Text>
             <View
@@ -175,8 +166,8 @@ export default class SavedResultScreen extends React.Component {
               />
               </View>
 
-              <View style={styles.savedesultContainer}>
-              <Text style={styles.savedResultLabel}>{data.savedResults}
+              <View style={styles.flatlistContain}>
+              <Text style={styles.miniResultLabel}>{data.savedResults}
               </Text>
               <View
               style={{
@@ -208,25 +199,15 @@ export default class SavedResultScreen extends React.Component {
               fontFamily: "Roboto-Light",
               marginTop: 15,
             },
-            contain:{
-              height: '50%'
+            flatlistContain: {
+              height: 240,
             },
-            savedResultLabelresultContainer:{
-              height: '50%'
-            },
-            savedResultLabel: {
+            miniResultLabel: {
               marginTop: 20,
+              marginBottom: 10,
               fontSize: 25,
               color: '#000000',
               textAlign: 'center',
               fontFamily: "Roboto-Light",
-            },
-            row: {
-              fontFamily: "Roboto-Light",
-              color: '#FFFFFF',
-              padding: 15,
-              marginBottom: 5,
-              fontSize: 20,
-              justifyContent: 'center',
             },
           });
