@@ -101,12 +101,22 @@ export default class OngoingVoteScreen extends React.Component {
             }))
           });
         });
+        if(that._ismounted === true){
         that.mergeArray()
+      }
       }
 
       mergeArray(){
         this.setState({yourFriensTurn : [...this.state.finishedArray, ...this.state.pendingArray]})
       }
+
+      componentDidMount() {
+    this._ismounted = true;
+  }
+
+  componentWillUnmount() {
+     this._ismounted = false;
+  }
 
       renderItem1 = ({item, index}) => {
         return (
