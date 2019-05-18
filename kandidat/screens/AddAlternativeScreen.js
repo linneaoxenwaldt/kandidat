@@ -107,7 +107,7 @@ export default class AddAlternativeScreen extends React.Component {
 
     addAlternativesToParticipants() {
       for(let i=0; i<this.state.newAlternatives.length; i++) {
-        db.collection("Users").doc(this.createrID).collection("PendingVotes").doc(this.VoteID).collection('Alternatives').doc(this.state.newAlternatives[i].id).set({
+        this.db.collection("Users").doc(this.createrID).collection("PendingVotes").doc(this.VoteID).collection('Alternatives').doc(this.state.newAlternatives[i].id).set({
           Name: this.state.newAlternatives[i].text,
           Votes: this.state.newAlternatives[i].votes,
         })

@@ -582,7 +582,7 @@ export default class RequestScreen extends React.Component {
                     marginTop: 10,
                     backgroundColor: '#FFFFFF',
                     alignItems: 'center',
-              
+
                   },
                   modalText: {
                     paddingTop: 50,
