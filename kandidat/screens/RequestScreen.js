@@ -570,6 +570,7 @@ export default class RequestScreen extends React.Component {
                   },
                   requestHeight: {
                     height: 260,
+                    paddingBottom: 5,
                   },
                   arrowBack: {
                     marginLeft: 10,

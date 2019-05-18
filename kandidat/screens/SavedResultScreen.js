@@ -189,7 +189,6 @@ export default class SavedResultScreen extends React.Component {
           const styles = StyleSheet.create({
             container: {
               flex: 1,
-              paddingTop: 15,
               backgroundColor: '#FFFFFF',
             },
             resultLabel: {
@@ -200,7 +199,8 @@ export default class SavedResultScreen extends React.Component {
               marginTop: 15,
             },
             flatlistContain: {
-              height: 240,
+              height: 260,
+              paddingBottom: 5,
             },
             miniResultLabel: {
               marginTop: 20,

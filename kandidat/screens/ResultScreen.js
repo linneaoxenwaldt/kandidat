@@ -67,7 +67,6 @@ componentWillUnmount() {
       const altID = doc.id;
       const name = doc.get('Name')
       const votes = doc.get('Votes')
-    //  console.log(that.state.result)
       that.setState(prevState => ({
         result: [...prevState.result, {AltID: altID, Name: name, Votes: votes}]
       }))
