@@ -90,6 +90,7 @@ export default class NewVoteScreen extends React.Component {
     }
 
     addToCategoryList(newCat) {
+      var that = this
       var catID = newCat.id
       var docRef = this.db.collection('Users').doc(this.userID).collection('Category').doc(catID);
       docRef.get().then(function(doc) {
