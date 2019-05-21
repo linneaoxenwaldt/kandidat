@@ -171,6 +171,7 @@ export default class AlternativeScreen extends React.Component {
             ref={input => { this.textInput = input }}
             style={styles.textInput}
             placeholder={data.addNew}
+            maxLength={28}
             onChangeText={(text) => this.setState({text})}
             />
             <TouchableOpacity

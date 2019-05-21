@@ -46,7 +46,7 @@ export default class SettingsScreen extends React.Component {
         <View style={styles.container}>
         <Text style={styles.infoLabel}>{data.info}</Text>
         <Text style={styles.infoText}>{data.infoText}</Text>
-        <TouchableOpacity style={styles.startButton} onPress={() => this.props.navigation.navigate('HomeScreen')}>
+        <TouchableOpacity style={styles.startButton} onPress={() => this.props.navigation.navigate('Home')}>
         <Text style={styles.startText}>{data.start}</Text>
         </TouchableOpacity>
         </View>

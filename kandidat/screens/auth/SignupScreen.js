@@ -45,6 +45,7 @@ getAllUserNames() {
 }
 
 checkUserNames(){
+  var that = this;
   var upperUserName = this.state.username.toUpperCase()
   var upperUserNameArray = []
   for (let i = 0; i < this.state.rows.length; i++){
@@ -61,6 +62,7 @@ checkUserNames(){
   }else{
     firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
     .then(() => {
+      this.props.navigation.navigate('Settings')
       this.createAccountDatabase()
     })}
   }
