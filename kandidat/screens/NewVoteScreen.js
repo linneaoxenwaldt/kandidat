@@ -134,13 +134,13 @@ export default class NewVoteScreen extends React.Component {
           render() {
             return (
               <View style={styles.container}>
-              <Text style={styles.categoryLabel}>{data.categories}</Text>
+              <Text style={styles.categoryLabel}>{data.votes}</Text>
               <View style ={styles.buttonContainer}>
               <TouchableOpacity
               style={styles.createOwnCategoryContainer}
               onPress={() => this.props.navigation.navigate('NewCategory', {addToCategoryList: this.addToCategoryList.bind(this)})}
               underlayColor='#fff'>
-              <Text style={styles.ownCategoryText}>{data.createOwnCate} <Icon
+              <Text style={styles.ownCategoryText}>{data.createOwnVote} <Icon
               name={Platform.OS === "ios" ? "ios-add-circle-outline" : "md-add-circle-outline"}
               size={25}
               /></Text>
@@ -173,6 +173,7 @@ export default class NewVoteScreen extends React.Component {
             color: '#000000',
             textAlign: 'center',
             fontFamily: "Roboto-Light",
+            textTransform:'uppercase',
           },
           createOwnCategoryContainer: {
             alignItems: 'center',
