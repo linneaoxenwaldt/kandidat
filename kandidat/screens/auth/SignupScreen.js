@@ -262,8 +262,11 @@ const styles = StyleSheet.create({
     marginLeft: '35%',
     backgroundColor:'#BA55B3',
     borderRadius:20,
-    borderWidth: 1,
     borderColor: '#fff',
+    shadowColor: 'grey',
+    shadowOpacity: 2,
+    shadowRadius: 2,
+    shadowOffset: {width: 0,height: 4},
   },
   signInResultText:{
     fontSize:20,

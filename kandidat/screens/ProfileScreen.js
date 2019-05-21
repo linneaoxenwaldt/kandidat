@@ -318,6 +318,10 @@ export default class ProfileScreen extends React.Component {
           height: 50,
           alignItems:'center',
           justifyContent:'center',
+          shadowColor: 'grey',
+          shadowOpacity: 2,
+          shadowRadius: 2,
+          shadowOffset: {width: 0,height: 4},
         },
         logOutButton:{
           backgroundColor: "#6BCDFD",
@@ -328,6 +332,10 @@ export default class ProfileScreen extends React.Component {
           borderRadius: 20,
           marginBottom: 8,
           marginTop: 8,
+          shadowColor: 'grey',
+          shadowOpacity: 2,
+          shadowRadius: 2,
+          shadowOffset: {width: 0,height: 4},
         },
         logOutText:{
           textAlign: 'center',

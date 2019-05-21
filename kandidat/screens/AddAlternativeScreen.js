@@ -363,7 +363,7 @@ export default class AddAlternativeScreen extends React.Component {
               render() {
                 return (
                   <View style={styles.container}>
-                  <Text style={styles.alternativeLabel}>{data.alternatives}</Text>
+                  <Text style={styles.alternativeLabel}>{data.alternatives.toUpperCase()}</Text>
                   <View style={styles.addMoreAlt}>
                   <TextInput
                   ref={input => { this.textInput = input }}
@@ -410,6 +410,7 @@ export default class AddAlternativeScreen extends React.Component {
                 justifyContent:'center',
               },
               alternativeLabel: {
+                //textTransform: 'uppercase',
                 fontSize: 40,
                 color: '#000000',
                 textAlign: 'center',

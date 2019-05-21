@@ -164,7 +164,7 @@ componentWillUnmount() {
         return (
           <View style={styles.container}>
           <Image source={require('../assets/images/medal.png')} style={styles.medalPic}/>
-          <Text style={styles.resultLabel}>{data.result}</Text>
+          <Text style={styles.resultLabel}>{data.result.toUpperCase()}</Text>
           <View style={styles.firstContainer}>
           <Text style={styles.containText}>{this.state.winner}</Text>
           <View style={styles.trophyIcon}>
@@ -296,8 +296,11 @@ componentWillUnmount() {
         padding: 10,
         backgroundColor:'#BA55B3',
         borderRadius:20,
-        borderWidth: 1,
-        borderColor: '#fff'
+        borderColor: '#fff',
+        shadowColor: 'grey',
+        shadowOpacity: 2,
+        shadowRadius: 2,
+        shadowOffset: {width: 0,height: 4},
       },
       saveResultText:{
         fontSize:20,
@@ -312,6 +315,10 @@ componentWillUnmount() {
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 20,
+        shadowColor: 'grey',
+        shadowOpacity: 2,
+        shadowRadius: 2,
+        shadowOffset: {width: 0,height: 4},
 
       },
       deleteText:{

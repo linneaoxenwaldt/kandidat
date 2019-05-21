@@ -84,6 +84,10 @@ export default class SettingsScreen extends React.Component {
       marginLeft: 100,
       marginBottom: 20,
       marginTop: 20,
+      shadowColor: 'grey',
+      shadowOpacity: 2,
+      shadowRadius: 2,
+      shadowOffset: {width: 0,height: 4},
     },
     startText: {
       color: "#FFFFFF",

@@ -446,7 +446,7 @@ export default class RequestScreen extends React.Component {
             render() {
               return (
                 <View style={styles.container}>
-                <Text style={styles.requestLabel}> {data.requests} </Text>
+                <Text style={styles.requestLabel}> {data.requests.toUpperCase()} </Text>
                 <View style={styles.requestHeight}>
                 <Text style={styles.textLabel}>{data.votes}</Text>
                 <View
@@ -474,7 +474,7 @@ export default class RequestScreen extends React.Component {
                   source={{uri: this.state.currentVote.sentFromProfilePic}}/>
                   <Text style={styles.invitedByText}>{this.state.currentVote.sentFromUsername}</Text>
                   </View>
-                  <Text style={styles.miniTextview}> {data.message}: </Text>
+                  <Text style={styles.miniTextview}> {data.description}: </Text>
 
                   <View style={styles.message}>
                   <ScrollView>
@@ -614,7 +614,11 @@ export default class RequestScreen extends React.Component {
                     height: 50,
                     alignItems:'center',
                     justifyContent:'center',
-                    fontSize: 10
+                    fontSize: 10,
+                    shadowColor: 'grey',
+                    shadowOpacity: 2,
+                    shadowRadius: 2,
+                    shadowOffset: {width: 0,height: 4},
                   },
                   declineButt: {
                     color:'white',
@@ -627,6 +631,10 @@ export default class RequestScreen extends React.Component {
                     height: 50,
                     alignItems:'center',
                     justifyContent:'center',
+                    shadowColor: 'grey',
+                    shadowOpacity: 2,
+                    shadowRadius: 2,
+                    shadowOffset: {width: 0,height: 4},
                   },
                   acceptButt: {
                     color:'white',
@@ -639,6 +647,10 @@ export default class RequestScreen extends React.Component {
                     height: 50,
                     alignItems:'center',
                     justifyContent:'center',
+                    shadowColor: 'grey',
+                    shadowOpacity: 2,
+                    shadowRadius: 2,
+                    shadowOffset: {width: 0,height: 4},
                   },
                   buttonBottomContainer: {
                     flexDirection:'row',

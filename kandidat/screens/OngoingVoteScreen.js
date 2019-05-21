@@ -140,7 +140,7 @@ export default class OngoingVoteScreen extends React.Component {
         return (
           <View style={styles.container}>
           <View style={styles.voteActContainer}>
-          <Text style={styles.ongoingVotesLabel}>{data.labelOngoing}</Text>
+          <Text style={styles.ongoingVotesLabel}>{data.labelOngoing.toUpperCase()}</Text>
           <Text style={styles.voteLabel}>
           {data.yourTurn}
           </Text>

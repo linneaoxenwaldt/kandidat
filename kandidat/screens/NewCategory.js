@@ -110,7 +110,7 @@ export default class NewCategory extends React.Component {
     render() {
       return (
         <View style={styles.container}>
-        <Text style={styles.categoryLabel}>{data.newCategory}</Text>
+        <Text style={styles.categoryLabel}>{data.newCategory.toUpperCase()}</Text>
         <Modal
         visible={this.state.showMe}
         onRequestClose = {() => {this.setState({ showMe : false })}}>
@@ -198,7 +198,7 @@ export default class NewCategory extends React.Component {
         categoryLabel: {
           marginTop: 40,
           marginBottom: 20,
-          fontSize: 34,
+          fontSize: 40,
           color: '#000000',
           textAlign: 'center',
           fontFamily: "Roboto-Light",
@@ -212,6 +212,7 @@ export default class NewCategory extends React.Component {
           borderRadius: 50,
           borderWidth: 4,
           borderColor: '#3BCDFD',
+
         },
         nameText: {
           fontFamily: 'Roboto-Light',
@@ -230,6 +231,10 @@ export default class NewCategory extends React.Component {
           width: 350,
           backgroundColor: '#BA55B3',
           marginBottom: 30,
+          shadowColor: 'grey',
+          shadowOpacity: 2,
+          shadowRadius: 2,
+          shadowOffset: {width: 0,height: 4}
         },
         picText:{
           justifyContent:'center',

@@ -165,7 +165,7 @@ export default class AlternativeScreen extends React.Component {
         render() {
           return (
             <View style={styles.container}>
-            <Text style={styles.alternativeLabel}>{data.alternatives}</Text>
+            <Text style={styles.alternativeLabel}>{data.alternatives.toUpperCase()}</Text>
             <View style={styles.addMoreAlt}>
             <TextInput
             ref={input => { this.textInput = input }}
@@ -262,6 +262,10 @@ export default class AlternativeScreen extends React.Component {
           borderRadius: 100,
           marginTop:10,
           marginBottom: 20,
+          shadowColor: 'grey',
+          shadowOpacity: 2,
+          shadowRadius: 2,
+          shadowOffset: {width: 0,height: 2},
         },
         addIcon: {
           color: "#FFFFFF",
