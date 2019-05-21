@@ -73,7 +73,7 @@ export default class ChangeEmailScreen extends React.Component {
           return;
         } else{
           user.updateEmail(this.state.newEmail).then(function() {
-            this.updateNewEmail()
+            that.updateNewEmail()
             Alert.alert(
               data.emailIsChanged,
               undefined,
@@ -152,7 +152,7 @@ export default class ChangeEmailScreen extends React.Component {
     textNewEmail: {
       backgroundColor:'#8FBC8F',
       borderColor:'#6f936f',
-      borderWidth: '4',
+      borderWidth: 4,
       fontSize: 25,
       textAlign:'center',
       alignItems: 'center',
@@ -166,7 +166,7 @@ export default class ChangeEmailScreen extends React.Component {
     textConfirmEmail: {
       backgroundColor:'#6ACCCB',
       borderColor:'#5db3b2',
-      borderWidth: '4',
+      borderWidth: 4,
       fontSize: 25,
       textAlign:'center',
       alignItems: 'center',
@@ -179,7 +179,7 @@ export default class ChangeEmailScreen extends React.Component {
     },
     textPassword: {
       borderColor:'#758e99',
-      borderWidth: '4',
+      borderWidth: 4,
       backgroundColor:'#94B4C1',
       fontSize: 25,
       textAlign:'center',
