@@ -9,10 +9,11 @@ import { DrawerActions, NavigationActions, createStackNavigator, createAppContai
 import LoginScreen from './screens/auth/LoginScreen'
 import SignupScreen from './screens/auth/SignupScreen'
 import ForgotPasswordScreen from './screens/auth/ForgotPasswordScreen'
+import SettingsScreen from './screens/SettingsScreen';
 
 const AppSwitchNavigator = createSwitchNavigator({
   Auth : LoginScreen,
-  Home  : MainTabNavigator
+  Home  : MainTabNavigator,
 })
 
 export default class App extends React.Component {

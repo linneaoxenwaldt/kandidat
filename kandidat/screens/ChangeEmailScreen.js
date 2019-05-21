@@ -194,7 +194,7 @@ export default class ChangeEmailScreen extends React.Component {
     descriptionText: {
       margin: 10,
       textAlign:'center',
-      fontSize: 30,
+      fontSize: 25,
       fontFamily: 'Roboto-Light',
       color: '#000000',
     },

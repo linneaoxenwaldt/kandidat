@@ -137,6 +137,7 @@ export default class NewCategory extends React.Component {
           <TextInput
           style={styles.nameText}
           placeholder={data.enterCatName}
+          maxLength={20}
           onChangeText={(text) => this.setState({text})}/>
           </View>
 

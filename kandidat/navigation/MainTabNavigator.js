@@ -247,7 +247,8 @@ const AppStack = createStackNavigator({
   VoteAddFriends: {screen: VoteAddFriendsStack},
   AddAlternative: {screen: AddAlternativeScreenStack},
   VoteScreen: {screen: VoteScreenStack},
-  ResultScreen: {screen: ResultScreenStack}
+  ResultScreen: {screen: ResultScreenStack},
+  Settings: {screen: SettingsStack},
 }, {
   headerMode: 'none',
 });

@@ -466,7 +466,7 @@ export default class RequestScreen extends React.Component {
                   <Modal visible={this.state.showMe}
                   onRequestClose = {() => {this.setState({ showMe : false })}}>
                   <View style={styles.modalView}>
-                  <Text style={styles.modalText}> {this.state.currentVote.CatName}</Text>
+                  <Text style={styles.modalText}>{this.state.currentVote.CatName}</Text>
 
                   <View style={styles.invitedContainer}>
                   <Text style={styles.textLabel}> {data.invited} </Text>
@@ -496,13 +496,13 @@ export default class RequestScreen extends React.Component {
                   <TouchableOpacity
                   style={styles.declineButt}
                   onPress={() => this.declineVote()}>
-                  <Text style={styles.closeText}> {data.decline} </Text>
+                  <Text style={styles.closeText}>{data.decline}</Text>
                   </TouchableOpacity>
 
                   <TouchableOpacity
                   onPress={() => this.setUpPendingVote()}
                   style={styles.acceptButt}>
-                  <Text style={styles.closeText}>{data.accept} </Text>
+                  <Text style={styles.closeText}>{data.accept}</Text>
                   </TouchableOpacity>
                   </View>
 
@@ -606,6 +606,7 @@ export default class RequestScreen extends React.Component {
 
                   },
                   closeContainer: {
+                    //marginTop: 10,
                     marginBottom: 10,
                     backgroundColor: '#6BCDFD',
                     alignItems: 'center',
@@ -623,7 +624,7 @@ export default class RequestScreen extends React.Component {
                   declineButt: {
                     color:'white',
                     marginBottom: 0,
-                    marginTop: 10,
+                    //marginTop: 10,
                     backgroundColor: '#CBA3D5',
                     alignItems: 'center',
                     borderRadius: 20,
@@ -639,7 +640,7 @@ export default class RequestScreen extends React.Component {
                   acceptButt: {
                     color:'white',
                     marginBottom: 0,
-                    marginTop: 10,
+                    //marginTop: 10,
                     backgroundColor: '#8FBC8F',
                     alignItems: 'center',
                     borderRadius: 20,
@@ -657,7 +658,8 @@ export default class RequestScreen extends React.Component {
                     justifyContent: 'space-between',
                     width: 340,
                     margin: 10,
-                    marginTop:10
+                    //marginTop:10,
+                    //marginBottom: 0,
                   },
                   message:{
                     marginBottom: 20,
@@ -677,7 +679,7 @@ export default class RequestScreen extends React.Component {
                   modalList: {
                     marginBottom:0,
                     width: '100%',
-                    height: 150,
+                    height: 130,
                   },
                   friendReqButton:{
                     flexDirection:'row',

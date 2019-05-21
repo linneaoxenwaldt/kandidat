@@ -129,39 +129,42 @@ export default class ProfileScreen extends React.Component {
         <View style={styles.userNameContainer}>
         <Text style={styles.userNameText}>{this.state.username}</Text>
         </View>
+        <TouchableOpacity
+        style={styles.emailContainer}
+        onPress={() => this.props.navigation.navigate('ChangeEmail')}>
         <View style={styles.emailContainer}>
         <Text style={styles.enText}>{this.state.email}</Text>
-        <TouchableOpacity
-        style={styles.changeIcon}
-        onPress={() => this.props.navigation.navigate('ChangeEmail')}>
         <Icon name={Platform.OS === "ios" ? "ios-create" : "md-create"}
         size={30}
+        style={styles.changeIcon}
         color='#FFFFFF'/>
-        </TouchableOpacity>
         </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+        style={styles.passwordContainer}
+        onPress={() => this.props.navigation.navigate('ChangePassword')}>
         <View style={styles.passwordContainer}>
         <Text style={styles.enText}>{data.changePassword}</Text>
-        <TouchableOpacity
-        style={styles.changeIcon}
-        onPress={() => this.props.navigation.navigate('ChangePassword')}>
         <Icon name={Platform.OS === "ios" ? "ios-create" : "md-create"}
         size={30}
-        color='#FFFFFF'/>
-        </TouchableOpacity>
-        </View>
-        <View style={styles.profilePicContainer}>
-        <Text style={styles.enText}>{data.changeProfilePic}</Text>
-        <TouchableOpacity
         style={styles.changeIcon}
+        color='#FFFFFF'/>
+        </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+        style={styles.profilePicContainer}
         onPress={()=>{
           this.setState({
             showMe: true
           })}}>
+        <View style={styles.profilePicContainer}>
+        <Text style={styles.enText}>{data.changeProfilePic}</Text>
           <Icon name={Platform.OS === "ios" ? "ios-create" : "md-create"}
           size={30}
+          style={styles.changeIcon}
           color='#FFFFFF'/>
-          </TouchableOpacity>
           </View>
+          </TouchableOpacity>
           <View style={styles.buttonBottomContainer}>
           <TouchableOpacity
           onPress={() => this.logOut()}

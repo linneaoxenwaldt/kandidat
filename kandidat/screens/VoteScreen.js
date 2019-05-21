@@ -367,7 +367,6 @@ export default class VoteScreen extends React.Component {
                   <Animated.View style={{ opacity: this.dislikeOpacity, transform: [{ rotate: '30deg' }], position: 'absolute', top: 50, right: 40, zIndex: 1000 }}>
                   <Text style={styles.dislikeText}>{data.no}</Text>
                   </Animated.View>
-
                   <Text style={styles.alternativeText}>{item.Name}</Text>
                   </Animated.View>
                 )
@@ -389,8 +388,9 @@ export default class VoteScreen extends React.Component {
                     <Animated.View style={{ opacity: 0, transform: [{ rotate: '30deg' }], position: 'absolute', top: 50, right: 40, zIndex: 1000 }}>
                     <Text style={styles.dislikeText}>{data.no}</Text>
                     </Animated.View>
-
+                    <View style={styles.textView}>
                     <Text style={styles.alternativeText}>{item.Name}</Text>
+                    </View>
                     </Animated.View>
                   )
                 }
@@ -440,10 +440,15 @@ export default class VoteScreen extends React.Component {
               fontFamily: "Roboto-Light",
               fontSize: 40,
               textAlign: 'center',
-              marginTop: 50,
+              //marginTop: 5,
+            },
+            textView: {
+              textAlign:'center',
+              justifyContent:'center',
+              alignItems:'center'
             },
             alternativeText: {
-              marginTop: 70,
+              //marginTop: 50,
               textAlign: "center",
               color: "#000",
               fontFamily: "Roboto-Light",
