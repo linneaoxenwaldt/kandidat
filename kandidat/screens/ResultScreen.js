@@ -166,30 +166,40 @@ componentWillUnmount() {
           <Image source={require('../assets/images/medal.png')} style={styles.medalPic}/>
           <Text style={styles.resultLabel}>{data.result.toUpperCase()}</Text>
           <View style={styles.firstContainer}>
-          <Text style={styles.containText}>{this.state.winner}</Text>
           <View style={styles.trophyIcon}>
           <Icon name={Platform.OS === "ios" ? "ios-trophy" : "md-create"}
           size={40}
           color='#daa520'/>
           </View>
+          <Text style={styles.containText}>{this.state.winner}</Text>
+          <View style={styles.result}>
+          <Text style={styles.likesText1}>8</Text>
+          </View>
           </View>
 
           <View style={styles.secondContainer}>
-          <Text style={styles.containText}>{this.state.second}</Text>
           <View style={styles.trophyIcon}>
           <Icon name={Platform.OS === "ios" ? "ios-trophy" : "md-create"}
           size={40}
           color='#c0c0c0'/>
           </View>
+          <Text style={styles.containText}>{this.state.second}</Text>
+          <View style={styles.result}>
+          <Text style={styles.likesText2}>5</Text>
+          </View>
           </View>
 
           <View style={styles.thirdContainer}>
-          <Text style={styles.containText}>{this.state.third}</Text>
           <View style={styles.trophyIcon}>
           <Icon name={Platform.OS === "ios" ? "ios-trophy" : "md-create"}
           size={40}
           color='#a0522d'/>
           </View>
+          <Text style={styles.containText}>{this.state.third}</Text>
+          <View style={styles.result}>
+          <Text style={styles.likesText3}>4</Text>
+          </View>
+
           </View>
           {this.checkSaved()}
           </View>
@@ -265,7 +275,57 @@ componentWillUnmount() {
         height: 50,
         width: 50,
         borderWidth: 2,
-        borderColor: 'white'
+        borderColor: 'white',
+        margin: 5
+      },
+      result: {
+        justifyContent:'center',
+        alignItems:'center',
+        alignSelf: 'center',
+        textAlign:'center',
+        backgroundColor: 'white',
+        borderRadius:100,
+        alignSelf: 'center',
+        color: '#daa520',
+        paddingRight: 0,
+        height: 50,
+        width: 50,
+        borderWidth: 2,
+        borderColor: 'white',
+        margin: 5,
+        fontSize: 30,
+        borderWidth:1,
+        borderColor:'black'
+      },
+      likesText1: {
+        justifyContent:'center',
+        alignItems:'center',
+        alignSelf: 'center',
+        textAlign:'center',
+        alignSelf: 'center',
+        color: '#daa520',
+        fontSize: 30,
+
+      },
+      likesText2: {
+        justifyContent:'center',
+        alignItems:'center',
+        alignSelf: 'center',
+        textAlign:'center',
+        alignSelf: 'center',
+        color: '#c0c0c0',
+        fontSize: 30,
+
+      },
+      likesText3: {
+        justifyContent:'center',
+        alignItems:'center',
+        alignSelf: 'center',
+        textAlign:'center',
+        alignSelf: 'center',
+        color: '#a0522d',
+        fontSize: 30,
+
       },
       buttonContainer:{
         flexDirection:'row',
