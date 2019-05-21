@@ -66,7 +66,7 @@ checkUserNames(){
   }
 
   onSignupPress = () => {
-    if (this.state.password !== this.state.passwordConfirm){
+    if (this.state.password !== this.state.passwordConfirm || this.state.password.length < 6){
       Alert.alert('Error, please check inputs')
       return;
     } else{

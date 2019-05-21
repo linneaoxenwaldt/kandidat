@@ -74,7 +74,7 @@ export default class ChangePasswordScreen extends React.Component {
               ],
               { cancelable: false })
           }).catch(function(error) {
-            Alert.alert(data.error)
+            Alert.alert('unable to change password, password must be atleast six characters')
           });
         } (error) =>{
           Alert.alert(data.error);
