@@ -260,6 +260,10 @@ export default class HomeScreen extends React.Component {
       backgroundColor: '#BA55B3',
       borderRadius:50,
       justifyContent:'center',
+      shadowColor: 'grey',
+      shadowOpacity: 2,
+      shadowRadius: 2,
+      shadowOffset: {width: 0,height: 4}
     },
     ongoingVote:{
       width: 300,
@@ -269,7 +273,11 @@ export default class HomeScreen extends React.Component {
       padding: 10,
       backgroundColor: '#6BCDFD',
       borderRadius:50,
-      justifyContent:'center'
+      justifyContent:'center',
+      shadowColor: 'grey',
+      shadowOpacity: 2,
+      shadowRadius: 2,
+      shadowOffset: {width: 0,height: 4}
     },
     ongoingRequest: {
       width: 300,
@@ -279,7 +287,11 @@ export default class HomeScreen extends React.Component {
       marginBottom: 10,
       backgroundColor:'#8FBC8F',
       borderRadius:50,
-      justifyContent:'center'
+      justifyContent:'center',
+      shadowColor: 'grey',
+      shadowOpacity: 2,
+      shadowRadius: 2,
+      shadowOffset: {width: 0,height: 4}
     },
     resultsButt: {
       width: 300,
@@ -289,6 +301,10 @@ export default class HomeScreen extends React.Component {
       marginBottom: 10,
       backgroundColor:'#94B4C1',
       borderRadius:50,
-      justifyContent:'center'
+      justifyContent:'center',
+      shadowColor: 'grey',
+      shadowOpacity: 2,
+      shadowRadius: 2,
+      shadowOffset: {width: 0,height: 4}
     }
   });

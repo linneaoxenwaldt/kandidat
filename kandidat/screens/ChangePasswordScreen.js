@@ -74,7 +74,7 @@ export default class ChangePasswordScreen extends React.Component {
               ],
               { cancelable: false })
           }).catch(function(error) {
-            Alert.alert(data.error)
+            Alert.alert('unable to change password, password must be atleast six characters')
           });
         } (error) =>{
           Alert.alert(data.error);
@@ -203,6 +203,10 @@ export default class ChangePasswordScreen extends React.Component {
       borderRadius: 20,
       marginBottom: 10,
       marginTop: 50,
+      shadowColor: 'grey',
+      shadowOpacity: 2,
+      shadowRadius: 2,
+      shadowOffset: {width: 0,height: 4},
     },
     saveText: {
       color: "#FFFFFF",

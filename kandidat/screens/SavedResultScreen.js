@@ -148,7 +148,7 @@ export default class SavedResultScreen extends React.Component {
         render() {
           return (
             <View style={styles.container}>
-            <Text style={styles.resultLabel}> {data.results} </Text>
+            <Text style={styles.resultLabel}> {data.results.toUpperCase()} </Text>
             <View style={styles.flatlistContain}>
             <Text style={styles.miniResultLabel}>{data.unchecked}
             <Text> </Text>

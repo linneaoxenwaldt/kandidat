@@ -141,7 +141,7 @@ export default class FriendsScreen extends React.Component {
           render() {
             return (
               <View style={styles.container}>
-              <Text style={styles.friendLabel}>{data.friends}</Text>
+              <Text style={styles.friendLabel}>{data.friends.toUpperCase()}</Text>
               <View style= {styles.buttonContainer}>
               <TouchableOpacity
               style={styles.addFriendsContainer}
@@ -190,8 +190,11 @@ export default class FriendsScreen extends React.Component {
             padding: 10,
             backgroundColor:'#BA55B3',
             borderRadius:50,
-            borderWidth: 1,
-            borderColor: '#fff'
+            borderColor: '#fff',
+            shadowColor: 'grey',
+            shadowOpacity: 2,
+            shadowRadius: 2,
+            shadowOffset: {width: 0,height: 4},
           },
           addFriendsText: {
             fontFamily: "Roboto-Light",

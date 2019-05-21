@@ -232,7 +232,7 @@ export default class AddFriendsScreen extends React.Component {
       render() {
         return (
           <View style={styles.container}>
-          <Text style={styles.descriptionText}>{data.friendUsername}</Text>
+          <Text style={styles.descriptionText}>{data.friendUsername.toUpperCase()}</Text>
           <TextInput
           style={styles.textInfo}
           placeholder={data.username}
@@ -290,6 +290,10 @@ export default class AddFriendsScreen extends React.Component {
         borderRadius: 20,
         marginBottom: 10,
         marginTop: 20,
+        shadowColor: 'grey',
+        shadowOpacity: 2,
+        shadowRadius: 2,
+        shadowOffset: {width: 0,height: 4},
       },
       addText: {
         color: "#FFFFFF",

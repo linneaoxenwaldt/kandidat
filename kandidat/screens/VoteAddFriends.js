@@ -220,7 +220,7 @@ export default class VoteAddFriends extends React.Component {
           render() {
             return (
               <View style={styles.container}>
-              <Text style={styles.friendLabel}>{data.invitefriends}</Text>
+              <Text style={styles.friendLabel}>{data.invitefriends.toUpperCase()}</Text>
               <View style= {styles.buttonContainer}>
               <TouchableOpacity
               style={styles.messageContainer}
@@ -228,7 +228,7 @@ export default class VoteAddFriends extends React.Component {
               onPress={()=>{
                 this.setState({
                   showMe: true})}}>
-              <Text style={styles.addFriendsText}> {data.message}</Text>
+              <Text style={styles.addFriendsText}> {data.description}</Text>
               </TouchableOpacity>
               <TouchableOpacity
               style={styles.expireDateContainer}
@@ -334,8 +334,11 @@ export default class VoteAddFriends extends React.Component {
             padding: 10,
             backgroundColor:'#BA55B3',
             borderRadius:20,
-            borderWidth: 1,
-            borderColor: '#fff'
+            borderColor: '#fff',
+            shadowColor: 'grey',
+            shadowOpacity: 2,
+            shadowRadius: 2,
+            shadowOffset: {width: 0,height: 4},
           },
           messageContainer:{
           justifyContent: 'center',
@@ -345,8 +348,12 @@ export default class VoteAddFriends extends React.Component {
           padding: 10,
           backgroundColor:'#BA55B3',
           borderRadius:20,
-          borderWidth: 1,
-          borderColor: '#fff'},
+          borderColor: '#fff',
+          shadowColor: 'grey',
+          shadowOpacity: 2,
+          shadowRadius: 2,
+          shadowOffset: {width: 0,height: 4},
+        },
 
           addFriendsText: {
             fontFamily: "Roboto-Light",
@@ -391,6 +398,10 @@ export default class VoteAddFriends extends React.Component {
             justifyContent: 'center',
             borderRadius: 20,
             marginBottom:10,
+            shadowColor: 'grey',
+            shadowOpacity: 2,
+            shadowRadius: 2,
+            shadowOffset: {width: 0,height: 4},
           },
           sendText:{
             fontSize:20,
@@ -445,6 +456,10 @@ export default class VoteAddFriends extends React.Component {
             height: 50,
             alignItems:'center',
             justifyContent:'center',
+            shadowColor: 'grey',
+            shadowOpacity: 2,
+            shadowRadius: 2,
+            shadowOffset: {width: 0,height: 4},
 
           },
           addText:{
