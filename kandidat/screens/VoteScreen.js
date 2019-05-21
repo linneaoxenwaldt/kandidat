@@ -477,7 +477,7 @@ export default class VoteScreen extends React.Component {
             thumbsContain: {
               flexDirection:'row',
               justifyContent: 'space-between',
-              marginTop: 300,
+              marginTop: 260,
               padding: 15,
             },
             pinIcon: {

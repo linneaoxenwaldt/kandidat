@@ -72,13 +72,13 @@ componentWillUnmount() {
       }))
       that.state.result.sort((a, b) => (a.Votes < b.Votes) ? 1 : -1)
       if(that.state.result.length > 0) {
-      that.setState({winner: that.state.result[0].Name})
+      that.setState({winner: {Name: that.state.result[0].Name, Votes: that.state.result[0].Votes}})
       }
       if(that.state.result.length > 1){
-        that.setState({second: that.state.result[1].Name})
+        that.setState({second: {Name: that.state.result[1].Name, Votes: that.state.result[1].Votes}})
       }
       if(that.state.result.length > 2){
-          that.setState({third: that.state.result[2].Name})
+          that.setState({third: {Name: that.state.result[2].Name, Votes: that.state.result[2].Votes}})
       }
     })
   }
@@ -171,9 +171,9 @@ componentWillUnmount() {
           size={40}
           color='#daa520'/>
           </View>
-          <Text style={styles.containText}>{this.state.winner}</Text>
+          <Text style={styles.containText}>{this.state.winner.Name}</Text>
           <View style={styles.result}>
-          <Text style={styles.likesText1}>8</Text>
+          <Text style={styles.likesText1}>{this.state.winner.Votes}</Text>
           </View>
           </View>
 
@@ -183,9 +183,9 @@ componentWillUnmount() {
           size={40}
           color='#c0c0c0'/>
           </View>
-          <Text style={styles.containText}>{this.state.second}</Text>
+          <Text style={styles.containText}>{this.state.second.Name}</Text>
           <View style={styles.result}>
-          <Text style={styles.likesText2}>5</Text>
+          <Text style={styles.likesText2}>{this.state.second.Votes}</Text>
           </View>
           </View>
 
@@ -195,9 +195,9 @@ componentWillUnmount() {
           size={40}
           color='#a0522d'/>
           </View>
-          <Text style={styles.containText}>{this.state.third}</Text>
+          <Text style={styles.containText}>{this.state.third.Name}</Text>
           <View style={styles.result}>
-          <Text style={styles.likesText3}>4</Text>
+          <Text style={styles.likesText3}>{this.state.third.Votes}</Text>
           </View>
 
           </View>
