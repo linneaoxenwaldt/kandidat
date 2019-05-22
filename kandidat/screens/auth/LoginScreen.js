@@ -57,7 +57,11 @@ export default class LoginScreen extends React.Component{
       underlayColor='#fff'>
       <Text style= {styles.logInText}>Log in </Text>
       </TouchableOpacity>
-      <Button title = 'Forgot password?' onPress = {this.onForgotPasswordPress} color = '#fff'/>
+
+      <TouchableOpacity
+      onPress = {this.onForgotPasswordPress}>
+      <Text style={styles.forgotPassword}>Forgot password?</Text>
+      </TouchableOpacity>
 
       <TouchableOpacity
       style = {styles.createAccount}
@@ -142,4 +146,8 @@ const styles = StyleSheet.create({
     marginBottom:10,
     alignItems: 'center',
   },
+  forgotPassword: {
+    color: '#fff',
+    fontSize: 20,
+  }
 });
