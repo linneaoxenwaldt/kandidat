@@ -232,7 +232,7 @@ export default class AddFriendsScreen extends React.Component {
       render() {
         return (
           <View style={styles.container}>
-          <Text style={styles.descriptionText}>{data.friendUsername.toUpperCase()}</Text>
+          <Text style={styles.descriptionText}>{data.friendUsername}</Text>
           <TextInput
           style={styles.textInfo}
           placeholder={data.username}
