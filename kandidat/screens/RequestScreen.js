@@ -9,6 +9,7 @@ import { ScrollView,
   Text,
   Modal,
   ImageBackground,
+  Picker,
 
 } from 'react-native';
 import { DrawerActions } from 'react-navigation';
@@ -38,6 +39,7 @@ export default class RequestScreen extends React.Component {
       currentVote: [],
       answers: [],
       otherParticipants: [],
+      picker:false,
     }
     this.getFriendReq()
     this.getVoteReq()
@@ -90,7 +92,7 @@ export default class RequestScreen extends React.Component {
             return (
               <ListItem
               containerStyle={{ backgroundColor: this.colors[index % this.colors.length]}}
-              titleStyle={{color: '#FFFFFF', fontSize: 30}}
+              titleStyle={{color: 'white', fontSize: 30}}
               title={item.username}
               roundAvatar
               leftAvatar= {{source: {uri: item.profilePic}}}
@@ -466,7 +468,8 @@ export default class RequestScreen extends React.Component {
                   <Modal visible={this.state.showMe}
                   onRequestClose = {() => {this.setState({ showMe : false })}}>
                   <View style={styles.modalView}>
-                  <Text style={styles.modalText}>{this.state.currentVote.CatName}</Text>
+                  <Text adjustsFontSizeToFit
+                  numberOfLines={1} style={styles.modalText}>{this.state.currentVote.CatName}</Text>
 
                   <View style={styles.invitedContainer}>
                   <Text style={styles.textLabel}> {data.invited} </Text>
@@ -474,7 +477,7 @@ export default class RequestScreen extends React.Component {
                   source={{uri: this.state.currentVote.sentFromProfilePic}}/>
                   <Text style={styles.invitedByText}>{this.state.currentVote.sentFromUsername}</Text>
                   </View>
-                  <Text style={styles.miniTextview}> {data.description}: </Text>
+                  <Text style={styles.miniTextview}> {data.description} </Text>
 
                   <View style={styles.message}>
                   <ScrollView>
@@ -483,13 +486,17 @@ export default class RequestScreen extends React.Component {
                   </View>
 
                   <Text style={styles.miniTextview}> {data.participants} </Text>
+
                   <View style={styles.modalList}>
+
                   <FlatList
                   data={this.state.participants}
                   extraData={this.state}
                   renderItem={this.showRequest}
                   keyExtractor={this.extractKey3}
                   />
+
+
                   </View>
 
                   <View style={styles.buttonBottomContainer}>
@@ -560,13 +567,16 @@ export default class RequestScreen extends React.Component {
                     margin: 10,
                   },
                   miniTextview: {
+                    textAlign: 'center',
                     marginLeft: 5,
                     width: 340,
-                    flexDirection:'row',
-                    justifyContent: 'space-between',
+                    //flexDirection:'row',
+                    justifyContent: 'center',
                     color: '#000000',
                     fontFamily: "Roboto-Light",
-                    fontSize: 20
+                    fontSize: 25,
+                    //borderBottomColor: '#94B4C1',
+                    //borderBottomWidth: 3,
                   },
                   requestHeight: {
                     height: 260,
@@ -589,7 +599,9 @@ export default class RequestScreen extends React.Component {
                     paddingTop: 50,
                     fontFamily: 'Roboto-Light',
                     fontSize: 40,
-                    paddingBottom: 0,
+                    paddingBottom: 10,
+                    alignItems:'center',
+                    //adjustsFontSizeToFit: true
                   },
                   invitedByText: {
                     fontFamily: 'Roboto-Light',
@@ -658,21 +670,31 @@ export default class RequestScreen extends React.Component {
                     justifyContent: 'space-between',
                     width: 340,
                     margin: 10,
+                    marginTop: 20
                     //marginTop:10,
                     //marginBottom: 0,
                   },
                   message:{
+
                     marginBottom: 20,
                     height: 100,
                     width: '100%',
-                    backgroundColor:'#689999',
-                    //borderWidth: 3,
+                    //backgroundColor:'#689999',
+                    borderTopWidth: 3,
+                    borderTopColor:'#689999',
+                    //borderLeftWidth: 3,
+                    //borderRightWidth: 3,
+                    borderColor: '#689999',
+                    alignItems:'center',
+
                   },
                   messageText:{
                     fontSize: 20,
-                    color: 'white',
+                    color: 'black',
                     fontFamily: 'Roboto-Light',
                     padding: 10,
+                    justifyContent:'center',
+
 
                   },
 
@@ -680,6 +702,8 @@ export default class RequestScreen extends React.Component {
                     marginBottom:0,
                     width: '100%',
                     height: 130,
+                    borderTopWidth: 3,
+                    borderTopColor:'#689999',
                   },
                   friendReqButton:{
                     flexDirection:'row',

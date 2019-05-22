@@ -41,7 +41,7 @@
   "infoText": "Use SwipeSolver to make decisions faster, easier and more fun! Add one or several friends to start a vote where everybody will have the opportunity to add their alternatives before voting for the final decision. Vote by pressing the thumbs up/down or swipe right/left to like or dislike an alternative. The most liked alternative will be presented as the winner when all participants have voted and you can choose to save the result for later. Good Luck!",
   "noMoreAlt": "You are finished voting!",
   "invited":"You are invited by:",
-  "participants":"Participants:",
+  "participants":"Participants",
   "accept":"ACCEPT",
   "decline":"DECLINE",
   "results":"Results  ",
