@@ -135,7 +135,7 @@ componentWillUnmount() {
             style = {styles.saveResult}
             underlayColor='#fff'
             onPress={() => this.saveResult()}>
-            <Text style= {styles.saveResultText}>{data.save}{data.result}</Text>
+            <Text style= {styles.saveResultText}>{data.save}</Text>
             </TouchableOpacity>
             </View>
           )

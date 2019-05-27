@@ -230,20 +230,7 @@ export default class VoteAddFriends extends React.Component {
                   showMe: true})}}>
               <Text style={styles.addFriendsText}> {data.description}</Text>
               </TouchableOpacity>
-              <TouchableOpacity
-              style={styles.expireDateContainer}
-              onPress={this.showDateTimePicker}
-              underlayColor='#fff'>
-              <DateTimePicker
-              isVisible={this.state.isDateTimePickerVisible}
-              onConfirm={this.handleDatePicked}
-              onCancel={this.hideDateTimePicker}
-              mode={"time"}
-              titleIOS={data.pickTime}
-              />
-              <Text style={styles.addFriendsText}> {data.expireDate}</Text>
-              <Text>{[this.state.date]}</Text>
-              </TouchableOpacity>
+
               </View>
 
 
@@ -342,12 +329,12 @@ export default class VoteAddFriends extends React.Component {
           },
           messageContainer:{
           justifyContent: 'center',
-          width: 170,
+          width: 350,
           height: 70,
           margin: 0,
           padding: 10,
           backgroundColor:'#BA55B3',
-          borderRadius:20,
+          borderRadius:50,
           borderColor: '#fff',
           shadowColor: 'grey',
           shadowOpacity: 2,
