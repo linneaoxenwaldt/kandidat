@@ -217,6 +217,7 @@ export default class VoteScreen extends React.Component {
         checkFinishedAnswers(){
           var allAnswerYes = true
           for(let i=0; i < this.state.partFinished.length; i++){
+            console.log(this.state.partFinished[i].Finished)
             if(this.state.partFinished[i].Finished === "No") {
               allAnswerYes = false
             }

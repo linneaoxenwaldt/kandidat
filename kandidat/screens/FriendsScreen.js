@@ -145,7 +145,7 @@ export default class FriendsScreen extends React.Component {
               <View style= {styles.buttonContainer}>
               <TouchableOpacity
               style={styles.addFriendsContainer}
-              onPress={() => this.props.navigation.navigate('AddFriend', { updateFriends: this.updateFriends.bind(this) })}
+              onPress={() => this.props.navigation.navigate('AddFriend')}
               underlayColor='#fff'>
               <Text style={styles.addFriendsText}>{data.addFriend} <Icon
               name={Platform.OS === "ios" ? "ios-person-add" : "md-add"}
