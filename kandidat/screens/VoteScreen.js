@@ -18,6 +18,11 @@ import { LinearGradient } from 'expo';
 import * as firebase from 'firebase';
 import data from '../data/engWord.json';
 
+//Credit for making the swiping function and inspiration to these two and links to their respectively github respitories:
+//https://github.com/wcandillon/can-it-be-done-in-react-native/tree/master/season1
+//https://github.com/nathvarun/React-Native-Layout-Tutorial-Series
+
+
 export default class VoteScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
